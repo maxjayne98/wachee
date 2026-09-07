@@ -1,0 +1,9 @@
+<script setup lang="ts">
+const model = defineModel<string>({ default: '' })
+</script>
+
+<template>
+  <input v-model="model" class="app-input" />
+</template>
+
+<style lang="scss"></style>
