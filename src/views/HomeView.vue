@@ -2,6 +2,9 @@
   <section>
     <div>
       <div>
+        <ShowFilters />
+      </div>
+      <div>
         <div v-for="(shows, genre) in showsByGenres" :key="genre">
           <div class="card-title">{{ genre }}</div>
           <div>
@@ -18,13 +21,13 @@
 import { onMounted } from 'vue'
 import { useShowList } from '@/store/showList'
 import ShowCard from '@/components/ShowCard.vue'
+import ShowFilters from '@/components/ShowFilters.vue'
 
 const INITIAL_PAGES = [1, 2, 3, 4, 5]
-const { shows, fetchShows, showsByGenres } = useShowList()
+const { fetchShows, showsByGenres } = useShowList()
 
 onMounted(async () => {
   await fetchShows(INITIAL_PAGES)
-  console.log('shows:: ', shows.value.length)
 })
 </script>
 <style lang="scss">

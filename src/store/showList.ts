@@ -1,26 +1,47 @@
 import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { fetchShowsPage } from '@/api/request'
-import type { Show } from '@/types'
-import { sortShowsByRating } from '@/utils'
+import type { Show, NestedKeyOf } from '@/types'
+import { sortShowsByRating, get } from '@/utils'
 
-export const showListStore = defineStore('showList', () => {
-  const shows = ref<Show[]>([])
+export type Filter =
+  | { type: 'equal'; field: NestedKeyOf<Show>; value: string | number | boolean }
+  | { type: 'range'; field: NestedKeyOf<Show>; value: { min: number; max: number } }
+
+export const useShowListStore = defineStore('showList', () => {
+  const allShows = ref<Show[]>([])
   const error = ref<string>('')
   const isLoading = ref<boolean>(false)
+  const filters = ref<Filter[]>([])
+
+  const visibleShows = computed(() => {
+    return allShows.value.filter(show => {
+      return filters.value.every(filter => {
+        const value = get(show, filter.field)
+        if (value == null) return false
+
+        if (filter.type === 'equal') {
+          return value === filter.value
+        }
+        if (filter.type === 'range') {
+          const num = Number(value)
+          return !Number.isNaN(num) && num >= filter.value.min && num <= filter.value.max
+        }
+        return true
+      })
+    })
+  })
 
   const showsById = computed(() => {
-    return shows.value.reduce((acc, show) => {
-      acc.set(show.id, show)
-      return acc
-    }, new Map<number, Show>())
+    return new Map(allShows.value.map(show => [show.id, show]))
   })
 
   const showsByGenres = computed(() => {
-    const sortedShows = sortShowsByRating(shows.value)
+    const sortedShows = sortShowsByRating(visibleShows.value)
     return sortedShows.reduce(
       (acc, show) => {
-        show.genres.forEach(genre => {
+        // Use Set to ensure no duplicated genres on the same show
+        new Set(show.genres).forEach(genre => {
           if (!acc[genre]) {
             acc[genre] = []
           }
@@ -34,48 +55,66 @@ export const showListStore = defineStore('showList', () => {
 
   async function fetchShows(pages: number[]) {
     isLoading.value = true
+    error.value = ''
     try {
       const data = await Promise.all(pages.map((page: number) => fetchShowsPage(page)))
-      const existingIds = new Set(shows.value.map(s => s.id))
-      const newShows: Show[] = []
+      const existingIds = new Set(allShows.value.map(s => s.id))
 
-      for (let i = 0; i < data.length; i++) {
-        const pageShows = data[i]
-        for (let j = 0; j < pageShows.length; j++) {
-          const element = pageShows[j]
-          if (!existingIds.has(element.id)) {
-            existingIds.add(element.id)
-            newShows.push(element)
-          }
-        }
-      }
+      const newShows = data.flat().filter(show => {
+        if (existingIds.has(show.id)) return false
+        existingIds.add(show.id)
+        return true
+      })
 
       if (newShows.length > 0) {
-        shows.value.push(...newShows)
+        allShows.value.push(...newShows)
       }
     } catch (err) {
       console.error('Error fetching shows:', err)
-      error.value = err as string
+      error.value = err instanceof Error ? err.message : 'Failed to fetch shows'
     } finally {
       isLoading.value = false
     }
   }
 
+  function updateFilters(newFilters: Filter[]) {
+    filters.value = newFilters
+  }
+
   return {
-    shows,
+    allShows,
+    visibleShows,
+    isLoading,
+    error,
+    filters,
     fetchShows,
     showsByGenres,
     showsById,
+    updateFilters,
   }
 })
 
+// Keep backward compatibility if showListStore is imported directly
+export const showListStore = useShowListStore
+
 export function useShowList() {
-  const store = showListStore()
+  const store = useShowListStore()
 
-  const { shows, showsByGenres, showsById } = storeToRefs(store)
-  const { fetchShows } = store
+  const { allShows, visibleShows, isLoading, error, filters, showsByGenres, showsById } =
+    storeToRefs(store)
+  const { fetchShows, updateFilters } = store
 
-  return { shows, fetchShows, showsByGenres, showsById }
+  return {
+    allShows,
+    visibleShows,
+    isLoading,
+    error,
+    filters,
+    fetchShows,
+    showsByGenres,
+    showsById,
+    updateFilters,
+  }
 }
 
 export type UseShowListReturn = ReturnType<typeof useShowList>
