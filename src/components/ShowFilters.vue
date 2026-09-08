@@ -57,7 +57,7 @@ const rating = ref({
 })
 
 watch(
-  () => [language.value, runtime.value, rating.value],
+  () => [language.value, runtime.value, rating.value] as const,
   ([language, runtime, rating]) => {
     const filters: Filter[] = []
     if (language) {

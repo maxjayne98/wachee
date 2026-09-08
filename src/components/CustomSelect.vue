@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 export type SelectValue = string | number | Record<string, unknown>
+
 export type SelectOption = {
   value: SelectValue
   label: string
@@ -63,16 +64,22 @@ onBeforeUnmount(() => {
   <div ref="rootRef" class="relative w-full min-w-[140px] select-none">
     <button
       type="button"
-      class="inline-flex w-full cursor-pointer items-center justify-between gap-2 rounded-full border border-white/[0.18] bg-[#140c1c]/[0.92] px-3 py-[0.45rem] text-[0.85rem] transition-all duration-150 ease-out hover:-translate-y-px hover:border-white/35 hover:bg-[#1c1026]/[0.95] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff527a]/70 disabled:cursor-not-allowed disabled:opacity-60"
-      :class="selectedOption ? 'text-white/[0.88]' : 'text-white/60'"
       :disabled="disabled || !options.length"
+      class="group inline-flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#11131C] px-3.5 py-2.5 text-sm transition-all duration-150 ease-out hover:border-white/20 hover:bg-[#181B27] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E99F9]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07080D] disabled:cursor-not-allowed disabled:opacity-50"
+      :class="[
+        selectedOption ? 'text-[#F5F6FA]' : 'text-[#6F7688]',
+        isOpen && 'border-[#9761E8]/40 bg-[#181B27]',
+      ]"
       @click="toggleDropdown"
     >
-      <span class="truncate">{{ displayLabel }}</span>
+      <span class="truncate font-medium">
+        {{ displayLabel }}
+      </span>
+
       <span
         aria-hidden="true"
-        class="inline-flex size-4 shrink-0 items-center justify-center transition-transform duration-200"
-        :class="{ 'rotate-180': isOpen }"
+        class="inline-flex size-4 shrink-0 items-center justify-center text-[#A7ADBC] transition-all duration-200 group-hover:text-[#F5F6FA]"
+        :class="{ 'rotate-180 text-[#9761E8]': isOpen }"
       >
         <svg viewBox="0 0 16 16" focusable="false" class="size-full fill-current">
           <path
@@ -83,27 +90,49 @@ onBeforeUnmount(() => {
     </button>
 
     <transition
-      enter-active-class="transition duration-120 ease-out"
-      enter-from-class="opacity-0 -translate-y-1"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition duration-120 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 -translate-y-1"
+      enter-active-class="transition duration-150 ease-out"
+      enter-from-class="opacity-0 -translate-y-1 scale-[0.98]"
+      enter-to-class="opacity-100 translate-y-0 scale-100"
+      leave-active-class="transition duration-100 ease-in"
+      leave-from-class="opacity-100 translate-y-0 scale-100"
+      leave-to-class="opacity-0 -translate-y-1 scale-[0.98]"
     >
       <ul
         v-if="isOpen"
-        class="absolute inset-x-0 top-[calc(100%+0.35rem)] z-20 m-0 grid max-h-[240px] list-none gap-[0.1rem] overflow-y-auto rounded-xl border border-white/[0.18] bg-[#160c20]/[0.98] p-[0.4rem] shadow-[0_18px_45px_rgba(0,0,0,0.35)]"
+        class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-30 m-0 grid max-h-[240px] list-none gap-1 overflow-y-auto rounded-xl border border-white/10 bg-[#11131C]/95 p-1.5 shadow-[0_18px_45px_rgba(0,0,0,0.45)] backdrop-blur-xl"
       >
         <li
           v-for="option in options"
-          :key="option.value"
-          class="block cursor-pointer rounded-[0.55rem] px-[0.6rem] py-[0.45rem] text-[0.85rem] transition-colors duration-120 hover:bg-[#ff2d55]/20 hover:text-white/[0.92]"
+          :key="String(option.value)"
+          class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm transition-all duration-150"
           :class="
-            option.value === modelValue ? 'bg-[#ff2d55]/35 text-white/[0.96]' : 'text-white/[0.85]'
+            option.value === modelValue
+              ? 'bg-[#9761E8]/15 text-[#F5F6FA]'
+              : 'text-[#A7ADBC] hover:bg-[#181B27] hover:text-[#F5F6FA]'
           "
           @click="selectOption(option)"
         >
-          {{ option.label }}
+          <span
+            v-if="option.value === modelValue"
+            class="absolute inset-y-2 left-0 w-0.5 rounded-full bg-linear-to-b from-[#0E99F9] via-[#9761E8] to-[#FB8E51]"
+          />
+
+          <span class="truncate">
+            {{ option.label }}
+          </span>
+
+          <svg
+            v-if="option.value === modelValue"
+            viewBox="0 0 20 20"
+            class="ml-auto size-4 shrink-0 text-[#9761E8]"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.704 5.292a1 1 0 0 1 .004 1.414l-7.25 7.292a1 1 0 0 1-1.42.004l-3.75-3.708a1 1 0 1 1 1.406-1.422l3.04 3.005 6.547-6.581a1 1 0 0 1 1.423-.004Z"
+              clip-rule="evenodd"
+            />
+          </svg>
         </li>
       </ul>
     </transition>

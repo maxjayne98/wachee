@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { fetchShowsPage } from '@/api/request'
 import type { Show, NestedKeyOf } from '@/types'
-import { sortShowsByRating, get } from '@/utils'
+import { sortShowsByRating, get, pickTwoRandom, shuffle } from '@/utils'
 
 export type Filter =
   | { type: 'equal'; field: NestedKeyOf<Show>; value: string | number | boolean }
@@ -36,9 +36,27 @@ export const useShowListStore = defineStore('showList', () => {
     return new Map(allShows.value.map(show => [show.id, show]))
   })
 
+  const topPicksShows = computed(() => {
+    const genres = Object.keys(showsByGenres.value)
+    const selected: Show[] = []
+    const selectedIds = new Set<number>()
+
+    for (const genre of genres) {
+      const shows = showsByGenres.value[genre]
+      const availableShows = shows.filter(show => !selectedIds.has(show.id))
+      const randomShows = pickTwoRandom(availableShows, 4)
+
+      for (const show of randomShows) {
+        selected.push(show)
+        selectedIds.add(show.id)
+      }
+    }
+
+    return shuffle(selected).slice(0, 6)
+  })
+
   const showsByGenres = computed(() => {
-    const sortedShows = sortShowsByRating(visibleShows.value)
-    return sortedShows.reduce(
+    return sortShowsByRating(visibleShows.value).reduce(
       (acc, show) => {
         // Use Set to ensure no duplicated genres on the same show
         new Set(show.genres).forEach(genre => {
@@ -91,6 +109,7 @@ export const useShowListStore = defineStore('showList', () => {
     showsByGenres,
     showsById,
     updateFilters,
+    topPicksShows,
   }
 })
 
@@ -100,8 +119,16 @@ export const showListStore = useShowListStore
 export function useShowList() {
   const store = useShowListStore()
 
-  const { allShows, visibleShows, isLoading, error, filters, showsByGenres, showsById } =
-    storeToRefs(store)
+  const {
+    allShows,
+    visibleShows,
+    isLoading,
+    error,
+    filters,
+    showsByGenres,
+    showsById,
+    topPicksShows,
+  } = storeToRefs(store)
   const { fetchShows, updateFilters } = store
 
   return {
@@ -114,6 +141,7 @@ export function useShowList() {
     showsByGenres,
     showsById,
     updateFilters,
+    topPicksShows,
   }
 }
 

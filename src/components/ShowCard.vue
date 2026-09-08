@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { Show } from '@/types'
+import Badge from '@/components/Badge.vue'
 
 interface Props {
   show: Show
@@ -61,13 +62,6 @@ const formattedTagline = computed(() => {
   return 'BRILLIANT MINDS\nA DARKER WORLD'
 })
 
-// Palette styles for genre badge glowing borders
-const genreColorClasses = ['badge-cyan', 'badge-purple', 'badge-orange', 'badge-pink']
-
-function getGenreClass(index: number) {
-  return genreColorClasses[index % genreColorClasses.length]
-}
-
 function handleFavorite(event: MouseEvent) {
   event.stopPropagation()
   isFav.value = !isFav.value
@@ -85,14 +79,21 @@ function handleCardClick() {
 </script>
 
 <template>
-  <article class="show-card" @click="handleCardClick">
+  <article
+    class="show-card group relative box-border w-[240px] shrink-0 cursor-pointer select-none rounded-[28px] bg-[linear-gradient(135deg,#0070f3_0%,#7928ca_40%,#c026d3_70%,#ff5722_100%)] p-[1.5px] shadow-[0_20px_40px_-10px_#000000b3,0_0_25px_-5px_#0070f340,0_0_25px_-5px_#ff572233] transition-[transform,box-shadow,filter] duration-350 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:shadow-[0_28px_55px_-10px_#000000d9,0_0_35px_2px_#0070f366,0_0_35px_2px_#ff572259]"
+    @click="handleCardClick"
+  >
     <!-- Card Outer Glow Border Container -->
-    <div class="show-card__inner">
+    <div
+      class="show-card__inner relative box-border flex size-full flex-col overflow-hidden rounded-[26.5px] bg-[#080a10]"
+    >
       <!-- Top Action Buttons (Overlay) -->
-      <div class="show-card__top-actions">
+      <div
+        class="show-card__top-actions absolute top-[18px] right-[18px] z-10 flex items-center gap-[12px]"
+      >
         <button
           type="button"
-          class="show-card__action-btn show-card__action-btn--share"
+          class="show-card__action-btn show-card__action-btn--share flex size-[42px] cursor-pointer items-center justify-center rounded-full border p-0 text-[#e2e8f0] backdrop-blur-[12px] transition-all duration-250 ease-in-out hover:scale-[1.08] hover:text-white border-white/14 bg-[#0a0e18]/65 hover:bg-white/15"
           aria-label="Share show"
           @click="handleShare"
         >
@@ -116,8 +117,12 @@ function handleCardClick() {
 
         <button
           type="button"
-          class="show-card__action-btn show-card__action-btn--favorite"
-          :class="{ 'is-active': isFav }"
+          class="show-card__action-btn show-card__action-btn--favorite flex size-[42px] cursor-pointer items-center justify-center rounded-full border p-0 text-[#e2e8f0] backdrop-blur-[12px] transition-all duration-250 ease-in-out hover:scale-[1.08] hover:text-white border-[#a855f7]/60 bg-[#1c0e2d]/70 hover:border-[#d946ef]/90 hover:bg-[#2d124b]/85"
+          :class="
+            isFav
+              ? 'shadow-[0_0_18px_#ec4899b3]'
+              : 'shadow-[0_0_12px_#a855f759] hover:shadow-[0_0_18px_#d946ef99]'
+          "
           aria-label="Toggle favorite"
           @click="handleFavorite"
         >
@@ -139,363 +144,78 @@ function handleCardClick() {
       </div>
 
       <!-- Poster Section with Seamless Bottom Fade -->
-      <div class="show-card__poster-wrapper">
+      <div class="show-card__poster-wrapper relative h-[330px] w-full overflow-hidden bg-[#0d111a]">
         <img
           v-if="posterUrl"
           :src="posterUrl"
           :alt="show.name"
-          class="show-card__poster"
+          class="show-card__poster block size-full object-cover object-[center_15%] transition-transform duration-600 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[1.04]"
           loading="lazy"
         />
-        <div v-else class="show-card__poster-placeholder">
+        <div
+          v-else
+          class="show-card__poster-placeholder flex size-full items-center justify-center bg-[linear-gradient(135deg,#131825_0%,#080a10_100%)] p-[1.5rem] text-center text-[1.1rem] font-semibold text-[#64748b]"
+        >
           <span>{{ show.name }}</span>
         </div>
-        <div class="show-card__poster-overlay" />
+        <div
+          class="show-card__poster-overlay pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,#080a101a_0%,#080a1000_35%,#080a1080_65%,#080a10eb_88%,#080a10_100%)]"
+        />
       </div>
 
       <!-- Body / Details Section -->
-      <div class="show-card__content">
-        <!-- Big Textured Poster Title -->
-        <h2 class="show-card__poster-title" :title="show.name">
-          {{ show.name }}
-        </h2>
-
+      <div
+        class="show-card__content relative z-2 -mt-[3.6rem] flex flex-col gap-[1.1rem] px-[1.5rem] pb-[1.6rem]"
+      >
         <!-- Rating Pill & Tagline Row -->
-        <div class="show-card__rating-tagline-row">
-          <div class="show-card__imdb-pill">
-            <div class="show-card__imdb-badge">IMDb</div>
-            <span class="show-card__imdb-score">{{ formattedRating }}</span>
+        <div class="show-card__rating-tagline-row flex items-center gap-[1rem]">
+          <div
+            class="show-card__imdb-pill inline-flex shrink-0 items-center gap-[0.55rem] rounded-full border border-[#ff9900]/85 bg-[#0f121a] py-[0.3rem] pr-[0.9rem] pl-[0.35rem] shadow-[0_0_14px_#ff990059]"
+          >
+            <div
+              class="show-card__imdb-badge inline-block rounded-full bg-[#f5c518] px-[0.45rem] py-[0.15rem] text-[0.72rem] leading-[1.2] font-black tracking-[-0.02em] text-black"
+            >
+              IMDb
+            </div>
+            <span class="show-card__imdb-score text-[1.15rem] leading-none font-bold text-white">{{
+              formattedRating
+            }}</span>
           </div>
 
-          <div v-if="formattedTagline" class="show-card__tagline-text">
+          <div
+            v-if="formattedTagline"
+            class="show-card__tagline-text text-left text-[0.65rem] leading-[1.35] font-semibold tracking-[0.14em] whitespace-pre-line text-[#64748b] uppercase"
+          >
             {{ formattedTagline }}
           </div>
         </div>
 
         <!-- Show Title & Network/Year Subtitle -->
-        <div class="show-card__details">
-          <h3 class="show-card__title">{{ show.name }}</h3>
-          <p class="show-card__meta">
+        <div class="show-card__details flex flex-col gap-[0.25rem] text-left">
+          <h3
+            class="show-card__title m-0! truncate text-[2rem]! leading-[1.2] font-bold tracking-[-0.01em] text-white"
+          >
+            {{ show.name }}
+          </h3>
+          <p
+            class="show-card__meta m-0 flex items-center gap-[0.45rem] text-[0.9rem] font-medium text-[#71717a]"
+          >
             <span>{{ networkName }}</span>
-            <span v-if="premiereYear" class="show-card__meta-dot">•</span>
+            <span v-if="premiereYear" class="show-card__meta-dot text-[#52525b]">•</span>
             <span v-if="premiereYear">{{ premiereYear }}</span>
           </p>
         </div>
 
         <!-- Genre Glowing Badges -->
-        <div v-if="displayedGenres.length > 0" class="show-card__genres">
-          <span
-            v-for="(genre, index) in displayedGenres"
-            :key="genre"
-            class="show-card__genre-pill"
-            :class="getGenreClass(index)"
-          >
+        <div
+          v-if="displayedGenres.length > 0"
+          class="show-card__genres mt-[0.2rem] flex flex-wrap items-center gap-[0.65rem]"
+        >
+          <Badge v-for="(genre, index) in displayedGenres" :key="genre" :color-index="index">
             {{ genre }}
-          </span>
+          </Badge>
         </div>
       </div>
     </div>
   </article>
 </template>
-
-<style lang="scss" scoped>
-.show-card {
-  position: relative;
-  width: 280px;
-  border-radius: 28px;
-  flex-shrink: 0;
-  padding: 1.5px;
-  background: linear-gradient(135deg, #0070f3 0%, #7928ca 40%, #c026d3 70%, #ff5722 100%);
-  box-shadow:
-    0 20px 40px -10px rgba(0, 0, 0, 0.7),
-    0 0 25px -5px rgba(0, 112, 243, 0.25),
-    0 0 25px -5px rgba(255, 87, 34, 0.2);
-  user-select: none;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition:
-    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 0.35s ease;
-
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow:
-      0 28px 55px -10px rgba(0, 0, 0, 0.85),
-      0 0 35px 2px rgba(0, 112, 243, 0.4),
-      0 0 35px 2px rgba(255, 87, 34, 0.35);
-
-    .show-card__poster {
-      transform: scale(1.04);
-    }
-  }
-
-  // Inner container with dark background
-  &__inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: #080a10;
-    border-radius: 26.5px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-  }
-
-  // Top Action Icons
-  &__top-actions {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  &__action-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(10, 14, 24, 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    color: #e2e8f0;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.25s ease;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-      transform: scale(1.08);
-    }
-
-    &--favorite {
-      background: rgba(28, 14, 45, 0.7);
-      border: 1px solid rgba(168, 85, 247, 0.6);
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
-
-      &:hover {
-        background: rgba(45, 18, 75, 0.85);
-        border-color: rgba(217, 70, 239, 0.9);
-        box-shadow: 0 0 18px rgba(217, 70, 239, 0.6);
-      }
-
-      &.is-active {
-        box-shadow: 0 0 18px rgba(236, 72, 153, 0.7);
-      }
-    }
-  }
-
-  // Poster Image & Seamless Fade
-  &__poster-wrapper {
-    position: relative;
-    width: 100%;
-    height: 330px;
-    background: #0d111a;
-    overflow: hidden;
-  }
-
-  &__poster {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 15%;
-    display: block;
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  &__poster-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #131825 0%, #080a10 100%);
-    color: #64748b;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: center;
-    padding: 1.5rem;
-  }
-
-  &__poster-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(8, 10, 16, 0.1) 0%,
-      rgba(8, 10, 16, 0) 35%,
-      rgba(8, 10, 16, 0.5) 65%,
-      rgba(8, 10, 16, 0.92) 88%,
-      #080a10 100%
-    );
-    pointer-events: none;
-  }
-
-  // Content Area
-  &__content {
-    position: relative;
-    padding: 0 1.5rem 1.6rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
-    margin-top: -3.6rem;
-    z-index: 2;
-  }
-
-  // Poster Title (Large & Distressed / Stylized)
-  &__poster-title {
-    margin: 0;
-    font-size: 2.2rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #f1f5f9;
-    line-height: 1.1;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-shadow:
-      0 4px 14px rgba(0, 0, 0, 0.95),
-      0 0 25px rgba(255, 255, 255, 0.2);
-  }
-
-  // IMDb Pill + Tagline Row
-  &__rating-tagline-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  &__imdb-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    background: #0f121a;
-    border: 1px solid rgba(255, 153, 0, 0.85);
-    box-shadow: 0 0 14px rgba(255, 153, 0, 0.35);
-    border-radius: 9999px;
-    padding: 0.3rem 0.9rem 0.3rem 0.35rem;
-    flex-shrink: 0;
-  }
-
-  &__imdb-badge {
-    background: #f5c518;
-    color: #000000;
-    font-size: 0.72rem;
-    font-weight: 900;
-    padding: 0.15rem 0.45rem;
-    border-radius: 9999px;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    display: inline-block;
-  }
-
-  &__imdb-score {
-    color: #ffffff;
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  &__tagline-text {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    color: #64748b;
-    text-transform: uppercase;
-    line-height: 1.35;
-    white-space: pre-line;
-  }
-
-  // Show Details (Name + Network/Year)
-  &__details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    text-align: left;
-  }
-
-  &__title {
-    margin: 0;
-    font-size: 1.55rem;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__meta {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #71717a;
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-  }
-
-  &__meta-dot {
-    color: #52525b;
-  }
-
-  // Genre Badges (Glowing Pill Badges)
-  &__genres {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.65rem;
-    margin-top: 0.2rem;
-  }
-
-  &__genre-pill {
-    padding: 0.45rem 1.15rem;
-    border-radius: 9999px;
-    background: rgba(12, 16, 26, 0.75);
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #e2e8f0;
-    letter-spacing: 0.02em;
-    text-transform: capitalize;
-    white-space: nowrap;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-
-    &:hover {
-      transform: scale(1.05);
-    }
-
-    &.badge-cyan {
-      border: 1.5px solid #0099ff;
-      box-shadow: 0 0 10px rgba(0, 153, 255, 0.35);
-    }
-
-    &.badge-purple {
-      border: 1.5px solid #a855f7;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.35);
-    }
-
-    &.badge-orange {
-      border: 1.5px solid #ff5533;
-      box-shadow: 0 0 10px rgba(255, 85, 51, 0.35);
-    }
-
-    &.badge-pink {
-      border: 1.5px solid #ec4899;
-      box-shadow: 0 0 10px rgba(236, 72, 153, 0.35);
-    }
-  }
-}
-</style>
