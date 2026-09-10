@@ -1,17 +1,25 @@
 <template>
-  <div class="flex flex-wrap gap-3 items-center mb-2">
-    <label class="grid gap-2 text-sm text-left">
-      <span>Language</span>
-      <CustomSelect v-model="language" :options="languageOptions" placeholder="Select Language" />
-    </label>
-    <label class="grid gap-2 text-sm text-left">
-      <span>Runtime</span>
-      <CustomSelect v-model="runtime" :options="runtimeOptions" placeholder="Select Runtime" />
-    </label>
-    <label class="grid gap-2 text-sm text-left min-w-md">
-      <span>Rating</span>
-      <RangeSlider v-model="rating" :min="1" :max="10" :step="0.1" />
-    </label>
+  <div
+    class="mb-4 grid min-w-0 grid-cols-1 items-start gap-x-4 gap-y-4 text-left sm:grid-cols-2 lg:grid-cols-4"
+  >
+    <div class="min-w-0">
+      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Language</p>
+      <div class="flex h-20 items-center">
+        <CustomSelect v-model="language" :options="languageOptions" aria-label="Language" />
+      </div>
+    </div>
+    <div class="min-w-0">
+      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Runtime</p>
+      <div class="flex h-20 items-center">
+        <CustomSelect v-model="runtime" :options="runtimeOptions" aria-label="Runtime" />
+      </div>
+    </div>
+    <div class="min-w-0 sm:col-span-2">
+      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Rating</p>
+      <div class="px-4">
+        <RangeSlider v-model="rating" class="lg:w-64" :min="1" :max="10" :step="0.1" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -20,53 +28,48 @@ import { computed, ref, watch } from 'vue'
 import CustomSelect, { type SelectOption } from '@/components/CustomSelect.vue'
 import RangeSlider from '@/components/RangeSlider.vue'
 import { useShowList, type Filter } from '@/store/showList'
-import { capitalizeFirstLetter } from '@/utils'
 
 const { allShows, updateFilters } = useShowList()
+const languageOptions = computed<SelectOption[]>(() => [
+  { value: '', label: 'Any language' },
+  ...Array.from(
+    new Set(
+      allShows.value
+        .map(show => show.language)
+        .filter((language): language is string => Boolean(language))
+    )
+  )
+    .sort()
+    .map(language => ({ value: language, label: language })),
+])
 
-const languageOptions = computed<SelectOption[]>(() => {
-  const langs = new Set<string>()
-  for (let index = 0; index < allShows.value.length; index++) {
-    const element = allShows.value[index]
-    if (element.language) {
-      langs.add(capitalizeFirstLetter(element.language))
-    }
-  }
-  return [
-    { value: '', label: 'Any Language' },
-    ...Array.from(langs).map(l => ({ value: l, label: l })),
-  ] as SelectOption[]
-})
-
-const runtimeOptions = [
-  { label: 'Any Runtime', value: '' },
-  { label: 'Under 30 min', value: { min: 0, max: 30 } },
-  { label: 'Under 60 min', value: { min: 0, max: 60 } },
-  { label: 'Over 60 min', value: { min: 60, max: 200 } },
+// Primitive values keep selection identity stable through Vue's reactive proxies.
+const runtimeOptions: SelectOption[] = [
+  { label: 'Any runtime', value: '' },
+  { label: 'Under 30 min', value: 'short' },
+  { label: '30–60 min', value: 'medium' },
+  { label: 'Over 60 min', value: 'long' },
 ]
-
-const language = ref<string>('')
-const runtime = ref({
-  min: 10,
-  max: 120,
-})
-
-const rating = ref({
-  min: 1,
-  max: 10,
-})
+const runtimeRanges: Record<
+  string,
+  { min: number; max: number; minExclusive?: boolean; maxExclusive?: boolean }
+> = {
+  short: { min: 0, max: 30, maxExclusive: true },
+  medium: { min: 30, max: 60 },
+  long: { min: 60, max: Infinity, minExclusive: true },
+}
+const language = ref('')
+const runtime = ref('')
+const rating = ref({ min: 1, max: 10 })
 
 watch(
   () => [language.value, runtime.value, rating.value] as const,
   ([language, runtime, rating]) => {
     const filters: Filter[] = []
-    if (language) {
-      filters.push({ type: 'equal', field: 'language', value: language })
-    }
-    if (runtime && typeof runtime === 'object' && (runtime.min !== 10 || runtime.max !== 120)) {
-      filters.push({ type: 'range', field: 'runtime', value: runtime })
-    }
-    if (rating && typeof rating === 'object' && (rating.min !== 1 || rating.max !== 10)) {
+    if (language) filters.push({ type: 'equal', field: 'language', value: language })
+    const range = runtimeRanges[runtime]
+    if (range) filters.push({ type: 'range', field: 'runtime', value: range })
+    if (rating.min !== 1 || rating.max !== 10) {
       filters.push({ type: 'range', field: 'rating.average', value: rating })
     }
     updateFilters(filters)
@@ -74,4 +77,3 @@ watch(
   { deep: true }
 )
 </script>
-<style lang="scss" scoped></style>
