@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import Button from '@/components/Button.vue'
+
 import TextInput from '@/components/TextInput.vue'
 import Magnifier from '@/components/icons/Magnifier.vue'
 
@@ -46,7 +46,7 @@ function onSubmit() {
   >
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[#090b12]/90 to-transparent transition-opacity duration-500 motion-reduce:transition-none"
+      class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-black/90 to-transparent transition-opacity duration-500 motion-reduce:transition-none"
       :class="isScrolled ? 'opacity-0' : 'opacity-100'"
     />
     <div
@@ -59,12 +59,7 @@ function onSubmit() {
         class="absolute -top-20 left-1/4 h-28 w-96 -rotate-12 rounded-full bg-sky-200/10 blur-2xl"
       />
       <span class="absolute -bottom-24 right-1/4 h-28 w-80 rounded-full bg-blue-400/15 blur-2xl" />
-      <!-- <span
-        class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/50 to-transparent"
-      />
-      <span
-        class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-sky-300/10 via-sky-100/60 to-sky-300/10"
-      /> -->
+      
     </div>
 
     <div
@@ -80,11 +75,11 @@ function onSubmit() {
 
       <form
         role="search"
-        class="group flex min-w-0 w-full max-w-112 items-center rounded-full bg-linear-to-r from-cyan-500/40 via-purple-500/50 to-orange-500/40 p-px shadow-lg shadow-purple-950/20 transition-shadow focus-within:shadow-purple-500/20"
+        class="group flex min-w-0 w-full max-w-md items-center rounded-full bg-linear-to-r from-cyan-500/40 via-purple-500/50 to-orange-500/40 p-px shadow-lg  transition-shadow focus-within:shadow-purple-500/20"
         @submit.prevent="onSubmit"
       >
         <div
-          class="flex w-full min-w-0 items-center gap-2 rounded-full bg-[#0c101a]/95 p-2 pl-5 sm:pl-6"
+          class="flex w-full min-w-0 items-center gap-2 rounded-full bg-black/95 p-2 pl-5 sm:pl-6"
         >
           <Magnifier
             aria-hidden="true"
@@ -94,11 +89,11 @@ function onSubmit() {
             v-model="searchQuery"
             type="search"
             placeholder="Find your next favorite…"
-            class="min-w-0 w-full border-0 bg-transparent py-2 text-sm! text-slate-100 outline-none placeholder:text-slate-400 sm:text-base!"
+            class="min-w-0 w-full border-0 bg-transparent py-2 text-sm! text-slate-100 outline-none  sm:text-base!"
             required
             aria-label="Search shows"
           />
-          <Button
+          <button
             id="search-submit"
             aria-label="Search"
             type="submit"
