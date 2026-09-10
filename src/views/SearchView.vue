@@ -32,9 +32,7 @@ watch(
 </script>
 
 <template>
-  <section
-    class="search-view min-h-svh bg-[#090b12] text-left text-slate-200 [#app:has(&)]:mt-0! [#app:has(&)]:w-full! [body:has(&)]:bg-[#090b12]!"
-  >
+  <section class="page-shell text-left text-slate-200">
     <div class="mx-auto max-w-360 px-6 pt-28 pb-16 sm:px-12 lg:px-16">
       <div class="mt-6 mb-8 border-b border-white/10 pb-8">
         <h1
@@ -58,7 +56,7 @@ watch(
         <div
           v-for="item in 6"
           :key="item"
-          class="flex h-72 animate-pulse overflow-hidden rounded-3xl border border-white/10 bg-[#080a10] motion-reduce:animate-none"
+          class="flex h-72 animate-pulse overflow-hidden rounded-3xl border border-white/10 bg-slate-900 motion-reduce:animate-none"
         >
           <div class="w-28 shrink-0 bg-slate-800/60 sm:w-40" />
           <div class="flex flex-1 flex-col gap-4 p-6">

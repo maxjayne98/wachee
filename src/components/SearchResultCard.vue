@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import Badge from '@/components/Badge.vue'
+import IMDbBadge from '@/components/IMDbBadge.vue'
 import type { Show } from '@/types'
 
 const props = defineProps<{ show: Show }>()
@@ -17,14 +18,14 @@ watch(posterUrl, () => {
 
 <template>
   <article
-    class="search-result-card group min-w-0 rounded-3xl bg-linear-to-br from-[#0070f3] via-[#a12ccf] to-[#ff5722] p-px shadow-lg shadow-blue-950/30 transition duration-300 hover:-translate-y-1 hover:shadow-purple-500/20 motion-reduce:transition-none"
+    class="group min-w-0 rounded-3xl bg-linear-to-br from-cyan-500 via-purple-500 to-orange-500 p-px shadow-lg shadow-black/30 transition duration-300 hover:-translate-y-1 hover:shadow-purple-500/20 motion-reduce:transition-none"
   >
     <router-link
       class="block h-full rounded-3xl bg-transparent! no-underline focus-visible:outline-2 focus-visible:outline-sky-300 focus-visible:outline-offset-4"
       :aria-label="`Explore ${show.name}`"
       :to="{ name: 'show-detail', params: { id: show.id } }"
     >
-      <div class="relative flex h-full min-w-0 overflow-hidden rounded-3xl bg-[#080a10]">
+      <div class="relative flex h-full min-w-0 overflow-hidden rounded-3xl bg-slate-950">
         <div class="relative w-28 shrink-0 overflow-hidden bg-slate-900 sm:w-40">
           <img
             v-if="posterUrl && !imageFailed"
@@ -36,31 +37,18 @@ watch(posterUrl, () => {
           />
           <div
             v-else
-            class="flex h-full min-h-56 items-center justify-center bg-linear-to-br from-slate-800 to-blue-950 p-4 text-center text-sm text-slate-400"
+            class="flex h-full min-h-56 items-center justify-center bg-linear-to-br from-slate-800 to-slate-950 p-4 text-center text-sm text-slate-400"
           >
             No poster available
           </div>
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 bg-linear-to-t from-[#080a10]/80 via-transparent to-transparent"
+            class="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent"
           />
         </div>
         <div class="flex min-w-0 flex-1 flex-col gap-3 p-4 sm:gap-4 sm:p-6">
           <div class="flex flex-wrap items-center gap-3">
-            <span
-              class="inline-flex items-center gap-2 rounded-full border border-amber-500/80 bg-[#0f121a] py-1 pr-3 pl-1 text-sm font-bold text-white shadow-md shadow-amber-500/15"
-              aria-label="Show rating"
-            >
-              <span
-                aria-hidden="true"
-                class="flex items-center p-0.5 justify-center rounded-full bg-amber-400 text-xs text-black"
-                >IMDb</span
-              >
-              {{ show.rating.average?.toFixed(1) ?? 'N/A' }}
-              <span v-if="show.rating.average != null" class="text-xs font-normal text-slate-400"
-                >/ 10</span
-              >
-            </span>
+            <IMDbBadge :score="show.rating.average" />
             <span class="text-xs text-slate-400">{{ show.type }}</span>
           </div>
           <div>
@@ -83,7 +71,7 @@ watch(posterUrl, () => {
             }}</Badge>
           </div>
           <span
-            class="mt-auto inline-flex min-h-10 items-center gap-3 self-start rounded-full border border-sky-400/30 bg-sky-950/40! px-4 py-2 text-xs font-semibold text-sky-100 no-underline transition-colors hover:border-sky-300/70 hover:bg-sky-900/50! focus-visible:outline-2 focus-visible:outline-sky-300 focus-visible:outline-offset-2"
+            class="mt-auto inline-flex min-h-10 items-center gap-3 self-start rounded-full border border-sky-400/30 bg-sky-950/40 px-4 py-2 text-xs font-semibold text-sky-100 no-underline transition-colors hover:border-sky-300/70 hover:bg-sky-900/50 focus-visible:outline-2 focus-visible:outline-sky-300 focus-visible:outline-offset-2"
             >Explore show <span aria-hidden="true">→</span></span
           >
         </div>
