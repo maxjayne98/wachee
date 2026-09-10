@@ -1,5 +1,61 @@
 @import 'tailwindcss';
 
+@utility page-shell {
+  @apply min-h-svh bg-slate-950;
+
+  #app:has(&) {
+    @apply mt-0! w-full!;
+  }
+
+  body:has(&) {
+    @apply bg-slate-950!;
+  }
+}
+
+/* Shared Tailwind utilities for accents, outlined surfaces, and hero artwork. */
+@utility gradient-spectrum {
+  background-image: linear-gradient(
+    to right,
+    var(--color-blue-500),
+    var(--color-violet-600) 40%,
+    var(--color-fuchsia-600) 70%,
+    var(--color-orange-500)
+  );
+}
+
+@utility gradient-border {
+  background:
+    linear-gradient(var(--color-slate-950), var(--color-slate-950)) padding-box,
+    linear-gradient(
+        135deg,
+        var(--color-blue-500),
+        var(--color-violet-600) 40%,
+        var(--color-fuchsia-600) 70%,
+        var(--color-orange-500)
+      )
+      border-box;
+}
+
+@utility hero-overlay {
+  background:
+    linear-gradient(
+      to right,
+      --alpha(var(--color-slate-950) / 95%),
+      --alpha(var(--color-slate-950) / 60%) 45%,
+      --alpha(var(--color-slate-950) / 10%)
+    ),
+    linear-gradient(
+      to top,
+      var(--color-slate-950),
+      transparent 65%,
+      --alpha(var(--color-slate-950) / 65%)
+    );
+}
+
+@utility glass-surface {
+  @apply border border-white/15 bg-white/5 backdrop-blur-xl;
+}
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -66,4 +122,37 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #356a94 #0d1522;
+}
+
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: #0d1522;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 0.125rem solid #0d1522;
+    border-radius: 999rem;
+    background: #356a94;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #60a5fa;
+  }
+}
+
+@media (forced-colors: active) {
+  * {
+    scrollbar-color: auto;
+  }
 }
