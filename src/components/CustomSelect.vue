@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import ArrowDown from '@/components/icons/ArrowDown.vue'
 
 export type SelectValue = string | number | Record<string, unknown>
 
@@ -13,11 +14,13 @@ const props = withDefaults(
     options: SelectOption[]
     placeholder?: string
     disabled?: boolean
+    ariaLabel?: string
   }>(),
   {
     options: () => [],
     placeholder: 'Select an option',
     disabled: false,
+    ariaLabel: undefined,
   }
 )
 
@@ -61,14 +64,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="rootRef" class="relative w-full min-w-[140px] select-none">
+  <div ref="rootRef" class="relative w-full min-w-0 select-none">
     <button
       type="button"
       :disabled="disabled || !options.length"
-      class="group inline-flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#11131C] px-3.5 py-2.5 text-sm transition-all duration-150 ease-out hover:border-white/20 hover:bg-[#181B27] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E99F9]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07080D] disabled:cursor-not-allowed disabled:opacity-50"
+      :aria-label="ariaLabel"
+      :aria-expanded="isOpen"
+      class="group inline-flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border border-white/10 bg-slate-900 px-3.5 py-2.5 min-h-11 text-sm! transition-all duration-150 ease-out hover:border-white/20 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:opacity-50"
       :class="[
-        selectedOption ? 'text-[#F5F6FA]' : 'text-[#6F7688]',
-        isOpen && 'border-[#9761E8]/40 bg-[#181B27]',
+        selectedOption ? 'text-slate-100' : 'text-slate-400',
+        isOpen && 'border-purple-500/40 bg-slate-800',
       ]"
       @click="toggleDropdown"
     >
@@ -78,14 +83,10 @@ onBeforeUnmount(() => {
 
       <span
         aria-hidden="true"
-        class="inline-flex size-4 shrink-0 items-center justify-center text-[#A7ADBC] transition-all duration-200 group-hover:text-[#F5F6FA]"
-        :class="{ 'rotate-180 text-[#9761E8]': isOpen }"
+        class="inline-flex size-4 shrink-0 items-center justify-center text-slate-400 transition-all duration-200 group-hover:text-slate-100"
+        :class="{ 'rotate-180 text-purple-400': isOpen }"
       >
-        <svg viewBox="0 0 16 16" focusable="false" class="size-full fill-current">
-          <path
-            d="M4.47 6.47a.75.75 0 0 1 1.06 0L8 8.94l2.47-2.47a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 0 1 0-1.06Z"
-          />
-        </svg>
+        <ArrowDown />
       </span>
     </button>
 
@@ -99,7 +100,7 @@ onBeforeUnmount(() => {
     >
       <ul
         v-if="isOpen"
-        class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-30 m-0 grid max-h-[240px] list-none gap-1 overflow-y-auto rounded-xl border border-white/10 bg-[#11131C]/95 p-1.5 shadow-[0_18px_45px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+        class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-30 m-0 grid max-h-60 list-none gap-1 overflow-y-auto rounded-xl border border-white/10 bg-slate-900/95 p-1.5 shadow-2xl shadow-black/50 backdrop-blur-xl"
       >
         <li
           v-for="option in options"
@@ -107,16 +108,11 @@ onBeforeUnmount(() => {
           class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm transition-all duration-150"
           :class="
             option.value === modelValue
-              ? 'bg-[#9761E8]/15 text-[#F5F6FA]'
-              : 'text-[#A7ADBC] hover:bg-[#181B27] hover:text-[#F5F6FA]'
+              ? 'bg-purple-500/15 text-slate-100'
+              : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
           "
           @click="selectOption(option)"
         >
-          <span
-            v-if="option.value === modelValue"
-            class="absolute inset-y-2 left-0 w-0.5 rounded-full bg-linear-to-b from-[#0E99F9] via-[#9761E8] to-[#FB8E51]"
-          />
-
           <span class="truncate">
             {{ option.label }}
           </span>
@@ -124,7 +120,7 @@ onBeforeUnmount(() => {
           <svg
             v-if="option.value === modelValue"
             viewBox="0 0 20 20"
-            class="ml-auto size-4 shrink-0 text-[#9761E8]"
+            class="ml-auto size-4 shrink-0 text-purple-400"
             fill="currentColor"
           >
             <path
