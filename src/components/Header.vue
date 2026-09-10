@@ -1,38 +1,113 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import Button from '@/components/Button.vue'
 import TextInput from '@/components/TextInput.vue'
+import Magnifier from '@/components/icons/Magnifier.vue'
 
-const searchQuery = ref<string>('')
+const route = useRoute()
+const isScrolled = ref(false)
+
+function updateScrollState() {
+  isScrolled.value = window.scrollY > 0
+}
+
+onMounted(() => {
+  updateScrollState()
+  window.addEventListener('scroll', updateScrollState, { passive: true })
+})
+onUnmounted(() => window.removeEventListener('scroll', updateScrollState))
+
+const searchQuery = ref<string>(getQuery())
+const router = useRouter()
+
+function getQuery() {
+  return Array.isArray(route.query.q) ? (route.query.q[0] ?? '') : (route.query.q ?? '')
+}
+
+watch(
+  () => route.query.q,
+  () => {
+    searchQuery.value = getQuery()
+  }
+)
 
 function onSubmit() {
-  alert(searchQuery.value)
+  if (searchQuery.value.trim()) {
+    router.push({ path: '/search', query: { q: searchQuery.value.trim() } })
+  }
 }
 </script>
 
 <template>
-  <header class="app-header">
-    <img src="@/assets/wachee.png" alt="Wachee" class="app-header-logo" />
-    <form @submit.prevent="onSubmit">
-      <TextInput v-model="searchQuery" type="text" placeholder="Search" class="app-header-search" />
-      <Button type="submit" class="app-header-search-button">Search</Button>
-    </form>
+  <header
+    class="app-header fixed inset-x-0 top-0 z-50 isolate border-b transition-colors duration-300 motion-reduce:transition-none"
+    :class="isScrolled ? 'border-sky-200/30' : 'border-transparent'"
+  >
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[#090b12]/90 to-transparent transition-opacity duration-500 motion-reduce:transition-none"
+      :class="isScrolled ? 'opacity-0' : 'opacity-100'"
+    />
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-linear-to-br from-sky-400/15 via-blue-950/35 to-sky-900/15 shadow-xl shadow-sky-950/15 backdrop-blur-2xl backdrop-saturate-150 transition-opacity duration-500 motion-reduce:transition-none"
+      :class="isScrolled ? 'opacity-100' : 'opacity-0'"
+    >
+      <span class="absolute inset-0 bg-linear-to-b from-white/15 via-white/0 to-sky-300/10" />
+      <span
+        class="absolute -top-20 left-1/4 h-28 w-96 -rotate-12 rounded-full bg-sky-200/10 blur-2xl"
+      />
+      <span class="absolute -bottom-24 right-1/4 h-28 w-80 rounded-full bg-blue-400/15 blur-2xl" />
+      <!-- <span
+        class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/50 to-transparent"
+      />
+      <span
+        class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-sky-300/10 via-sky-100/60 to-sky-300/10"
+      /> -->
+    </div>
+
+    <div
+      class="mx-auto flex h-20 max-w-360 items-center justify-between gap-6 px-6 sm:gap-12 sm:px-12 lg:px-16"
+    >
+      <router-link
+        :to="{ path: '/' }"
+        aria-label="Wachee home"
+        class="shrink-0 rounded-xl bg-transparent! transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-purple-300 focus-visible:outline-offset-2"
+      >
+        <img src="@/assets/wachee.png" alt="Wachee" class="app-header-logo h-12 w-auto sm:h-16" />
+      </router-link>
+
+      <form
+        role="search"
+        class="group flex min-w-0 w-full max-w-112 items-center rounded-full bg-linear-to-r from-cyan-500/40 via-purple-500/50 to-orange-500/40 p-px shadow-lg shadow-purple-950/20 transition-shadow focus-within:shadow-purple-500/20"
+        @submit.prevent="onSubmit"
+      >
+        <div
+          class="flex w-full min-w-0 items-center gap-2 rounded-full bg-[#0c101a]/95 p-2 pl-5 sm:pl-6"
+        >
+          <Magnifier
+            aria-hidden="true"
+            class="hidden size-6 shrink-0 stroke-purple-300/70 sm:block"
+          />
+          <TextInput
+            v-model="searchQuery"
+            type="search"
+            placeholder="Find your next favorite…"
+            class="min-w-0 w-full border-0 bg-transparent py-2 text-sm! text-slate-100 outline-none placeholder:text-slate-400 sm:text-base!"
+            required
+            aria-label="Search shows"
+          />
+          <Button
+            id="search-submit"
+            aria-label="Search"
+            type="submit"
+            class="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-purple-300/25 bg-linear-to-br from-indigo-500 via-purple-600 to-fuchsia-600 text-white shadow-md shadow-purple-500/20 transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-purple-200 focus-visible:outline-offset-2 motion-reduce:transition-none"
+          >
+            <Magnifier aria-hidden="true" class="size-5 stroke-white" />
+          </Button>
+        </div>
+      </form>
+    </div>
   </header>
 </template>
-<style lang="scss">
-.app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  padding: 0.25rem 4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.app-header-logo {
-  height: 80px;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="home-view bg-[#090b12] text-[#c0bfcb] [#app:has(&)]:w-full! [#app:has(&)]:mt-0! [body:has(&)]:bg-[#090b12]! [body:has(&)_.app-header]:bg-[linear-gradient(#090b12eb,#090b1200)]! max-[701px]:[body:has(&)_.app-header]:px-[16px]! max-[701px]:[body:has(&)_.app-header-logo]:h-[60px]! max-[701px]:[body:has(&)_.app-header_form]:min-w-0 max-[701px]:[body:has(&)_.app-header_form]:max-w-[65%]"
+    class="home-view bg-[#090b12] text-[#c0bfcb] [#app:has(&)]:w-full! [#app:has(&)]:mt-0! [body:has(&)]:bg-[#090b12]!"
   >
     <FeaturedShows
       :shows="topPicksShows"
@@ -10,11 +10,11 @@
     />
     <div
       id="browse-shows"
-      class="home-catalog mx-auto min-w-0 max-w-[1312px] scroll-mt-[100px] px-[32px] pt-[28px] pb-[64px] text-left max-[701px]:px-[24px] max-[701px]:py-[32px] max-[701px]:[&_label]:min-w-0 max-[701px]:[&_label]:max-w-full"
+      class="home-catalog mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-[701px]:px-6 max-[701px]:py-8 max-[701px]:[&_label]:min-w-0 max-[701px]:[&_label]:max-w-full"
     >
-      <div class="catalog-heading mb-[28px]">
+      <div class="catalog-heading mb-7">
         <span class="text-[1rem] tracking-[0.2em] text-[#b7a3d5]">FIND YOUR NEXT FAVORITE</span>
-        <h2 class="mt-[12px]! text-[3rem]! text-[#f5f2fc]!">Explore the collection</h2>
+        <h2 class="mt-3! text-[3rem]! text-[#f5f2fc]!">Explore the collection</h2>
       </div>
       <ShowFilters />
       <nav
@@ -36,15 +36,15 @@
         v-for="(shows, genre) in showsByGenres"
         :id="genreId(genre)"
         :key="genre"
-        class="genre-section scroll-mt-[100px] focus:outline-none focus-visible:[&_.card-title]:underline focus-visible:[&_.card-title]:decoration-[#a855f7] focus-visible:[&_.card-title]:underline-offset-8"
+        class="genre-section scroll-mt-25 focus:outline-none focus-visible:[&_.card-title]:underline focus-visible:[&_.card-title]:decoration-[#a855f7] focus-visible:[&_.card-title]:underline-offset-8"
         tabindex="-1"
         :aria-label="genre"
       >
-        <div class="card-title mt-[2rem] mb-[1rem] text-left text-[2rem] font-bold text-[#f5f2fc]">
+        <div class="card-title mt-8 mb-4 text-left text-[2rem] font-bold text-[#f5f2fc]">
           {{ genre }}
         </div>
         <div
-          class="show-card-container flex h-[500px] flex-row justify-start gap-[1.5rem] overflow-x-auto p-[0.5rem]"
+          class="show-card-container flex h-150 flex-row justify-start gap-4 overflow-x-auto p-2"
         >
           <VirtualCarousel :items="shows" :item-width="240" :gap="16">
             <template #default="{ item }">

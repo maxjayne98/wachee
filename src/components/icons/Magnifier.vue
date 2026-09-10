@@ -1,0 +1,34 @@
+<template>
+  <svg
+    id="Editable-line"
+    viewBox="0 0 32 32"
+    version="1.1"
+    xml:space="preserve"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+  >
+    <circle
+      id="XMLID_42_"
+      cx="14"
+      cy="14"
+      fill="none"
+      r="9"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-miterlimit="10"
+      stroke-width="2"
+    />
+    <line
+      id="XMLID_44_"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-miterlimit="10"
+      stroke-width="2"
+      x1="27"
+      x2="20.366"
+      y1="27"
+      y2="20.366"
+    />
+  </svg>
+</template>

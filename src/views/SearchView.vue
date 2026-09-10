@@ -1,5 +1,107 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useShowList } from '@/store/showList'
+import SearchResultCard from '@/components/SearchResultCard.vue'
+import Magnifier from '@/components/icons/Magnifier.vue'
+
+const route = useRoute()
+const { searchShowsByQuery, visibleShows: results, error, isLoading } = useShowList()
+const query = computed(() => {
+  const value = route.query.q
+  return (Array.isArray(value) ? (value[0] ?? '') : (value ?? '')).trim()
+})
+
+const retry = ref(0)
+
+watch(
+  [query, retry],
+  async ([value], _, onCleanup) => {
+    const controller = new AbortController()
+    onCleanup(() => controller.abort())
+
+    if (!value) return
+    try {
+      await searchShowsByQuery(value, controller.signal)
+    } catch {
+      if (!controller.signal.aborted) error.value = 'Search is temporarily unavailable.'
+    }
+  },
+  { immediate: true }
+)
+</script>
+
 <template>
-  <section>Search page</section>
+  <section
+    class="search-view min-h-svh bg-[#090b12] text-left text-slate-200 [#app:has(&)]:mt-0! [#app:has(&)]:w-full! [body:has(&)]:bg-[#090b12]!"
+  >
+    <div class="mx-auto max-w-360 px-6 pt-28 pb-16 sm:px-12 lg:px-16">
+      <div class="mt-6 mb-8 border-b border-white/10 pb-8">
+        <h1
+          class="mt-3! mb-4! text-3xl! font-bold text-white! sm:text-4xl! [overflow-wrap:anywhere]"
+        >
+          {{ query ? `Results for “${query}”` : 'Find your next favorite' }}
+        </h1>
+        <p role="status" aria-live="polite" class="text-sm text-slate-400">
+          {{
+            isLoading
+              ? 'Searching the collection…'
+              : error
+                ? 'Search is temporarily unavailable.'
+                : query
+                  ? `${results.length} ${results.length === 1 ? 'show' : 'shows'} found`
+                  : 'Search for a show using the search bar above.'
+          }}
+        </p>
+      </div>
+      <div v-if="isLoading" aria-hidden="true" class="grid gap-6 xl:grid-cols-2">
+        <div
+          v-for="item in 6"
+          :key="item"
+          class="flex h-72 animate-pulse overflow-hidden rounded-3xl border border-white/10 bg-[#080a10] motion-reduce:animate-none"
+        >
+          <div class="w-28 shrink-0 bg-slate-800/60 sm:w-40" />
+          <div class="flex flex-1 flex-col gap-4 p-6">
+            <div class="h-5 w-20 rounded-full bg-slate-800" />
+            <div class="h-7 w-3/4 rounded-lg bg-slate-800" />
+            <div class="h-16 rounded-lg bg-slate-800/50" />
+            <div class="mt-auto h-8 w-24 rounded-full bg-slate-800/60" />
+          </div>
+        </div>
+      </div>
+      <div
+        v-else-if="error"
+        role="alert"
+        class="rounded-3xl border border-sky-400/20 bg-slate-900/50 px-6 py-12 text-center"
+      >
+        <h2 class="text-xl! text-white!">We couldn’t load your results</h2>
+        <p class="mt-3! text-sm text-slate-400">Please try again in a moment.</p>
+        <button
+          class="mt-6 cursor-pointer rounded-full bg-sky-600 px-6 py-3 text-sm! font-semibold text-white hover:bg-sky-500 focus-visible:outline-2 focus-visible:outline-sky-200 focus-visible:outline-offset-2"
+          @click="retry++"
+        >
+          Try again
+        </button>
+      </div>
+      <div v-else-if="results.length" class="grid items-stretch gap-6 xl:grid-cols-2">
+        <SearchResultCard v-for="show in results" :key="show.id" :show="show" />
+      </div>
+      <div
+        v-else
+        class="rounded-3xl border border-white/10 bg-linear-to-br from-sky-950/30 to-slate-950 px-6 py-16 text-center"
+      >
+        <Magnifier aria-hidden="true" class="mx-auto mb-6 size-10 stroke-sky-400" />
+        <h2 class="text-xl! text-white!">
+          {{ query ? 'No shows found' : 'Every great watch starts with a search' }}
+        </h2>
+        <p class="mx-auto mt-3! max-w-md text-sm leading-relaxed text-slate-400">
+          {{
+            query
+              ? 'Try a different title or check the spelling in the search bar above.'
+              : 'Enter a show title above to explore the collection.'
+          }}
+        </p>
+      </div>
+    </div>
+  </section>
 </template>
-<script lang="ts"></script>
-<style lang="scss"></style>

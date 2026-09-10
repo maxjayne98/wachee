@@ -16,7 +16,6 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  font-size: 62.5%;
   font-family: var(--sans);
   line-height: 1.45;
   letter-spacing: 0.18px;
