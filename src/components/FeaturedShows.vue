@@ -9,7 +9,6 @@ const DURATION = 10_000
 const activeIndex = ref(0)
 const picks = ref<HTMLElement | null>(null)
 const progress = ref(0)
-const paused = ref(false)
 const failedImages = ref(new Set<string>())
 const activeShow = computed(() => props.shows[activeIndex.value])
 const summary = computed(() => {
@@ -61,7 +60,7 @@ onMounted(() => {
     const now = Date.now()
     const elapsed = now - lastTick
     lastTick = now
-    if (paused.value || document.hidden || props.shows.length < 2) return
+    if (document.hidden || props.shows.length < 2) return
     progress.value += elapsed / DURATION
     if (progress.value >= 1) select(activeIndex.value + 1)
   }, 100)
@@ -109,19 +108,19 @@ onUnmounted(() => {
         </div>
         <Transition
           mode="out-in"
-          enter-active-class="transition-[opacity,transform] duration-250 ease-in-out"
-          leave-active-class="transition-[opacity,transform] duration-250 ease-in-out"
-          enter-from-class="opacity-0 translate-y-[10px]"
-          leave-to-class="opacity-0 -translate-y-[10px]"
+          enter-active-class="transition-opacity duration-250 ease-in-out"
+          leave-active-class="transition-opacity duration-250 ease-in-out"
+          enter-from-class="opacity-0"
+          leave-to-class="opacity-0"
         >
           <div
             :key="activeShow.id"
-            class="featured__details max-w-[680px] flex-1 pt-[20px] pb-[24px] max-[701px]:pt-[24px]"
+            class="featured__details max-w-170 flex-1 pt-5 pb-6 max-[701px]:pt-6"
             role="group"
             aria-roledescription="slide"
             :aria-label="`${activeIndex + 1} of ${shows.length}: ${activeShow.name}`"
           >
-            <div class="featured__genres mb-[14px] flex flex-wrap gap-[8px]">
+            <div class="featured__genres mb-3.5 flex flex-wrap gap-2">
               <Badge
                 v-for="(genre, index) in activeShow.genres.slice(0, 3)"
                 :key="genre"
@@ -132,19 +131,17 @@ onUnmounted(() => {
               <Badge v-if="!activeShow.genres.length" size="regular">{{ activeShow.type }}</Badge>
             </div>
             <h1
-              class="m-0! mb-[16px]! text-[clamp(3.6rem,4vw,5.6rem)]! leading-[1.02] font-[750]! tracking-[-0.045em]! text-balance text-white! [overflow-wrap:anywhere]"
+              class="m-0! mb-4 text-[clamp(3.6rem,4vw,5.6rem)]! leading-tight! min-h-48 font-extrabold! tracking-[-0.045em]! text-balance text-white! wrap-anywhere"
             >
               {{ activeShow.name }}
             </h1>
-            <div
-              class="featured__meta flex flex-wrap items-center gap-[20px] text-[1.3rem] text-[#d5d3df]"
-            >
+            <div class="featured__meta flex flex-wrap items-center gap-5 text-sm text-[#d5d3df]">
               <span
                 v-if="activeShow.rating.average != null"
-                class="featured__rating inline-flex items-center gap-[7px] rounded-full border border-[#ff9900d9] bg-[#0f121a] py-[4px] pr-[10px] pl-[4px] font-bold text-white shadow-[0_0_14px_#ff990059]"
+                class="featured__rating inline-flex items-center gap-1.75 rounded-full border border-[#ff9900d9] bg-[#0f121a] py-1 pr-2.5 pl-1 font-bold text-white shadow-[0_0_14px_#ff990059]"
                 ><span
-                  class="featured__rating-label inline-flex size-[22px] items-center justify-center rounded-full bg-[#f5c518] text-[#080a10]"
-                  >★</span
+                  class="inline-flex p-0.5 items-center justify-center rounded-full bg-[#f5c518] text-[#080a10]"
+                  >IMDb</span
                 >
                 {{ activeShow.rating.average.toFixed(1) }}
                 <small class="font-normal text-[#aaa7b6]">/ 10</small></span
@@ -154,69 +151,54 @@ onUnmounted(() => {
               <span v-if="activeShow.language">{{ activeShow.language }}</span>
             </div>
             <p
-              class="featured__summary mt-[14px]! line-clamp-2 max-w-[560px] text-[1.6rem] leading-[1.6] text-[#c0bfcb]"
+              class="featured__summary mt-5! line-clamp-2 max-w-140 text-base leading-8! min-h-16 text-[#c0bfcb]"
             >
               {{
                 summary ||
                 'Your next great story starts here. Discover this pick and find something new to love.'
               }}
             </p>
-            <div class="featured__actions mt-[18px] flex flex-wrap items-center gap-[26px]">
-              <a
-                :href="activeShow.url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="featured__primary inline-flex cursor-pointer items-center justify-center gap-[32px] rounded-full border-[1.5px] border-transparent [background:linear-gradient(#151022,#151022)_padding-box,linear-gradient(135deg,#0070f3,#7928ca_40%,#c026d3_70%,#ff5722)_border-box]! px-[22px] py-[12px] text-[1.4rem]! font-[750] text-[#f1eaff] shadow-[0_0_18px_#a855f735] transition-[background] duration-200 hover:shadow-[0_0_24px_#a855f770]"
-                >Explore show <span aria-hidden="true">↗</span></a
+            <div class="featured__actions mt-5 flex flex-wrap items-center gap-[26px]">
+              <router-link
+                :to="{ name: 'show-detail', params: { id: activeShow.id } }"
+                class="inline-flex cursor-pointer items-center justify-center gap-8 rounded-full border-4 border-transparent [background:linear-gradient(#151022,#151022)_padding-box,linear-gradient(135deg,#0070f3,#7928ca_40%,#c026d3_70%,#ff5722)_border-box]! px-5.5 py-3 text-base! font-[750] text-[#f1eaff] shadow-[0_0_18px_#a855f735] transition-[background] duration-200 hover:shadow-[0_0_24px_#a855f770]"
+                >Explore show <span aria-hidden="true">→</span></router-link
               >
-              <a
-                href="#browse-shows"
-                class="featured__browse inline-flex gap-[16px] text-[1.3rem] text-[#e3e0ec]"
-                >Browse collection <span aria-hidden="true">↓</span></a
-              >
+              <a href="#browse-shows" class="inline-flex gap-4 text-base text-[#e3e0ec]"
+                >Browse collection
+              </a>
             </div>
           </div>
         </Transition>
         <div class="featured__selection mt-auto min-w-0">
           <div
-            class="featured__selection-heading mb-[12px] flex items-center justify-between gap-[16px] max-[701px]:[&_.featured__eyebrow]:text-[0.8rem] max-[701px]:[&_.featured__eyebrow]:tracking-[0.12em]"
+            class="mb-3 flex items-center justify-between gap-4 max-[701px]:[&_.featured__eyebrow]:text-[0.8rem] max-[701px]:[&_.featured__eyebrow]:tracking-[0.12em]"
           >
             <div>
               <span
-                class="featured__eyebrow flex items-center gap-[10px] text-[1rem] font-bold tracking-[0.24em] text-[#b9b7c5]"
+                class="flex items-center gap-2.5 text-base font-bold tracking-[0.24em] text-[#b9b7c5]"
                 >CURATED FOR YOUR NEXT OBSESSION</span
               >
               <h2
-                class="m-0! mt-[9px]! flex flex-wrap items-center gap-[20px] text-[2.3rem]! text-white! max-[701px]:gap-[10px] max-[701px]:text-[1.8rem]!"
+                class="m-0! mt-2.25! flex flex-wrap items-center gap-5 text-2xl text-white! max-[701px]:gap-2.5 max-[701px]:text-[1.8rem]!"
               >
-                Top picks for you<span
-                  class="featured__count text-[1.1rem] tracking-[0.1em] text-[#9894a6]"
+                Top picks for you<span class="text-base tracking-widest text-[#9894a6]"
                   >{{ String(activeIndex + 1).padStart(2, '0') }} /
                   {{ String(shows.length).padStart(2, '0') }}</span
                 >
               </h2>
             </div>
-            <div
-              v-if="shows.length > 1"
-              class="featured__controls flex gap-[8px] max-[701px]:gap-[5px]"
-            >
+            <div v-if="shows.length > 1" class="featured__controls flex gap-2 max-[701px]:gap-1.25">
               <button
-                class="size-[40px] cursor-pointer rounded-full border border-[#ffffff26] bg-[#ffffff09] text-white hover:bg-[#ffffff20] max-[701px]:size-[34px]"
+                class="w-14 cursor-pointer rounded-full border border-[#ffffff26] bg-[#ffffff09] text-white hover:bg-[#ffffff20] max-[701px]:w-12"
                 aria-label="Previous pick"
                 @click="select(activeIndex - 1)"
               >
                 ←
               </button>
+
               <button
-                class="size-[40px] cursor-pointer rounded-full border border-[#ffffff26] bg-[#ffffff09] text-white hover:bg-[#ffffff20] max-[701px]:size-[34px]"
-                :aria-label="paused ? 'Resume slideshow' : 'Pause slideshow'"
-                :aria-pressed="paused"
-                @click="paused = !paused"
-              >
-                {{ paused ? '▶' : 'Ⅱ' }}
-              </button>
-              <button
-                class="size-[40px] cursor-pointer rounded-full border border-[#ffffff26] bg-[#ffffff09] text-white hover:bg-[#ffffff20] max-[701px]:size-[34px]"
+                class="w-14 cursor-pointer rounded-full border border-[#ffffff26] bg-[#ffffff09] text-white hover:bg-[#ffffff20] max-[701px]:w-12"
                 aria-label="Next pick"
                 @click="select(activeIndex + 1)"
               >
@@ -226,12 +208,12 @@ onUnmounted(() => {
           </div>
           <div
             ref="picks"
-            class="featured__picks flex gap-[12px] overflow-x-auto px-[3px] pt-[3px] pb-[12px] [scrollbar-width:thin] [scrollbar-color:#51495e_transparent]"
+            class="featured__picks flex gap-3 overflow-x-auto px-0.75 pt-0.75 pb-3 scrollbar-thin [scrollbar-color:#51495e_transparent]"
           >
             <button
               v-for="(show, index) in shows"
               :key="show.id"
-              class="featured__pick relative h-[72px] flex-[0_0_164px] cursor-pointer overflow-hidden rounded-[18px] border text-left text-white hover:border-[#d9c7ff] max-[701px]:basis-[140px] after:absolute after:inset-0 after:bg-[linear-gradient(0deg,#090b12ed,#090b1233)] after:content-['']"
+              class="featured__pick relative h-24 flex-[0_0_164px] cursor-pointer overflow-hidden rounded-[18px] border text-left text-white hover:border-[#d9c7ff] max-[701px]:basis-[140px] after:absolute after:inset-0 after:bg-[linear-gradient(0deg,#090b12ed,#090b1233)] after:content-['']"
               :class="
                 index === activeIndex
                   ? 'border-transparent [background:linear-gradient(#080a10,#080a10)_padding-box,linear-gradient(135deg,#0070f3,#7928ca_40%,#c026d3_70%,#ff5722)_border-box] shadow-[0_0_12px_#a855f74d]'
@@ -250,17 +232,16 @@ onUnmounted(() => {
                 loading="lazy"
                 @error="failedImages.add(imageFor(show))"
               />
+              <span class="absolute top-2.5 left-3 z-1 text-sm">{{
+                String(index + 1).padStart(2, '0')
+              }}</span>
               <span
-                class="featured__pick-number absolute top-[10px] left-[12px] z-1 text-[1rem] text-[#ded5ed]"
-                >{{ String(index + 1).padStart(2, '0') }}</span
-              >
-              <span
-                class="featured__pick-title absolute right-[10px] bottom-[15px] left-[12px] z-1 truncate text-[1.2rem] font-[650]"
+                class="absolute right-2.5 bottom-3.75 left-3 z-1 truncate text-base font-bold"
                 >{{ show.name }}</span
               >
               <span
                 v-if="index === activeIndex"
-                class="featured__progress absolute inset-x-0 bottom-0 z-2 h-[3px] bg-[#ffffff30]"
+                class="featured__progress absolute inset-x-0 bottom-0 z-2 h-0.75 bg-[#ffffff30]"
                 ><span
                   class="block h-full origin-left bg-[#d9c7ff] transition-transform duration-100 ease-linear"
                   :style="{ transform: `scaleX(${progress})` }"
@@ -271,15 +252,15 @@ onUnmounted(() => {
       </template>
       <div
         v-else
-        class="featured__empty my-auto max-w-[700px] py-[50px] [&_h1]:mt-[14px]! [&_p]:mb-[24px] [&_p]:text-[#b9b7c5]"
+        class="my-auto max-w-175 lg:max-w-250 py-12.5 [&_h1]:mt-3.5! [&_p]:text-[#b9b7c5]"
         role="status"
       >
         <span
-          class="featured__eyebrow flex items-center gap-[10px] text-[1rem] font-bold tracking-[0.24em] text-[#b9b7c5]"
+          class="featured__eyebrow flex items-center gap-2.5 text-base font-bold tracking-[0.24em] text-[#b9b7c5]"
           >THE WACHEE SPOTLIGHT</span
         >
         <h1
-          class="m-0! mb-[16px]! text-[clamp(3.6rem,4vw,5.6rem)]! leading-[1.02] font-[750]! tracking-[-0.045em]! text-balance text-white! [overflow-wrap:anywhere]"
+          class="m-0! mb-4! text-[clamp(3.6rem,4vw,5.6rem)]! leading-[1.02] font-[750]! tracking-[-0.045em]! text-balance text-white! wrap-anywhere"
         >
           {{
             loading
@@ -300,17 +281,11 @@ onUnmounted(() => {
         </p>
         <button
           v-if="error && !loading"
-          class="featured__primary inline-flex cursor-pointer items-center justify-center gap-[32px] rounded-full border-[1.5px] border-transparent [background:linear-gradient(#151022,#151022)_padding-box,linear-gradient(135deg,#0070f3,#7928ca_40%,#c026d3_70%,#ff5722)_border-box]! px-[22px] py-[12px] text-[1.4rem]! font-[750] text-[#f1eaff] shadow-[0_0_18px_#a855f735] transition-[background] duration-200 hover:shadow-[0_0_24px_#a855f770]"
+          class="inline-flex cursor-pointer text-lg mt-8 items-center justify-center gap-8 rounded-full border-2 border-transparent [background:linear-gradient(#151022,#151022)_padding-box,linear-gradient(135deg,#0070f3,#7928ca_40%,#c026d3_70%,#ff5722)_border-box]! px-5.5 py-3 font-extrabold text-[#f1eaff] shadow-[0_0_18px_#a855f735] transition-[background] duration-200 hover:shadow-[0_0_24px_#a855f770]"
           @click="emit('retry')"
         >
           Try again ↗
         </button>
-        <a
-          v-else-if="!loading"
-          href="#browse-shows"
-          class="featured__browse inline-flex gap-[16px] text-[1.3rem] text-[#e3e0ec]"
-          >Adjust filters ↓</a
-        >
       </div>
     </div>
   </section>
