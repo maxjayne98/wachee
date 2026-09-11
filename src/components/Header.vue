@@ -86,8 +86,9 @@ function onSubmit() {
             class="hidden size-6 shrink-0 stroke-purple-300/70 sm:block"
           />
           <TextInput
+            id="searchQuery"
             v-model="searchQuery"
-            type="search"
+            type="input"
             placeholder="Find your next favorite…"
             class="min-w-0 w-full border-0 bg-transparent py-2 text-sm! text-slate-100 outline-none  sm:text-base!"
             required

@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('@/views/SearchView.vue'),
     },
     {
+      path: '/show/:id',
+      name: 'show-detail',
+      component: () => import('@/views/ShowDetailView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/',
     },

@@ -1,9 +1,11 @@
-import type { Show, SearchResult } from '@/types'
+import type { Show, SearchResult, CastMember, Season, Episode, ShowImage } from '@/types'
 
 async function get<T>(url: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(import.meta.env.VITE_API_BASE_URL + url, { signal })
   if (!response.ok) {
-    throw new Error(response.statusText)
+    throw new Error(
+      response.status === 404 ? 'Show not found' : response.statusText || 'Request failed'
+    )
   }
   const result = (await response.json()) as T
   return result
@@ -24,8 +26,20 @@ export async function searchShowsByName(
   return get<SearchResult[]>(`/search/shows?q=${encodeURIComponent(query)}`, signal)
 }
 
-// export async function fetchShowCast(id: number, signal?: AbortSignal): Promise<TVMazeCastMember[]> {
-//   return apiGet<TVMazeCastMember[]>(`/shows/${id}/cast`, signal);
-// }
+export function fetchShowCast(id: number, signal?: AbortSignal) {
+  return get<CastMember[]>(`/shows/${id}/cast`, signal)
+}
+
+export function fetchShowSeasons(id: number, signal?: AbortSignal) {
+  return get<Season[]>(`/shows/${id}/seasons`, signal)
+}
+
+export function fetchSeasonEpisodes(id: number, signal?: AbortSignal) {
+  return get<Episode[]>(`/seasons/${id}/episodes`, signal)
+}
+
+export function fetchShowImages(id: number, signal?: AbortSignal) {
+  return get<ShowImage[]>(`/shows/${id}/images`, signal)
+}
 
 export { get }

@@ -54,4 +54,12 @@ function shuffle<T>(array: T[]): T[] {
   return result
 }
 
-export { sortShowsByRating, capitalizeFirstLetter, get, pickTwoRandom, shuffle }
+function plainText(html?: string | null): string {
+  return html
+    ? new DOMParser()
+        .parseFromString(html.replace(/<\/(p|div)>/gi, '$&\n\n'), 'text/html')
+        .body.textContent?.trim() || ''
+    : ''
+}
+
+export { sortShowsByRating, capitalizeFirstLetter, get, pickTwoRandom, shuffle, plainText }

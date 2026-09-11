@@ -130,7 +130,7 @@ onUnmounted(() => {
                 :name="genre"
                 >{{ genre }}</Badge
               >
-              <Badge v-if="activeShow.genres.length" :name="activeShow.type" size="regular">{{
+              <Badge v-if="!activeShow.genres.length" :name="activeShow.type" size="regular">{{
                 activeShow.type
               }}</Badge>
             </div>

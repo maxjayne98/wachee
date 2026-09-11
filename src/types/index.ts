@@ -45,6 +45,8 @@ export interface Show {
   officialSite?: string | null
   status: string
   network?: NetworkInfo | null
+  webChannel?: { id: number; name: string } | null
+  averageRuntime?: number | null
   externals?: ExternalsInfo
 }
 
@@ -73,3 +75,31 @@ export type NestedKeyOf<T> = T extends object
       [K in keyof T & string]: T[K] extends object ? K | `${K}.${NestedKeyOf<T[K]>}` : K
     }[keyof T & string]
   : never
+
+export interface Season {
+  id: number
+  number: number
+  name: string
+  premiereDate: string | null
+  endDate: string | null
+  episodeOrder: number | null
+}
+
+export interface Episode {
+  id: number
+  name: string
+  url: string
+  season: number
+  number: number | null
+  airdate: string
+  runtime: number | null
+  image: ImageInfo | null
+  summary: string | null
+}
+
+export interface ShowImage {
+  id: number
+  type: string | null
+  main: boolean
+  resolutions: { original: { url: string }; medium?: { url: string } }
+}
