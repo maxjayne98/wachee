@@ -34,7 +34,7 @@
         v-for="(shows, genre) in showsByGenres"
         :id="genreId(genre)"
         :key="genre"
-        class="scroll-mt-25 focus:outline-none focus-visible:[&>h3]:underline focus-visible:[&>h3]:decoration-purple-500 focus-visible:[&>h3]:underline-offset-8"
+        class="scroll-mt-25 focus:outline-none focus-visible:[&>h3]:underline focus-visible:[&>h3]:decoration-purple-500 focus-visible:[&>h3]:underline-offset-8 [content-visibility:auto] [contain-intrinsic-size:auto_560px]"
         tabindex="-1"
         :aria-label="genre"
       >
