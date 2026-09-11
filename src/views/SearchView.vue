@@ -1,18 +1,33 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useShowList } from '@/store/showList'
 import SearchResultCard from '@/components/SearchResultCard.vue'
 import Magnifier from '@/components/icons/Magnifier.vue'
+import { searchShowsByName } from '@/api/request'
+import type { Show } from '@/types'
 
 const route = useRoute()
-const { searchShowsByQuery, visibleShows: results, error, isLoading } = useShowList()
 const query = computed(() => {
   const value = route.query.q
   return (Array.isArray(value) ? (value[0] ?? '') : (value ?? '')).trim()
 })
-
+const isLoading = ref(false)
+const error = ref('')
 const retry = ref(0)
+const searchResult = ref<Show[]>([])
+
+async function searchShowsByQuery(query: string, signal?: AbortSignal) {
+  isLoading.value = true
+  try {
+    const result = await searchShowsByName(query, signal)
+    searchResult.value = Object.values(result).map(result => result.show)
+  } catch (err) {
+    console.error('Error fetching shows:', err)
+    error.value = err instanceof Error ? err.message : 'Failed to fetch shows'
+  } finally {
+    isLoading.value = false
+  }
+}
 
 watch(
   [query, retry],
@@ -47,7 +62,7 @@ watch(
               : error
                 ? 'Search is temporarily unavailable.'
                 : query
-                  ? `${results.length} ${results.length === 1 ? 'show' : 'shows'} found`
+                  ? `${searchResult.length} ${searchResult.length === 1 ? 'show' : 'shows'} found`
                   : 'Search for a show using the search bar above.'
           }}
         </p>
@@ -81,8 +96,8 @@ watch(
           Try again
         </button>
       </div>
-      <div v-else-if="results.length" class="grid items-stretch gap-6 xl:grid-cols-2">
-        <SearchResultCard v-for="show in results" :key="show.id" :show="show" />
+      <div v-else-if="searchResult.length" class="grid items-stretch gap-6 xl:grid-cols-2">
+        <SearchResultCard v-for="show in searchResult" :key="show.id" :show="show" />
       </div>
       <div
         v-else

@@ -22,8 +22,8 @@ export async function fetchShowById(id: number, signal?: AbortSignal): Promise<S
 export async function searchShowsByName(
   query: string,
   signal?: AbortSignal
-): Promise<SearchResult[]> {
-  return get<SearchResult[]>(`/search/shows?q=${encodeURIComponent(query)}`, signal)
+): Promise<Record<number, SearchResult>> {
+  return get<Record<number, SearchResult>>(`/search/shows?q=${encodeURIComponent(query)}`, signal)
 }
 
 export function fetchShowCast(id: number, signal?: AbortSignal) {

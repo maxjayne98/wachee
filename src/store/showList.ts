@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
-import { fetchShowsPage, searchShowsByName } from '@/api/request'
+import { fetchShowsPage } from '@/api/request'
 import type { Show, NestedKeyOf } from '@/types'
 import { sortShowsByRating, get, pickTwoRandom, shuffle } from '@/utils'
 
@@ -110,21 +110,6 @@ export const useShowListStore = defineStore('showList', () => {
     }
   }
 
-  async function searchShowsByQuery(query: string, signal?: AbortSignal) {
-    isLoading.value = true
-
-    try {
-      const result = await searchShowsByName(query, signal)
-      allShows.value = result.map(({ show }) => show)
-      console.log(result.map(({ show }) => show))
-    } catch (err) {
-      console.error('Error fetching shows:', err)
-      error.value = err instanceof Error ? err.message : 'Failed to fetch shows'
-    } finally {
-      isLoading.value = false
-    }
-  }
-
   function updateFilters(newFilters: Filter[]) {
     filters.value = newFilters
   }
@@ -140,7 +125,6 @@ export const useShowListStore = defineStore('showList', () => {
     showsById,
     updateFilters,
     topPickedShows,
-    searchShowsByQuery,
   }
 })
 
@@ -160,7 +144,7 @@ export function useShowList() {
     showsById,
     topPickedShows,
   } = storeToRefs(store)
-  const { fetchShows, updateFilters, searchShowsByQuery } = store
+  const { fetchShows, updateFilters } = store
 
   return {
     allShows,
@@ -173,7 +157,6 @@ export function useShowList() {
     showsById,
     updateFilters,
     topPickedShows,
-    searchShowsByQuery,
   }
 }
 
