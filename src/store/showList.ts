@@ -1,46 +1,56 @@
 import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { fetchShowsPage } from '@/api/request'
-import type { Show, NestedKeyOf } from '@/types'
-import { sortShowsByRating, get, pickTwoRandom, shuffle } from '@/utils'
+import type { Show } from '@/types'
+import { sortShowsByRating, pickTwoRandom, shuffle } from '@/utils'
 
-export type Filter =
-  | { type: 'equal'; field: NestedKeyOf<Show>; value: string | number | boolean }
-  | {
-      type: 'range'
-      field: NestedKeyOf<Show>
-      value: { min: number; max: number; minExclusive?: boolean; maxExclusive?: boolean }
-    }
+export interface ShowFiltersState {
+  language: string
+  runtime: string
+  rating: { min: number; max: number }
+}
+
+const DEFAULT_FILTERS: ShowFiltersState = {
+  language: '',
+  runtime: '',
+  rating: { min: 1, max: 10 },
+}
 
 export const useShowListStore = defineStore('showList', () => {
   const allShows = ref<Show[]>([])
   const error = ref<string>('')
   const isLoading = ref<boolean>(false)
-  const filters = ref<Filter[]>([])
+  const filters = ref<ShowFiltersState>({ ...DEFAULT_FILTERS, rating: { min: 1, max: 10 } })
   const topPickedShows = ref<Show[]>([])
 
   const visibleShows = computed(() => {
-    return allShows.value.filter(show => {
-      return filters.value.every(filter => {
-        const value =
-          filter.field === 'runtime'
-            ? (show.runtime ?? show.averageRuntime)
-            : get(show, filter.field)
-        if (value == null) return false
+    const { language, runtime, rating } = filters.value
+    const hasRatingFilter = rating.min > 1 || rating.max < 10
 
-        if (filter.type === 'equal') {
-          return value === filter.value
+    if (!language && !runtime && !hasRatingFilter) {
+      return allShows.value
+    }
+
+    return allShows.value.filter(show => {
+      if (language && show.language !== language) {
+        return false
+      }
+
+      if (runtime) {
+        const time = show.runtime ?? show.averageRuntime ?? 0
+        if (runtime === 'short' && time >= 30) return false
+        if (runtime === 'medium' && (time < 30 || time > 60)) return false
+        if (runtime === 'long' && time <= 60) return false
+      }
+
+      if (hasRatingFilter) {
+        const score = show.rating?.average
+        if (score == null || score < rating.min || score > rating.max) {
+          return false
         }
-        if (filter.type === 'range') {
-          const num = Number(value)
-          return (
-            Number.isFinite(num) &&
-            (filter.value.minExclusive ? num > filter.value.min : num >= filter.value.min) &&
-            (filter.value.maxExclusive ? num < filter.value.max : num <= filter.value.max)
-          )
-        }
-        return true
-      })
+      }
+
+      return true
     })
   })
 
@@ -110,8 +120,8 @@ export const useShowListStore = defineStore('showList', () => {
     }
   }
 
-  function updateFilters(newFilters: Filter[]) {
-    filters.value = newFilters
+  function resetFilters() {
+    filters.value = { ...DEFAULT_FILTERS, rating: { min: 1, max: 10 } }
   }
 
   return {
@@ -120,10 +130,10 @@ export const useShowListStore = defineStore('showList', () => {
     isLoading,
     error,
     filters,
+    resetFilters,
     fetchShows,
     showsByGenres,
     showsById,
-    updateFilters,
     topPickedShows,
   }
 })
@@ -144,7 +154,7 @@ export function useShowList() {
     showsById,
     topPickedShows,
   } = storeToRefs(store)
-  const { fetchShows, updateFilters } = store
+  const { fetchShows, resetFilters } = store
 
   return {
     allShows,
@@ -152,10 +162,10 @@ export function useShowList() {
     isLoading,
     error,
     filters,
+    resetFilters,
     fetchShows,
     showsByGenres,
     showsById,
-    updateFilters,
     topPickedShows,
   }
 }
