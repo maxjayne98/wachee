@@ -1,49 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import SearchResultCard from '@/components/SearchResultCard.vue'
 import Magnifier from '@/components/icons/Magnifier.vue'
-import { searchShowsByName } from '@/api/request'
-import type { Show } from '@/types'
+import { useShowSearch } from '@/composables/useShowSearch'
 
 const route = useRoute()
 const query = computed(() => {
   const value = route.query.q
   return (Array.isArray(value) ? (value[0] ?? '') : (value ?? '')).trim()
 })
-const isLoading = ref(false)
-const error = ref('')
-const retry = ref(0)
-const searchResult = ref<Show[]>([])
 
-async function searchShowsByQuery(query: string, signal?: AbortSignal) {
-  isLoading.value = true
-  try {
-    const result = await searchShowsByName(query, signal)
-    searchResult.value = Object.values(result).map(result => result.show)
-  } catch (err) {
-    console.error('Error fetching shows:', err)
-    error.value = err instanceof Error ? err.message : 'Failed to fetch shows'
-  } finally {
-    isLoading.value = false
-  }
-}
-
-watch(
-  [query, retry],
-  async ([value], _, onCleanup) => {
-    const controller = new AbortController()
-    onCleanup(() => controller.abort())
-
-    if (!value) return
-    try {
-      await searchShowsByQuery(value, controller.signal)
-    } catch {
-      if (!controller.signal.aborted) error.value = 'Search is temporarily unavailable.'
-    }
-  },
-  { immediate: true }
-)
+const { searchResult, isLoading, error, retry } = useShowSearch(query)
 </script>
 
 <template>
@@ -91,7 +59,7 @@ watch(
         <p class="mt-3! text-sm text-slate-400">Please try again in a moment.</p>
         <button
           class="mt-6 cursor-pointer rounded-full bg-sky-600 px-6 py-3 text-sm! font-semibold text-white hover:bg-sky-500 focus-visible:outline-2 focus-visible:outline-sky-200 focus-visible:outline-offset-2"
-          @click="retry++"
+          @click="retry"
         >
           Try again
         </button>
