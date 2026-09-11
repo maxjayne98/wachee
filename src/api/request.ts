@@ -1,4 +1,12 @@
-import type { Show, SearchResult, CastMember, Season, Episode, ShowImage } from '@/types'
+import type {
+  Show,
+  ShowDetail,
+  SearchResult,
+  CastMember,
+  Season,
+  Episode,
+  ShowImage,
+} from '@/types'
 
 async function get<T>(url: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(import.meta.env.VITE_API_BASE_URL + url, { signal })
@@ -17,6 +25,10 @@ export async function fetchShowsPage(page: number, signal?: AbortSignal): Promis
 
 export async function fetchShowById(id: number, signal?: AbortSignal): Promise<Show> {
   return get<Show>(`/shows/${id}`, signal)
+}
+
+export async function fetchShowDetail(id: number, signal?: AbortSignal): Promise<ShowDetail> {
+  return get<ShowDetail>(`/shows/${id}?embed[]=cast&embed[]=seasons&embed[]=images`, signal)
 }
 
 export async function searchShowsByName(

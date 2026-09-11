@@ -10,15 +10,20 @@
       />
     </div>
     <div
-      v-if="seasonsError || episodesError"
+      v-if="episodesError"
       role="alert"
       class="rounded-2xl border border-slate-700 p-6 text-sm text-slate-400"
     >
       Episodes couldn’t load.
-      <button class="ml-2 text-sky-300 underline" @click="tryAgain">Try again</button>
+      <button class="ml-2 text-sky-300 underline" @click="emit('retry-episodes')">
+        Try again
+      </button>
     </div>
     <p v-else-if="episodesLoading" role="status" class="py-8 text-sm text-slate-400">
       Loading episodes…
+    </p>
+    <p v-else-if="!seasons.length" class="py-4 text-sm text-slate-400">
+      No season information is available yet.
     </p>
     <p v-else-if="!episodes.length" class="py-4 text-sm text-slate-400">
       No episodes are available for this season yet.
@@ -58,6 +63,7 @@
     </div>
   </section>
 </template>
+
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { plainText } from '@/utils'
@@ -68,19 +74,15 @@ import DetailImage from '@/components/DetailImage.vue'
 const props = defineProps<{
   seasons: Season[]
   episodes: Episode[]
-  seasonsError?: boolean
-  episodesError?: boolean
   episodesLoading?: boolean
+  episodesError?: boolean
 }>()
-const emit = defineEmits(['retry', 'retry-episodes'])
-const selectedSeason = defineModel<number | null>('selectedSeason')
+const emit = defineEmits<{
+  (e: 'retry-episodes'): void
+}>()
+const selectedSeason = defineModel<number | null>('selectedSeason', { default: null })
 
 const seasonsOptions = computed(() =>
   props.seasons.map(season => ({ value: season.id, label: `Season ${season.number}` }))
 )
-
-function tryAgain() {
-  if (props.seasonsError) emit('retry')
-  else if (props.episodesError) emit('retry-episodes')
-}
 </script>

@@ -103,3 +103,14 @@ export interface ShowImage {
   main: boolean
   resolutions: { original: { url: string }; medium?: { url: string } }
 }
+
+export interface ShowDetailEmbedded {
+  cast?: CastMember[]
+  seasons?: Season[]
+  images?: ShowImage[]
+}
+
+export interface ShowDetail extends Show {
+  _embedded?: ShowDetailEmbedded
+}
+

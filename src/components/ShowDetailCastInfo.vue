@@ -12,11 +12,7 @@
         {{ expandedCast ? 'Show less ↑' : `View all (${cast.length}) →` }}
       </button>
     </div>
-    <div v-if="castError" class="rounded-2xl border border-slate-700 p-6 text-sm text-slate-400">
-      Cast couldn’t load.
-      <button class="ml-2 text-sky-300 underline" @click="retry">Try again</button>
-    </div>
-    <p v-else-if="!cast.length" class="text-sm text-slate-400">
+    <p v-if="!cast.length" class="text-sm text-slate-400">
       No cast information is available yet.
     </p>
     <div
@@ -54,18 +50,14 @@
     </div>
   </section>
 </template>
+
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { CastCredit } from '@/types'
+import type { CastMember } from '@/types'
 import DetailImage from './DetailImage.vue'
 
-const props = defineProps<{ cast: CastCredit[]; castError?: boolean }>()
-const emit = defineEmits(['retry'])
+const props = defineProps<{ cast: CastMember[] }>()
 
 const expandedCast = ref(false)
 const visibleCast = computed(() => (expandedCast.value ? props.cast : props.cast.slice(0, 8)))
-
-function retry() {
-  emit('retry')
-}
 </script>

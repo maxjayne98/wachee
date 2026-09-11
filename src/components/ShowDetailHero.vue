@@ -95,11 +95,15 @@ import IMDbBadge from './IMDbBadge.vue'
 interface Props {
   show: Show
   backdrop: string
-  seasons: Season[]
-  favorite: boolean
-  favoriteMessage: string
+  seasons?: Season[]
+  favorite?: boolean
+  favoriteMessage?: string
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  seasons: () => [],
+  favorite: false,
+  favoriteMessage: '',
+})
 
 const years = computed(() => {
   const start = props.show.premiered?.slice(0, 4)

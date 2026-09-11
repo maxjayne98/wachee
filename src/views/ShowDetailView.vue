@@ -19,8 +19,6 @@ const {
   backdrop,
   loading,
   error,
-  castError,
-  seasonsError,
   episodesLoading,
   episodesError,
   retry,
@@ -111,16 +109,14 @@ watch(
           <Tabs v-model="activeSection" :sections="sections" />
         </nav>
         <ShowDetailOverview id="detail-overview" :show="show" />
-        <ShowDetailCastInfo id="detail-cast" :cast="cast" :cast-error="castError" @retry="retry" />
+        <ShowDetailCastInfo id="detail-cast" :cast="cast" />
         <ShowDetailEpisodeInfo
           id="detail-episodes"
           v-model:selected-season="selectedSeason"
           :seasons="seasons"
           :episodes="episodes"
-          :seasons-error="seasonsError"
           :episodes-error="episodesError"
           :episodes-loading="episodesLoading"
-          @retry="retry"
           @retry-episodes="retryEpisodes"
         />
       </div>

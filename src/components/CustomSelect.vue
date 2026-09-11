@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import ArrowDown from '@/components/icons/ArrowDown.vue'
 
-export type SelectValue = string | number | Record<string, unknown>
+export type SelectValue = string | number | Record<string, unknown> | null
 
 export type SelectOption = {
   value: SelectValue
