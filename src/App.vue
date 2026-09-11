@@ -7,7 +7,13 @@ import { RouterView } from 'vue-router'
   <Header />
   <main>
     <RouterView v-slot="{ Component, route }">
-      <Transition>
+      <Transition
+        enter-active-class="duration-200 ease-out"
+        enter-from-class="opacity-0"
+        leave-active-class="duration-200 ease-out"
+        leave-to-class="opacity-0"
+        mode="out-in"
+      >
         <component :is="Component" :key="route.fullPath" />
       </Transition>
     </RouterView>
