@@ -1,7 +1,5 @@
 <template>
-  <section
-    class="home-view bg-[#090b12] text-[#c0bfcb] [#app:has(&)]:w-full! [#app:has(&)]:mt-0! [body:has(&)]:bg-[#090b12]!"
-  >
+  <section class="page-shell text-slate-300">
     <FeaturedShows
       :shows="topPickedShows"
       :loading="isLoading"
@@ -10,16 +8,16 @@
     />
     <div
       id="browse-shows"
-      class="home-catalog mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-[701px]:px-6 max-[701px]:py-8 max-[701px]:[&_label]:min-w-0 max-[701px]:[&_label]:max-w-full"
+      class="mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-md:px-6 max-md:py-8"
     >
-      <div class="catalog-heading mb-7">
-        <span class="text-[1rem] tracking-[0.2em] text-[#b7a3d5]">FIND YOUR NEXT FAVORITE</span>
-        <h2 class="mt-3! text-[3rem]! text-[#f5f2fc]!">Explore the collection</h2>
+      <div class="mb-7">
+        <span class="text-base tracking-widest text-violet-300">FIND YOUR NEXT FAVORITE</span>
+        <h2 class="mt-3! text-4xl! md:text-5xl! text-slate-100!">Explore the collection</h2>
       </div>
       <ShowFilters />
       <nav
         v-if="Object.keys(showsByGenres).length"
-        class="genre-navigation mt-2 flex! flex-wrap gap-2 border-b border-[#ffffff12] pt-[22px] pb-[28px]"
+        class="mt-2 flex! flex-wrap gap-2 border-b border-white/10 pt-5.5 pb-7"
         aria-label="Browse by genre"
       >
         <Badge
@@ -36,17 +34,15 @@
         v-for="(shows, genre) in showsByGenres"
         :id="genreId(genre)"
         :key="genre"
-        class="genre-section scroll-mt-25 focus:outline-none focus-visible:[&_.card-title]:underline focus-visible:[&_.card-title]:decoration-[#a855f7] focus-visible:[&_.card-title]:underline-offset-8"
+        class="scroll-mt-25 focus:outline-none focus-visible:[&>h3]:underline focus-visible:[&>h3]:decoration-purple-500 focus-visible:[&>h3]:underline-offset-8"
         tabindex="-1"
         :aria-label="genre"
       >
-        <div class="card-title mt-8 mb-4 text-left text-[2rem] font-bold text-[#f5f2fc]">
+        <h3 class="mt-8! mb-4! text-left text-3xl! font-bold text-slate-100!">
           {{ genre }}
-        </div>
-        <div
-          class="show-card-container flex h-150 flex-row justify-start gap-4 overflow-x-auto p-2"
-        >
-          <VirtualCarousel :items="shows" :item-width="240" :gap="16">
+        </h3>
+        <div class="flex h-140 flex-row justify-start gap-4 overflow-x-auto p-2">
+          <VirtualCarousel :items="shows">
             <template #default="{ item }">
               <ShowCard :show="item" :tagline="item.summary ?? ''" />
             </template>
