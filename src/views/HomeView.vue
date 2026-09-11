@@ -3,7 +3,7 @@
     class="home-view bg-[#090b12] text-[#c0bfcb] [#app:has(&)]:w-full! [#app:has(&)]:mt-0! [body:has(&)]:bg-[#090b12]!"
   >
     <FeaturedShows
-      :shows="topPicksShows"
+      :shows="topPickedShows"
       :loading="isLoading"
       :error="error"
       @retry="fetchShows(INITIAL_PAGES)"
@@ -66,7 +66,7 @@ import FeaturedShows from '@/components/FeaturedShows.vue'
 import Badge from '@/components/Badge.vue'
 
 const INITIAL_PAGES = [1, 2, 3, 4, 5]
-const { fetchShows, showsByGenres, topPicksShows, isLoading, error } = useShowList()
+const { fetchShows, showsByGenres, topPickedShows, isLoading, error } = useShowList()
 
 const genreId = (genre: string) => `genre-${encodeURIComponent(genre)}`
 function scrollToGenre(genre: string) {
