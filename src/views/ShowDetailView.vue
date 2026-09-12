@@ -6,7 +6,9 @@ import Tabs from '@/components/base/Tabs.vue'
 import ShowDetailOverview from '@/components/pages/detail/ShowDetailOverview.vue'
 import ShowDetailCastInfo from '@/components/pages/detail/ShowDetailCastInfo.vue'
 import ShowDetailEpisodeInfo from '@/components/pages/detail/ShowDetailEpisodeInfo.vue'
-import ShowDetailHero from '@/components/pages/detail/ShowDetailHero.vue'
+import ShowHero from '@/components/shared/ShowHero.vue'
+import DetailImage from '@/components/base/DetailImage.vue'
+import ArrowRight from '@/components/base/icons/ArrowRight.vue'
 
 const route = useRoute()
 const id = computed(() => Number(route.params.id))
@@ -25,8 +27,6 @@ const {
   retryEpisodes,
 } = useShowDetail(id)
 const activeSection = ref('overview')
-const favorite = ref(false)
-const favoriteMessage = ref('')
 const sections = computed(() => [
   { label: 'overview', href: 'detail-overview' },
   { label: 'episodes', href: 'detail-episodes' },
@@ -37,12 +37,6 @@ watch(
   id,
   () => {
     activeSection.value = 'overview'
-    favoriteMessage.value = ''
-    try {
-      favorite.value = localStorage.getItem(`wachee:favorite:${id.value}`) === 'true'
-    } catch {
-      favorite.value = false
-    }
   },
   { immediate: true }
 )
@@ -94,12 +88,25 @@ watch(
       </div>
     </div>
     <template v-else>
-      <ShowDetailHero
-        :show="show"
-        :backdrop="backdrop"
-        :seasons="seasons"
-        :favorite="favorite"
-        :favorite-message="favoriteMessage" />
+      <section class="relative isolate overflow-hidden">
+        <DetailImage
+          :src="backdrop"
+          alt=""
+          eager
+          class="absolute! inset-0 size-full opacity-70"
+          image-class="object-[center_25%]!" />
+        <div aria-hidden="true" class="absolute inset-0 hero-overlay" />
+        <div class="relative mx-auto max-w-360 px-12 pt-26 pb-5 max-md:px-6 max-md:pt-25">
+          <ShowHero :show="show">
+            <template #actions>
+              <a :href="show.officialSite || show.url" target="_blank" rel="noopener noreferrer">
+                {{ show.officialSite ? 'Official website' : 'View on TVmaze' }}
+                <ArrowRight class="size-5 -rotate-45" />
+              </a>
+            </template>
+          </ShowHero>
+        </div>
+      </section>
       <div class="mx-auto max-w-360 px-6 pb-16 sm:px-12 lg:px-16">
         <nav aria-label="Show sections" class="mb-8 flex! gap-6 border-b border-white/10 sm:gap-8">
           <Tabs v-model="activeSection" :sections="sections" />

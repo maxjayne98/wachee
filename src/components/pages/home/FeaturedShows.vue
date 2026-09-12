@@ -3,7 +3,8 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Show } from '@/types'
 import DetailImage from '@/components/base/DetailImage.vue'
 import FeaturedShowsPicker from './FeaturedShowsPicker.vue'
-import FeaturedShowHero from './FeaturedShowHero.vue'
+import ShowHero from '@/components/shared/ShowHero.vue'
+import ArrowRight from '@/components/base/icons/ArrowRight.vue'
 
 const props = defineProps<{ shows: Show[]; loading: boolean; error: string }>()
 const emit = defineEmits<{ retry: [] }>()
@@ -72,11 +73,19 @@ onUnmounted(() => {
           leave-active-class="transition-opacity duration-250 ease-in-out"
           enter-from-class="opacity-0"
           leave-to-class="opacity-0">
-          <FeaturedShowHero
+          <ShowHero
             :key="activeShow.id"
             :show="activeShow"
-            :index="activeIndex"
-            :total="shows.length" />
+            role="group"
+            aria-roledescription="slide"
+            :aria-label="`${activeIndex + 1} of ${shows.length}: ${activeShow.name}`">
+            <template #actions>
+              <router-link :to="{ name: 'show-detail', params: { id: activeShow.id } }">
+                Explore show
+                <ArrowRight class="size-5" />
+              </router-link>
+            </template>
+          </ShowHero>
         </Transition>
         <FeaturedShowsPicker v-model="activeIndex" :shows="shows" />
       </template>
