@@ -62,4 +62,34 @@ function plainText(html?: string | null): string {
     : ''
 }
 
-export { sortShowsByRating, capitalizeFirstLetter, get, pickTwoRandom, shuffle, plainText }
+function debounce<T extends (...args: unknown[]) => void>(fn: T, delay = 300) {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined
+
+  const debounced = (...args: Parameters<T>) => {
+    if (timeoutId !== undefined) {
+      clearTimeout(timeoutId)
+    }
+    timeoutId = setTimeout(() => {
+      fn(...args)
+    }, delay)
+  }
+
+  debounced.cancel = () => {
+    if (timeoutId !== undefined) {
+      clearTimeout(timeoutId)
+      timeoutId = undefined
+    }
+  }
+
+  return debounced
+}
+
+export {
+  sortShowsByRating,
+  capitalizeFirstLetter,
+  get,
+  pickTwoRandom,
+  shuffle,
+  plainText,
+  debounce,
+}

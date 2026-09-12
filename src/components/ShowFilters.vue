@@ -17,19 +17,48 @@
     <div class="min-w-0 sm:col-span-2">
       <p class="m-0! text-sm font-medium leading-5 text-slate-300">Rating</p>
       <div class="px-4">
-        <RangeSlider v-model="filters.rating" class="lg:w-64" :min="1" :max="10" :step="0.1" />
+        <RangeSlider v-model="rating" class="lg:w-64" :min="1" :max="10" :step="0.1" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import CustomSelect, { type SelectOption } from '@/components/CustomSelect.vue'
 import RangeSlider from '@/components/RangeSlider.vue'
 import { useShowList } from '@/store/showList'
+import { debounce } from '@/utils'
 
 const { allShows, filters } = useShowList()
+
+const rating = ref({ ...filters.value.rating })
+
+const updateFilterRating = debounce((newRating: { min: number; max: number }) => {
+  filters.value.rating = { ...newRating }
+}, 300)
+
+watch(
+  rating,
+  newRating => {
+    updateFilterRating(newRating)
+  },
+  { deep: true }
+)
+
+watch(
+  () => filters.value.rating,
+  newRating => {
+    if (newRating.min !== rating.value.min || newRating.max !== rating.value.max) {
+      rating.value = { ...newRating }
+    }
+  },
+  { deep: true }
+)
+
+onUnmounted(() => {
+  updateFilterRating.cancel()
+})
 
 const languageOptions = computed<SelectOption[]>(() => [
   { value: '', label: 'Any language' },
