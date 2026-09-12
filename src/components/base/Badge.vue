@@ -1,5 +1,7 @@
 <script setup lang="ts">
-withDefaults(
+import { computed } from 'vue'
+
+const props = withDefaults(
   defineProps<{
     colorIndex?: number
     href?: string
@@ -7,24 +9,36 @@ withDefaults(
   }>(),
   { colorIndex: 0, size: 'small', href: undefined }
 )
-const colors = [
-  '[--badge-color:#0099ff]',
-  '[--badge-color:#a855f7]',
-  '[--badge-color:#ff5533]',
-  '[--badge-color:#ec4899]',
+
+const colorVariants = [
+  'border-sky-400 bg-slate-950/80 text-sky-100',
+  'border-purple-500 bg-slate-950/80 text-purple-100',
+  'border-orange-500 bg-slate-950/80 text-orange-100',
+  'border-pink-500 bg-slate-950/80 text-pink-100',
 ]
+
+const hoverVariants = [
+  'hover:border-sky-300 hover:bg-sky-950/90 hover:shadow-md hover:shadow-sky-400/30',
+  'hover:border-purple-400 hover:bg-purple-950/90 hover:shadow-md hover:shadow-purple-500/30',
+  'hover:border-orange-400 hover:bg-orange-950/90 hover:shadow-md hover:shadow-orange-500/30',
+  'hover:border-pink-400 hover:bg-pink-950/90 hover:shadow-md hover:shadow-pink-500/30',
+]
+
+const activeIndex = computed(
+  () => ((props.colorIndex % colorVariants.length) + colorVariants.length) % colorVariants.length
+)
 </script>
 
 <template>
   <component
     :is="href ? 'a' : 'span'"
     :href="href"
-    class="badge min-w-20 inline-flex items-center justify-center rounded-full border-2 border-(--badge-color) bg-[#0c101a]/75! font-semibold text-[#e2e8f0] tracking-[0.02em] capitalize whitespace-nowrap no-underline shadow-[0_0_10px_color-mix(in_srgb,var(--badge-color)_35%,transparent)] transition-[transform,box-shadow,background] duration-200 ease-in-out motion-reduce:transition-none"
+    class="inline-flex min-w-16 items-center justify-center rounded-full border-2 font-semibold tracking-wide whitespace-nowrap transition-all duration-200 motion-reduce:transition-none"
     :class="[
-      colors[((colorIndex % colors.length) + colors.length) % colors.length],
-      size === 'regular' ? 'px-3 py-0.75 text-sm' : 'px-2 py-0.5 text-xs',
-      href &&
-        'cursor-pointer hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,var(--badge-color)_18%,#0c101a)]! hover:shadow-[0_0_18px_color-mix(in_srgb,var(--badge-color)_50%,transparent)] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-4',
+      colorVariants[activeIndex],
+      href && hoverVariants[activeIndex],
+      size === 'regular' ? 'px-3.5 py-1 text-sm' : 'px-2.5 py-0.5 text-xs',
+      href && 'cursor-pointer hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2',
     ]">
     <slot />
   </component>

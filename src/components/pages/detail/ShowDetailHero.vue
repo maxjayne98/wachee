@@ -8,14 +8,9 @@
       aria-hidden="true"
       class="absolute inset-0 -z-10 bg-linear-to-t from-slate-950 via-transparent to-slate-950/20" />
     <div class="mx-auto max-w-360 px-6 pb-10 sm:px-12 lg:px-16">
-      <nav aria-label="Breadcrumb" class="mb-7 flex! flex-wrap gap-3 text-xs text-slate-400">
-        <router-link to="/" class="text-slate-300 hover:text-sky-200">Discover</router-link>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">{{ show.name }}</span>
-      </nav>
       <div class="flex flex-col items-start gap-7 sm:flex-row sm:items-center sm:gap-10">
         <div
-          class="w-36 shrink-0 rounded-2xl bg-linear-to-br from-cyan-400 via-purple-500 to-orange-400 p-0.5 shadow-xl shadow-blue-950/50 sm:w-52 lg:w-60">
+          class="w-36 shrink-0 rounded-2xl border-2 border-transparent gradient-border shadow-xl shadow-blue-950/50 sm:w-52 lg:w-60">
           <DetailImage
             :src="show.image?.original || show.image?.medium"
             :alt="show.name"
@@ -55,26 +50,11 @@
               :href="show.officialSite || show.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-11 items-center gap-4 rounded-full border border-sky-400 bg-sky-950/60! px-5 py-2.5 text-sm font-semibold text-sky-100 shadow-lg shadow-sky-500/20 hover:bg-sky-900/70!">
+              class="inline-flex min-h-11 items-center gap-2 rounded-full border border-sky-400 bg-sky-950/60! px-5 py-2.5 text-sm font-semibold text-sky-100 shadow-lg shadow-sky-500/20 hover:bg-sky-900/70!">
               {{ show.officialSite ? 'Official website' : 'View on TVmaze' }}
-              <span aria-hidden="true">↗</span>
+              <ArrowRight class="size-5 -rotate-45" />
             </a>
-            <button
-              :aria-pressed="favorite"
-              class="inline-flex min-h-11 items-center gap-3 rounded-full border px-5 py-2.5 text-sm! font-semibold backdrop-blur-sm transition-colors"
-              :class="
-                favorite
-                  ? 'border-pink-400/70 bg-pink-950/40 text-pink-200'
-                  : 'border-slate-400/50 bg-slate-950/40 text-slate-200 hover:border-pink-300'
-              "
-              @click="toggleFavorite">
-              <span aria-hidden="true">{{ favorite ? '♥' : '♡' }}</span>
-              {{ favorite ? 'Saved to favorites' : 'Add to favorites' }}
-            </button>
           </div>
-          <p role="status" class="mt-3! min-h-4 text-xs text-slate-400">
-            {{ favoriteMessage }}
-          </p>
         </div>
       </div>
     </div>
@@ -86,18 +66,15 @@ import type { Show, Season } from '@/types'
 import Badge from '@/components/base/Badge.vue'
 import DetailImage from '@/components/base/DetailImage.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
+import ArrowRight from '@/components/base/icons/ArrowRight.vue'
 
 interface Props {
   show: Show
   backdrop: string
   seasons?: Season[]
-  favorite?: boolean
-  favoriteMessage?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   seasons: () => [],
-  favorite: false,
-  favoriteMessage: '',
 })
 
 const years = computed(() => {
@@ -107,8 +84,4 @@ const years = computed(() => {
     ? `${start}${end && end !== start ? `–${end}` : !end && props.show.status === 'Running' ? '–present' : ''}`
     : ''
 })
-function toggleFavorite() {
-  //TODO
-  console.log('EEEEERRRRRRORRRRRRR TODO HERE')
-}
 </script>

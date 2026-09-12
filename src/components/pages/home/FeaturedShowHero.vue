@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import type { Show } from '@/types'
 import Badge from '@/components/base/Badge.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
+import ArrowRight from '@/components/base/icons/ArrowRight.vue'
 
 const props = defineProps<{
   show: Show
@@ -61,9 +62,9 @@ const ariaLabel = computed(() => {
     <div class="mt-5 flex flex-wrap items-center gap-6.5">
       <router-link
         :to="{ name: 'show-detail', params: { id: show.id } }"
-        class="inline-flex cursor-pointer items-center justify-center gap-8 rounded-full border-4 border-transparent gradient-border! px-5.5 py-3 text-base! font-bold text-violet-100 shadow-lg shadow-purple-500/20 transition-[background] duration-200 hover:shadow-xl hover:shadow-purple-500/40">
+        class="inline-flex cursor-pointer items-center justify-center gap-4 rounded-full border-4 border-transparent gradient-border! px-5.5 py-3 text-base! font-bold text-violet-100 shadow-lg shadow-purple-500/20 transition-[background] duration-200 hover:shadow-xl hover:shadow-purple-500/40">
         Explore show
-        <span aria-hidden="true">→</span>
+        <ArrowRight class="size-5" />
       </router-link>
     </div>
   </div>
