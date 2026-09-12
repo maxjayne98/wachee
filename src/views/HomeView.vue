@@ -12,6 +12,17 @@
         <h2 class="mt-3! text-4xl! md:text-5xl! text-slate-100!">Explore the collection</h2>
       </div>
       <ShowFilters />
+      <div v-if="isLoading" class="space-y-10">
+        <section v-for="i in 2" :key="i" class="scroll-mt-25">
+          <div class="mt-8 mb-4 h-8 w-44 rounded-lg bg-slate-800/80 animate-pulse" />
+          <div class="flex gap-4 overflow-hidden p-2">
+            <div v-for="j in 5" :key="j" class="w-60 shrink-0">
+              <ShowCardSkeleton />
+            </div>
+          </div>
+        </section>
+      </div>
+
       <nav
         v-if="genreSections.length"
         class="mt-2 flex! flex-wrap gap-2 border-b border-white/10 pt-5.5 pb-7"
@@ -51,6 +62,7 @@
 import { onMounted, computed } from 'vue'
 import { useShowList } from '@/store/showList'
 import ShowCard from '@/components/shared/ShowCard.vue'
+import ShowCardSkeleton from '@/components/shared/ShowCardSkeleton.vue'
 import ShowFilters from '@/components/pages/home/ShowFilters.vue'
 import VirtualCarousel from '@/components/pages/home/VirtualCarousel.vue'
 import FeaturedShows from '@/components/pages/home/FeaturedShows.vue'

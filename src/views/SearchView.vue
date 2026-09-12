@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import Magnifier from '@/components/base/icons/Magnifier.vue'
 import { useShowSearch } from '@/composables/useShowSearch'
 import ShowCard from '@/components/shared/ShowCard.vue'
+import ShowCardSkeleton from '@/components/shared/ShowCardSkeleton.vue'
 
 const route = useRoute()
 const query = computed(() => {
@@ -38,27 +39,7 @@ const { searchResult, isLoading, error, retry } = useShowSearch(query)
         v-if="isLoading"
         aria-hidden="true"
         class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        <div
-          v-for="item in 12"
-          :key="item"
-          class="relative box-border flex min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950 text-left shadow-lg shadow-black/20 motion-reduce:animate-none">
-          <div class="relative aspect-4/5 w-full overflow-hidden bg-slate-900 animate-pulse">
-            <div
-              class="size-full bg-linear-to-b from-slate-800/40 via-transparent to-slate-950/80" />
-          </div>
-          <div
-            class="relative -mt-8 flex flex-1 flex-col rounded-t-3xl border-t border-sky-200/15 bg-linear-to-br from-slate-800/85 via-slate-900/95 to-slate-950 px-5 pt-5 pb-4 backdrop-blur-xl">
-            <div class="mb-2 flex items-center gap-2">
-              <div class="h-3 w-20 rounded-full bg-slate-700/60 animate-pulse" />
-            </div>
-            <div class="mb-3 min-h-14 flex flex-col gap-2">
-              <div class="h-5 w-4/5 rounded-md bg-slate-700/70 animate-pulse" />
-            </div>
-            <div class="flex flex-wrap gap-1.5 pb-4">
-              <div class="h-5 w-14 rounded-full bg-slate-800 animate-pulse" />
-            </div>
-          </div>
-        </div>
+        <ShowCardSkeleton v-for="item in 12" :key="item" />
       </div>
       <div
         v-else-if="error"
