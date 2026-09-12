@@ -1,5 +1,6 @@
 <template>
-  <div class="mb-4 grid min-w-0 grid-cols-1 items-start gap-x-4 gap-y-4 text-left sm:grid-cols-2 lg:grid-cols-4">
+  <div
+    class="mb-4 grid min-w-0 grid-cols-1 items-start gap-x-4 gap-y-4 text-left sm:grid-cols-2 lg:grid-cols-4">
     <div class="min-w-0">
       <p class="m-0! text-sm font-medium leading-5 text-slate-300">Language</p>
       <div class="flex h-20 items-center">
@@ -23,8 +24,8 @@
 
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
-import CustomSelect, { type SelectOption } from '@/components/CustomSelect.vue'
-import RangeSlider from '@/components/RangeSlider.vue'
+import CustomSelect, { type SelectOption } from '@/components/base/CustomSelect.vue'
+import RangeSlider from '@/components/base/RangeSlider.vue'
 import { useShowList } from '@/store/showList'
 import { debounce } from '@/utils'
 
@@ -61,7 +62,11 @@ onUnmounted(() => {
 const languageOptions = computed<SelectOption[]>(() => [
   { value: '', label: 'Any language' },
   ...Array.from(
-    new Set(allShows.value.map(show => show.language).filter((language): language is string => Boolean(language)))
+    new Set(
+      allShows.value
+        .map(show => show.language)
+        .filter((language): language is string => Boolean(language))
+    )
   )
     .sort()
     .map(language => ({ value: language, label: language })),

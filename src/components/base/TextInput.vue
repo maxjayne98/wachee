@@ -5,5 +5,3 @@ const model = defineModel<string>({ default: '' })
 <template>
   <input v-model="model" class="app-input" />
 </template>
-
-<style lang="scss"></style>

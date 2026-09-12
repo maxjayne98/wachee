@@ -1,7 +1,12 @@
 <template>
   <section class="page-shell text-slate-300">
-    <FeaturedShows :shows="topPickedShows" :loading="isLoading" :error="error" @retry="fetchShows(INITIAL_PAGES)" />
-    <div class="mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-md:px-6 max-md:py-8">
+    <FeaturedShows
+      :shows="topPickedShows"
+      :loading="isLoading"
+      :error="error"
+      @retry="fetchShows(INITIAL_PAGES)" />
+    <div
+      class="mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-md:px-6 max-md:py-8">
       <div class="mb-7">
         <span class="text-base tracking-widest text-violet-300">FIND YOUR NEXT FAVORITE</span>
         <h2 class="mt-3! text-4xl! md:text-5xl! text-slate-100!">Explore the collection</h2>
@@ -17,9 +22,9 @@
           :color-index="index"
           size="regular"
           :href="`#${genreId(genre)}`"
-          @click.prevent="scrollToGenre(genre)"
-          >{{ genre }}</Badge
-        >
+          @click.prevent="scrollToGenre(genre)">
+          {{ genre }}
+        </Badge>
       </nav>
       <section
         v-for="(shows, genre) in showsByGenres"
@@ -45,11 +50,11 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useShowList } from '@/store/showList'
-import ShowCard from '@/components/ShowCard.vue'
-import ShowFilters from '@/components/ShowFilters.vue'
-import VirtualCarousel from '@/components/VirtualCarousel.vue'
-import FeaturedShows from '@/components/FeaturedShows.vue'
-import Badge from '@/components/Badge.vue'
+import ShowCard from '@/components/shared/ShowCard.vue'
+import ShowFilters from '@/components/pages/home/ShowFilters.vue'
+import VirtualCarousel from '@/components/pages/home/VirtualCarousel.vue'
+import FeaturedShows from '@/components/pages/home/FeaturedShows.vue'
+import Badge from '@/components/base/Badge.vue'
 
 const INITIAL_PAGES = [1, 2, 3, 4, 5]
 const { fetchShows, showsByGenres, topPickedShows, isLoading, error } = useShowList()

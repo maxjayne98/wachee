@@ -33,12 +33,12 @@ watch(
       :loading="eager ? 'eager' : 'lazy'"
       :fetchpriority="eager ? 'high' : 'auto'"
       :class="['absolute inset-0 size-full object-cover object-top', imageClass]"
-      @error="handleError"
-    />
+      @error="handleError" />
     <div
       v-else
-      :class="['flex size-full items-center justify-center p-4 text-center text-sm text-slate-500']"
-    >
+      :class="[
+        'flex size-full items-center justify-center p-4 text-center text-sm text-slate-500',
+      ]">
       {{ alt }}
     </div>
   </div>

@@ -91,34 +91,29 @@ defineExpose({
   <div
     ref="container"
     class="relative w-full min-w-0 gap-4 overflow-x-auto scroll-smooth"
-    @scroll.passive="handleScroll"
-  >
+    @scroll.passive="handleScroll">
     <div
       ref="itemProbe"
       aria-hidden="true"
-      class="invisible pointer-events-none absolute h-0 w-60"
-    />
+      class="invisible pointer-events-none absolute h-0 w-60" />
     <div
       class="relative h-full"
       :style="{
         width: `${totalWidth}px`,
-      }"
-    >
+      }">
       <div
         class="absolute top-0 flex"
         :style="{
           left: `${offsetLeft}px`,
           gap: `${gap}px`,
-        }"
-      >
+        }">
         <div
           v-for="(item, localIndex) in visibleItems"
           :key="startIndex + localIndex"
           class="shrink-0"
           :style="{
             width: `${itemWidth}px`,
-          }"
-        >
+          }">
           <slot :item="item" :index="startIndex + localIndex" />
         </div>
       </div>

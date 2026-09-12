@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Show } from '@/types'
-import Badge from '@/components/Badge.vue'
-import IMDbBadge from '@/components/IMDbBadge.vue'
+import Badge from '@/components/base/Badge.vue'
+import IMDbBadge from '@/components/base/IMDbBadge.vue'
 
 const props = defineProps<{
   show: Show

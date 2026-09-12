@@ -2,11 +2,11 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useShowDetail } from '@/composables/useShowDetail'
-import Tabs from '@/components/Tabs.vue'
-import ShowDetailOverview from '@/components/ShowDetailOverview.vue'
-import ShowDetailCastInfo from '@/components/ShowDetailCastInfo.vue'
-import ShowDetailEpisodeInfo from '@/components/ShowDetailEpisodeInfo.vue'
-import ShowDetailHero from '@/components/ShowDetailHero.vue'
+import Tabs from '@/components/base/Tabs.vue'
+import ShowDetailOverview from '@/components/pages/detail/ShowDetailOverview.vue'
+import ShowDetailCastInfo from '@/components/pages/detail/ShowDetailCastInfo.vue'
+import ShowDetailEpisodeInfo from '@/components/pages/detail/ShowDetailEpisodeInfo.vue'
+import ShowDetailHero from '@/components/pages/detail/ShowDetailHero.vue'
 
 const route = useRoute()
 const id = computed(() => Number(route.params.id))
@@ -50,14 +50,12 @@ watch(
 
 <template>
   <div
-    class="show-detail min-h-svh bg-slate-950 text-left text-slate-200 [#app:has(&)]:mt-0! [#app:has(&)]:w-full! [body:has(&)]:bg-slate-950! [&_a]:no-underline [&_button]:cursor-pointer [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-sky-300 [&_button:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-sky-300 [&_a:focus-visible]:outline-offset-4"
-  >
+    class="show-detail min-h-svh bg-slate-950 text-left text-slate-200 [#app:has(&)]:mt-0! [#app:has(&)]:w-full! [body:has(&)]:bg-slate-950! [&_a]:no-underline [&_button]:cursor-pointer [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-sky-300 [&_button:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-sky-300 [&_a:focus-visible]:outline-offset-4">
     <div v-if="loading" class="mx-auto max-w-360 px-6 pt-32 pb-16 sm:px-12 lg:px-16" role="status">
       <p class="mb-8! text-sm text-sky-200">Loading the story…</p>
       <div
         aria-hidden="true"
-        class="flex animate-pulse flex-col gap-8 sm:flex-row motion-reduce:animate-none"
-      >
+        class="flex animate-pulse flex-col gap-8 sm:flex-row motion-reduce:animate-none">
         <div class="h-80 w-52 rounded-3xl bg-slate-800" />
         <div class="flex flex-1 flex-col gap-6 py-6">
           <div class="h-12 w-2/3 rounded-xl bg-slate-800" />
@@ -69,8 +67,7 @@ watch(
     <div
       v-else-if="error || !show"
       class="mx-auto max-w-2xl px-6 pt-40 pb-20 text-center"
-      role="alert"
-    >
+      role="alert">
       <p class="text-sm text-sky-300">WACHEE</p>
       <h1 class="my-6! text-4xl! text-white!">
         {{ error === 'Show not found' ? 'Show not found' : 'This story couldn’t load' }}
@@ -86,14 +83,14 @@ watch(
         <button
           v-if="error !== 'Show not found'"
           class="rounded-full bg-sky-600 px-6 py-3 text-sm! text-white"
-          @click="retry"
-        >
-          Try again</button
-        ><router-link
+          @click="retry">
+          Try again
+        </button>
+        <router-link
           to="/"
-          class="rounded-full border border-slate-600 px-6 py-3 text-sm text-slate-200"
-          >Back to discover</router-link
-        >
+          class="rounded-full border border-slate-600 px-6 py-3 text-sm text-slate-200">
+          Back to discover
+        </router-link>
       </div>
     </div>
     <template v-else>
@@ -102,8 +99,7 @@ watch(
         :backdrop="backdrop"
         :seasons="seasons"
         :favorite="favorite"
-        :favorite-message="favoriteMessage"
-      />
+        :favorite-message="favoriteMessage" />
       <div class="mx-auto max-w-360 px-6 pb-16 sm:px-12 lg:px-16">
         <nav aria-label="Show sections" class="mb-8 flex! gap-6 border-b border-white/10 sm:gap-8">
           <Tabs v-model="activeSection" :sections="sections" />
@@ -117,8 +113,7 @@ watch(
           :episodes="episodes"
           :episodes-error="episodesError"
           :episodes-loading="episodesLoading"
-          @retry-episodes="retryEpisodes"
-        />
+          @retry-episodes="retryEpisodes" />
       </div>
     </template>
   </div>

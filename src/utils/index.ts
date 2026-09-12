@@ -62,10 +62,10 @@ function plainText(html?: string | null): string {
     : ''
 }
 
-function debounce<T extends (...args: unknown[]) => void>(fn: T, delay = 300) {
+function debounce<Args extends unknown[]>(fn: (...args: Args) => void, delay = 300) {
   let timeoutId: ReturnType<typeof setTimeout> | undefined
 
-  const debounced = (...args: Parameters<T>) => {
+  const debounced = (...args: Args) => {
     if (timeoutId !== undefined) {
       clearTimeout(timeoutId)
     }
@@ -77,8 +77,8 @@ function debounce<T extends (...args: unknown[]) => void>(fn: T, delay = 300) {
   debounced.cancel = () => {
     if (timeoutId !== undefined) {
       clearTimeout(timeoutId)
-      timeoutId = undefined
     }
+    timeoutId = undefined
   }
 
   return debounced

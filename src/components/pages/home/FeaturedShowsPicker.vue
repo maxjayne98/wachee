@@ -63,9 +63,9 @@
 import { ref, watch } from 'vue'
 import type { Show } from '@/types'
 
-import DetailImage from '@/components/DetailImage.vue'
-import ArrowLeft from '@/components/icons/ArrowLeft.vue'
-import ArrowRight from '@/components/icons/ArrowRight.vue'
+import DetailImage from '@/components/base/DetailImage.vue'
+import ArrowLeft from '@/components/base/icons/ArrowLeft.vue'
+import ArrowRight from '@/components/base/icons/ArrowRight.vue'
 
 const props = defineProps<{ shows: Show[] }>()
 

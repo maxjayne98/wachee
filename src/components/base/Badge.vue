@@ -25,8 +25,7 @@ const colors = [
       size === 'regular' ? 'px-3 py-0.75 text-sm' : 'px-2 py-0.5 text-xs',
       href &&
         'cursor-pointer hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,var(--badge-color)_18%,#0c101a)]! hover:shadow-[0_0_18px_color-mix(in_srgb,var(--badge-color)_50%,transparent)] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-4',
-    ]"
-  >
+    ]">
     <slot />
   </component>
 </template>

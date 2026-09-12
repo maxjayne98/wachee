@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Show } from '@/types'
-import DetailImage from '@/components/DetailImage.vue'
-import FeaturedShowsPicker from '@/components/FeaturedShowsPicker.vue'
-import FeaturedShowHero from '@/components/FeaturedShowHero.vue'
+import DetailImage from '@/components/base/DetailImage.vue'
+import FeaturedShowsPicker from './FeaturedShowsPicker.vue'
+import FeaturedShowHero from './FeaturedShowHero.vue'
 
 const props = defineProps<{ shows: Show[]; loading: boolean; error: string }>()
 const emit = defineEmits<{ retry: [] }>()

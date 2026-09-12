@@ -113,4 +113,3 @@ export interface ShowDetailEmbedded {
 export interface ShowDetail extends Show {
   _embedded?: ShowDetailEmbedded
 }
-

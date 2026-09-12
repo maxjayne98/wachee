@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Header from './components/Header.vue'
+import AppHeader from '@/components/app/AppHeader.vue'
 import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <Header />
+  <AppHeader />
   <main>
     <RouterView v-slot="{ Component, route }">
       <Transition
@@ -12,8 +12,7 @@ import { RouterView } from 'vue-router'
         enter-from-class="opacity-0"
         leave-active-class="duration-200 ease-out"
         leave-to-class="opacity-0"
-        mode="out-in"
-      >
+        mode="out-in">
         <component :is="Component" :key="route.fullPath" />
       </Transition>
     </RouterView>
