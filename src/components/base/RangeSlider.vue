@@ -51,7 +51,11 @@ const position = computed(
 </template>
 
 <style scoped>
-.slider-input::-webkit-slider-runnable-track,
+.slider-input::-webkit-slider-runnable-track {
+  height: 0.375rem;
+  background: transparent;
+}
+
 .slider-input::-moz-range-track {
   height: 0.375rem;
   background: transparent;
@@ -59,7 +63,7 @@ const position = computed(
 
 .slider-input::-webkit-slider-thumb {
   appearance: none;
-  margin-top: 0.01rem;
+  margin-top: -0.3rem;
   box-sizing: border-box;
   width: var(--thumb-size);
   height: var(--thumb-size);
@@ -81,7 +85,10 @@ const position = computed(
   transition: transform 0.15s ease;
 }
 
-.slider-input:hover::-webkit-slider-thumb,
+.slider-input:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
 .slider-input:hover::-moz-range-thumb {
   transform: scale(1.1);
 }
