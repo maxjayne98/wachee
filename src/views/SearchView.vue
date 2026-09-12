@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import Magnifier from '@/components/base/icons/Magnifier.vue'
 import { useShowSearch } from '@/composables/useShowSearch'
 import ShowCard from '@/components/shared/ShowCard.vue'
 import ShowCardSkeleton from '@/components/shared/ShowCardSkeleton.vue'
+import StateMessage from '@/components/shared/StateMessage.vue'
 
 const route = useRoute()
 const query = computed(() => {
@@ -41,38 +41,18 @@ const { searchResult, isLoading, error, retry } = useShowSearch(query)
         class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         <ShowCardSkeleton v-for="item in 12" :key="item" />
       </div>
-      <div
+      <StateMessage
         v-else-if="error"
-        role="alert"
-        class="rounded-3xl border border-sky-400/20 bg-slate-900/50 px-6 py-12 text-center">
-        <h2 class="text-xl! text-white!">We couldn’t load your results</h2>
-        <p class="mt-3! text-sm text-slate-400">Please try again in a moment.</p>
-        <button
-          class="mt-6 cursor-pointer rounded-full bg-sky-600 px-6 py-3 text-sm! font-semibold text-white hover:bg-sky-500 focus-visible:outline-2 focus-visible:outline-sky-200 focus-visible:outline-offset-2"
-          @click="retry">
-          Try again
-        </button>
-      </div>
+        title="Unable to load results"
+        @retry="retry" />
       <div
         v-else-if="searchResult.length"
         class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         <ShowCard v-for="show in searchResult" :key="show.id" :show="show" />
       </div>
-      <div
+      <StateMessage
         v-else
-        class="rounded-3xl border border-white/10 bg-linear-to-br from-sky-950/30 to-slate-950 px-6 py-16 text-center">
-        <Magnifier aria-hidden="true" class="mx-auto mb-6 size-10 stroke-sky-400" />
-        <h2 class="text-xl! text-white!">
-          {{ query ? 'No shows found' : 'Every great watch starts with a search' }}
-        </h2>
-        <p class="mx-auto mt-3! max-w-md text-sm leading-relaxed text-slate-400">
-          {{
-            query
-              ? 'Try a different title or check the spelling in the search bar above.'
-              : 'Enter a show title above to explore the collection.'
-          }}
-        </p>
-      </div>
+        :title="query ? 'No shows found' : 'Search the collection'" />
     </div>
   </section>
 </template>

@@ -7,6 +7,7 @@ import ShowFilters from '@/components/pages/home/ShowFilters.vue'
 import VirtualCarousel from '@/components/pages/home/VirtualCarousel.vue'
 import FeaturedShows from '@/components/pages/home/FeaturedShows.vue'
 import Badge from '@/components/base/Badge.vue'
+import StateMessage from '@/components/shared/StateMessage.vue'
 
 const INITIAL_PAGES = [1, 2, 3, 4, 5]
 const { fetchShows, showsByGenre, featuredShows, isLoading, error } = useShows()
@@ -60,38 +61,56 @@ onMounted(async () => {
         </section>
       </div>
 
-      <nav
-        v-if="genreSections.length"
-        class="mt-2 flex! flex-wrap gap-2 border-b border-white/10 pt-5.5 pb-7"
-        aria-label="Browse by genre">
-        <Badge
+      <StateMessage
+        v-else-if="error && !genreSections.length"
+        class="mt-8"
+        title="Unable to load shows"
+        @retry="fetchShows(INITIAL_PAGES)" />
+
+      <StateMessage
+        v-else-if="!genreSections.length"
+        class="mt-8"
+        title="No shows found" />
+
+      <template v-else>
+        <TransitionGroup
+          tag="nav"
+          class="relative mt-2 flex! flex-wrap gap-2 border-b border-white/10 pt-5.5 pb-7"
+          aria-label="Browse by genre"
+          enter-active-class="transition-all duration-300 ease-out"
+          leave-active-class="transition-all duration-300 ease-in"
+          enter-from-class="opacity-0"
+          leave-to-class="opacity-0"
+          move-class="transition-transform duration-300 ease-out">
+          <Badge
+            v-for="section in genreSections"
+            :key="section.genre"
+            :color-index="section.colorIndex"
+            size="regular"
+            :href="section.href"
+            @click.prevent="scrollToSection(section.id)">
+            {{ section.genre }}
+          </Badge>
+        </TransitionGroup>
+        <section
           v-for="section in genreSections"
+          :id="section.id"
           :key="section.genre"
-          :color-index="section.colorIndex"
-          size="regular"
-          :href="section.href"
-          @click.prevent="scrollToSection(section.id)">
-          {{ section.genre }}
-        </Badge>
-      </nav>
-      <section
-        v-for="section in genreSections"
-        :id="section.id"
-        :key="section.genre"
-        class="scroll-mt-25 focus:outline-none focus-visible:[&>h3]:underline focus-visible:[&>h3]:decoration-purple-500 focus-visible:[&>h3]:underline-offset-8 [content-visibility:auto] [contain-intrinsic-size:auto_560px]"
-        tabindex="-1"
-        :aria-label="section.genre">
-        <h3 class="mt-8! mb-4! text-left text-3xl! font-bold text-slate-100!">
-          {{ section.genre }}
-        </h3>
-        <div class="flex h-125 flex-row justify-start gap-4 overflow-x-auto p-2">
-          <VirtualCarousel :items="section.shows">
-            <template #default="{ item }">
-              <ShowCard :show="item" :tagline="item.summary ?? ''" />
-            </template>
-          </VirtualCarousel>
-        </div>
-      </section>
+          class="scroll-mt-25 focus:outline-none focus-visible:[&>h3]:underline focus-visible:[&>h3]:decoration-purple-500 focus-visible:[&>h3]:underline-offset-8 [content-visibility:auto] [contain-intrinsic-size:auto_560px]"
+          tabindex="-1"
+          :aria-label="section.genre">
+          <h3 class="mt-8! mb-4! text-left text-3xl! font-bold text-slate-100!">
+            {{ section.genre }}
+          </h3>
+          <div class="flex h-125 flex-row justify-start gap-4 overflow-x-auto p-2">
+            <VirtualCarousel :items="section.shows">
+              <template #default="{ item }">
+                <ShowCard :show="item" :tagline="item.summary ?? ''" />
+              </template>
+            </VirtualCarousel>
+          </div>
+        </section>
+      </template>
     </div>
   </section>
 </template>

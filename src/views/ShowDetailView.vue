@@ -9,6 +9,7 @@ import ShowDetailEpisodes from '@/components/pages/detail/ShowDetailEpisodes.vue
 import ShowHero from '@/components/shared/ShowHero.vue'
 import DetailImage from '@/components/base/DetailImage.vue'
 import ArrowRight from '@/components/base/icons/ArrowRight.vue'
+import StateMessage from '@/components/shared/StateMessage.vue'
 
 const route = useRoute()
 const id = computed(() => Number(route.params.id))
@@ -34,19 +35,16 @@ const sections = computed(() => [
 ])
 
 watch(
-  id,
+  () => show.value?.id,
   () => {
     activeSection.value = 'overview'
-  },
-  { immediate: true }
+  }
 )
 </script>
 
 <template>
-  <div
-    class="page-shell text-left text-slate-200 [&_a]:no-underline [&_button]:cursor-pointer [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-sky-300 [&_button:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-sky-300 [&_a:focus-visible]:outline-offset-4">
-    <div v-if="loading" class="page-container pt-32 pb-16" role="status">
-      <p class="mb-8! text-sm text-sky-200">Loading the story…</p>
+  <section class="page-shell">
+    <div v-if="loading" class="page-container pt-32 pb-20">
       <div
         aria-hidden="true"
         class="flex animate-pulse flex-col gap-8 sm:flex-row motion-reduce:animate-none">
@@ -58,34 +56,19 @@ watch(
         </div>
       </div>
     </div>
-    <div
-      v-else-if="error || !show"
-      class="mx-auto max-w-2xl px-6 pt-40 pb-20 text-center"
-      role="alert">
-      <p class="text-sm text-sky-300">WACHEE</p>
-      <h1 class="my-6! text-4xl! text-white!">
-        {{ error === 'Show not found' ? 'Show not found' : 'This story couldn’t load' }}
-      </h1>
-      <p class="text-slate-400">
-        {{
-          error === 'Show not found'
-            ? 'This show may have been removed, or the link is incorrect.'
-            : 'Please try again in a moment.'
-        }}
-      </p>
-      <div class="mt-8 flex justify-center gap-4">
-        <button
-          v-if="error !== 'Show not found'"
-          class="rounded-full bg-sky-600 px-6 py-3 text-sm! text-white"
-          @click="retry">
-          Try again
-        </button>
-        <router-link
-          to="/"
-          class="rounded-full border border-slate-600 px-6 py-3 text-sm text-slate-200">
-          Back to discover
-        </router-link>
-      </div>
+    <div v-else-if="error || !show" class="mx-auto max-w-2xl px-6 pt-40 pb-20">
+      <StateMessage
+        :title="error === 'Show not found' ? 'Show not found' : 'Unable to load show'"
+        :retry-label="error !== 'Show not found' ? 'Try again' : undefined"
+        @retry="error !== 'Show not found' ? retry() : undefined">
+        <template #actions>
+          <router-link
+            to="/"
+            class="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900 px-5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition hover:border-violet-400/50 hover:bg-violet-500/10 hover:text-violet-300 focus-visible:outline-2 focus-visible:outline-violet-400">
+            Back to discover
+          </router-link>
+        </template>
+      </StateMessage>
     </div>
     <template v-else>
       <section class="relative isolate overflow-hidden">
@@ -132,5 +115,5 @@ watch(
           @retry-episodes="retryEpisodes" />
       </div>
     </template>
-  </div>
+  </section>
 </template>

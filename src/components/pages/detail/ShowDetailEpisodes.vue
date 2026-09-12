@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import type { Episode, Season } from '@/types'
 import CustomSelect from '@/components/base/CustomSelect.vue'
 import ShowDetailEpisodeItem from './ShowDetailEpisodeItem.vue'
+import StateMessage from '@/components/shared/StateMessage.vue'
 
 const props = defineProps<{
   seasons: Season[]
@@ -38,16 +39,11 @@ const seasonsOptions = computed(() =>
       enter-from-class="opacity-0"
       leave-active-class="transition-opacity duration-150 ease-in"
       leave-to-class="opacity-0">
-      <div
+      <StateMessage
         v-if="episodesError"
         key="error"
-        role="alert"
-        class="rounded-2xl border border-slate-700 p-6 text-sm text-slate-400">
-        Episodes couldn’t load.
-        <button class="ml-2 text-sky-300 underline" @click="emit('retry-episodes')">
-          Try again
-        </button>
-      </div>
+        title="Episodes couldn’t load"
+        @retry="emit('retry-episodes')" />
       <p
         v-else-if="episodesLoading"
         key="loading"
@@ -55,12 +51,14 @@ const seasonsOptions = computed(() =>
         class="py-8 text-sm text-slate-400">
         Loading episodes…
       </p>
-      <p v-else-if="!seasons.length" key="no-seasons" class="py-4 text-sm text-slate-400">
-        No season information is available yet.
-      </p>
-      <p v-else-if="!episodes.length" key="no-episodes" class="py-4 text-sm text-slate-400">
-        No episodes are available for this season yet.
-      </p>
+      <StateMessage
+        v-else-if="!seasons.length"
+        key="no-seasons"
+        title="No seasons available" />
+      <StateMessage
+        v-else-if="!episodes.length"
+        key="no-episodes"
+        title="No episodes available" />
       <div v-else :key="selectedSeason ?? 'episodes'" class="space-y-3">
         <ShowDetailEpisodeItem
           v-for="episode in episodes"

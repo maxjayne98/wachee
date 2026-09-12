@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import type { CastMember } from '@/types'
 import DetailImage from '@/components/base/DetailImage.vue'
+import StateMessage from '@/components/shared/StateMessage.vue'
 
 const props = defineProps<{ cast: CastMember[] }>()
 
@@ -22,7 +23,7 @@ const visibleCast = computed(() => (expandedCast.value ? props.cast : props.cast
         {{ expandedCast ? 'Show less ↑' : `View all (${cast.length}) →` }}
       </button>
     </div>
-    <p v-if="!cast.length" class="text-sm text-slate-400">No cast information is available yet.</p>
+    <StateMessage v-if="!cast.length" title="No cast available" />
     <div
       v-else
       id="cast-list"
