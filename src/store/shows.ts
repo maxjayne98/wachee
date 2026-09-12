@@ -7,13 +7,13 @@ import { sortShowsByRating, pickRandomPair, shuffle } from '@/utils'
 export interface ShowFiltersState {
   language: string
   runtime: string
-  rating: { min: number; max: number }
+  rating: number
 }
 
 const DEFAULT_FILTERS: ShowFiltersState = {
   language: '',
   runtime: '',
-  rating: { min: 1, max: 10 },
+  rating: 1,
 }
 
 export const useShowsStore = defineStore('shows', () => {
@@ -25,7 +25,7 @@ export const useShowsStore = defineStore('shows', () => {
 
   const filteredShows = computed(() => {
     const { language, runtime, rating } = filters.value
-    const hasRatingFilter = rating.min > 1 || rating.max < 10
+    const hasRatingFilter = rating > 1
 
     if (!language && !runtime && !hasRatingFilter) {
       return allShows.value
@@ -45,7 +45,7 @@ export const useShowsStore = defineStore('shows', () => {
 
       if (hasRatingFilter) {
         const score = show.rating?.average
-        if (score == null || score < rating.min || score > rating.max) {
+        if (score == null || score < rating) {
           return false
         }
       }

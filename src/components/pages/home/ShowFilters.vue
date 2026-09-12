@@ -46,42 +46,36 @@ import { debounce } from '@/utils'
 
 const { allShows, filters, resetFilters } = useShows()
 
-const rating = ref({ ...filters.value.rating })
+const rating = ref(filters.value.rating)
 
 const hasActiveFilters = computed(() => {
   return (
     Boolean(filters.value.language) ||
     Boolean(filters.value.runtime) ||
-    filters.value.rating.min > 1 ||
-    filters.value.rating.max < 10
+    filters.value.rating > 1
   )
 })
 
 function handleReset() {
   resetFilters()
-  rating.value = { min: 1, max: 10 }
+  rating.value = 1
 }
 
-const updateFilterRating = debounce((newRating: { min: number; max: number }) => {
-  filters.value.rating = { ...newRating }
+const updateFilterRating = debounce((newRating: number) => {
+  filters.value.rating = newRating
 }, 300)
 
-watch(
-  rating,
-  newRating => {
-    updateFilterRating(newRating)
-  },
-  { deep: true }
-)
+watch(rating, newRating => {
+  updateFilterRating(newRating)
+})
 
 watch(
   () => filters.value.rating,
   newRating => {
-    if (newRating.min !== rating.value.min || newRating.max !== rating.value.max) {
-      rating.value = { ...newRating }
+    if (newRating !== rating.value) {
+      rating.value = newRating
     }
-  },
-  { deep: true }
+  }
 )
 
 onUnmounted(() => {

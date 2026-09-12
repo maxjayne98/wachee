@@ -11,36 +11,22 @@ function sortShowsByRating(shows: Iterable<Show>): Show[] {
   })
 }
 
-function capitalizeFirstLetter(str: string) {
-  return str[0].toUpperCase() + str.slice(1)
-}
-
-function get<T = unknown>(object: unknown, path: string, defaultValue?: T): T | undefined {
-  const result = path.split('.').reduce<unknown>((current, key) => {
-    if (current != null && typeof current === 'object') {
-      return (current as Record<string, unknown>)[key]
-    }
-    return undefined
-  }, object)
-
-  return result === undefined ? defaultValue : (result as T)
+function capitalizeFirstLetter(str: string): string {
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 function pickRandomPair<T>(items: T[], poolLimit = 6): T[] {
-  const limit = Math.min(items.length, poolLimit || 6)
+  const limit = Math.min(items.length, poolLimit ?? 6)
 
   if (limit < 2) {
     return items.slice(0, limit)
   }
 
-  const firstIndex = Math.floor(Math.random() * limit)
+  const pool = items.slice(0, limit)
+  pool.sort(() => Math.random() - 0.5)
 
-  let secondIndex: number
-  do {
-    secondIndex = Math.floor(Math.random() * limit)
-  } while (secondIndex === firstIndex)
-
-  return [items[firstIndex], items[secondIndex]]
+  return [pool[0]!, pool[1]!]
 }
 
 function shuffle<T>(array: T[]): T[] {
@@ -84,12 +70,4 @@ function debounce<Args extends unknown[]>(fn: (...args: Args) => void, delay = 3
   return debounced
 }
 
-export {
-  sortShowsByRating,
-  capitalizeFirstLetter,
-  get,
-  pickRandomPair,
-  shuffle,
-  plainText,
-  debounce,
-}
+export { sortShowsByRating, capitalizeFirstLetter, pickRandomPair, shuffle, plainText, debounce }
