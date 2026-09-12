@@ -1,15 +1,7 @@
 <template>
   <section class="page-shell text-slate-300">
-    <FeaturedShows
-      :shows="topPickedShows"
-      :loading="isLoading"
-      :error="error"
-      @retry="fetchShows(INITIAL_PAGES)"
-    />
-    <div
-      id="browse-shows"
-      class="mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-md:px-6 max-md:py-8"
-    >
+    <FeaturedShows :shows="topPickedShows" :loading="isLoading" :error="error" @retry="fetchShows(INITIAL_PAGES)" />
+    <div class="mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-md:px-6 max-md:py-8">
       <div class="mb-7">
         <span class="text-base tracking-widest text-violet-300">FIND YOUR NEXT FAVORITE</span>
         <h2 class="mt-3! text-4xl! md:text-5xl! text-slate-100!">Explore the collection</h2>
@@ -18,8 +10,7 @@
       <nav
         v-if="Object.keys(showsByGenres).length"
         class="mt-2 flex! flex-wrap gap-2 border-b border-white/10 pt-5.5 pb-7"
-        aria-label="Browse by genre"
-      >
+        aria-label="Browse by genre">
         <Badge
           v-for="(genre, index) in Object.keys(showsByGenres)"
           :key="genre"
@@ -36,8 +27,7 @@
         :key="genre"
         class="scroll-mt-25 focus:outline-none focus-visible:[&>h3]:underline focus-visible:[&>h3]:decoration-purple-500 focus-visible:[&>h3]:underline-offset-8 [content-visibility:auto] [contain-intrinsic-size:auto_560px]"
         tabindex="-1"
-        :aria-label="genre"
-      >
+        :aria-label="genre">
         <h3 class="mt-8! mb-4! text-left text-3xl! font-bold text-slate-100!">
           {{ genre }}
         </h3>
