@@ -67,6 +67,7 @@ onBeforeUnmount(() => {
   <div ref="rootRef" class="relative w-full min-w-0 select-none">
     <button
       type="button"
+      test-id="select-button"
       :disabled="disabled || !options.length"
       :aria-label="ariaLabel"
       :aria-expanded="isOpen"
@@ -97,10 +98,12 @@ onBeforeUnmount(() => {
       leave-to-class="opacity-0 -translate-y-1 scale-[0.98]">
       <ul
         v-if="isOpen"
+        test-id="select-dropdown"
         class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-1000 m-0 grid max-h-60 list-none gap-1 overflow-y-auto rounded-xl border border-white/10 bg-slate-900 p-1.5 shadow-2xl shadow-black/50 backdrop-blur-xl">
         <li
           v-for="option in options"
           :key="String(option.value)"
+          test-id="select-option"
           class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm transition-all duration-150"
           :class="
             option.value === modelValue

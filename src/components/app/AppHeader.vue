@@ -61,6 +61,7 @@ function onSubmit() {
       <router-link
         :to="{ path: '/' }"
         aria-label="Wachee home"
+        test-id="wachee-logo"
         class="shrink-0 rounded-xl bg-transparent! transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-purple-300 focus-visible:outline-offset-2">
         <img src="@/assets/wachee.png" alt="Wachee" class="app-header-logo h-12 w-auto sm:h-16" />
       </router-link>
@@ -75,6 +76,7 @@ function onSubmit() {
             v-model="searchQuery"
             type="input"
             placeholder="Find your favorite…"
+            test-id="search-bar"
             class="min-w-0 w-full border-0 bg-transparent py-2 text-sm! text-slate-100 outline-none sm:text-base!"
             required
             aria-label="Search shows" />
