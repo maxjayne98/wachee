@@ -97,7 +97,12 @@ watch(
           image-class="object-[center_25%]!" />
         <div aria-hidden="true" class="absolute inset-0 hero-overlay" />
         <div class="page-container relative pt-26 pb-5 max-md:pt-25">
-          <ShowHero :show="show">
+          <div
+            class="flex items-center gap-2.5 text-xs font-bold tracking-widest text-slate-400 md:text-base">
+            <span class="size-1.75 rounded-full bg-violet-300 shadow-lg shadow-violet-400/60" />
+            Discover {{ show.name }}
+          </div>
+          <ShowHero :show="show" :show-summary="false">
             <template #actions>
               <a
                 :href="show.officialSite || show.url"

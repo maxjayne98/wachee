@@ -4,7 +4,7 @@ import type { Show } from '@/types'
 import Badge from '@/components/base/Badge.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
 
-const props = defineProps<{ show: Show }>()
+const props = defineProps<{ show: Show; showSummary?: boolean }>()
 
 const summary = computed(() => {
   const html = props.show.summary
@@ -38,7 +38,11 @@ const runtime = computed(() => props.show.runtime ?? props.show.averageRuntime)
       <span v-if="runtime">{{ runtime }} min</span>
       <span v-if="show.language">{{ show.language }}</span>
     </div>
-    <p class="mt-5! line-clamp-2 max-w-140 text-base leading-8! min-h-16 text-slate-300">
+    <p
+      :class="[
+        'mt-5! line-clamp-2 max-w-140 text-base leading-8! min-h-16 text-slate-300',
+        { 'opacity-0': showSummary === false },
+      ]">
       {{
         summary ||
         'Your next great story starts here. Discover this pick and find something new to love.'
