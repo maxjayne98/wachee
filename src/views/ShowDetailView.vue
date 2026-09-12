@@ -45,7 +45,7 @@ watch(
 <template>
   <div
     class="show-detail min-h-svh bg-slate-950 text-left text-slate-200 [#app:has(&)]:mt-0! [#app:has(&)]:w-full! [body:has(&)]:bg-slate-950! [&_a]:no-underline [&_button]:cursor-pointer [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-sky-300 [&_button:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-sky-300 [&_a:focus-visible]:outline-offset-4">
-    <div v-if="loading" class="mx-auto max-w-360 px-6 pt-32 pb-16 sm:px-12 lg:px-16" role="status">
+    <div v-if="loading" class="page-container pt-32 pb-16" role="status">
       <p class="mb-8! text-sm text-sky-200">Loading the story…</p>
       <div
         aria-hidden="true"
@@ -96,10 +96,14 @@ watch(
           class="absolute! inset-0 size-full opacity-70"
           image-class="object-[center_25%]!" />
         <div aria-hidden="true" class="absolute inset-0 hero-overlay" />
-        <div class="relative mx-auto max-w-360 px-12 pt-26 pb-5 max-md:px-6 max-md:pt-25">
+        <div class="page-container relative pt-26 pb-5 max-md:pt-25">
           <ShowHero :show="show">
             <template #actions>
-              <a :href="show.officialSite || show.url" target="_blank" rel="noopener noreferrer">
+              <a
+                :href="show.officialSite || show.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-3 py-2 text-sm! font-medium text-slate-300 transition-colors hover:border-white/30 hover:bg-white/5 hover:text-white">
                 {{ show.officialSite ? 'Official website' : 'View on TVmaze' }}
                 <ArrowRight class="size-5 -rotate-45" />
               </a>
@@ -107,7 +111,7 @@ watch(
           </ShowHero>
         </div>
       </section>
-      <div class="mx-auto max-w-360 px-6 pb-16 sm:px-12 lg:px-16">
+      <div class="page-container pb-16">
         <nav aria-label="Show sections" class="mb-8 flex! gap-6 border-b border-white/10 sm:gap-8">
           <Tabs v-model="activeSection" :sections="sections" />
         </nav>

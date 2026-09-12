@@ -53,7 +53,7 @@ const description = computed(() =>
       </div>
     </div>
     <div
-      class="relative -mt-8 flex flex-1 flex-col rounded-t-3xl border-t border-sky-200/15 bg-linear-to-br from-slate-800/85 via-slate-900/95 to-slate-950 px-5 pt-5 pb-4 backdrop-blur-xl">
+      class="relative -mt-8 flex flex-1 flex-col rounded-t-3xl border-t border-white/10 bg-slate-900 px-5 pt-5 pb-4 backdrop-blur-xl">
       <div class="mb-2 flex min-w-0 items-center gap-2 text-xs font-medium text-slate-400">
         <span class="truncate text-sky-200/80">{{ networkName }}</span>
         <template v-if="premiereYear">

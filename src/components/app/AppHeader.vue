@@ -57,8 +57,7 @@ function onSubmit() {
       <span class="absolute -bottom-24 right-1/4 h-28 w-80 rounded-full bg-blue-400/15 blur-2xl" />
     </div>
 
-    <div
-      class="mx-auto flex h-20 max-w-360 items-center justify-between gap-6 px-2 md:px-6 sm:gap-12 lg:px-12">
+    <div class="page-container flex h-20 items-center justify-between gap-6 sm:gap-12">
       <router-link
         :to="{ path: '/' }"
         aria-label="Wachee home"

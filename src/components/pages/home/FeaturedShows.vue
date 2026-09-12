@@ -60,7 +60,7 @@ onUnmounted(() => {
     </Transition>
     <div class="absolute inset-0 hero-overlay" />
     <div
-      class="relative m-auto flex min-h-0 max-w-360 flex-col items-stretch px-12 pt-26 pb-5 max-md:px-6 max-md:pt-25">
+      class="page-container relative flex min-h-0 flex-col items-stretch pt-26 pb-5 max-md:pt-25">
       <template v-if="activeShow">
         <div
           class="flex items-center gap-2.5 text-xs font-bold tracking-widest text-slate-400 md:text-base">
@@ -80,7 +80,9 @@ onUnmounted(() => {
             aria-roledescription="slide"
             :aria-label="`${activeIndex + 1} of ${shows.length}: ${activeShow.name}`">
             <template #actions>
-              <router-link :to="{ name: 'show-detail', params: { id: activeShow.id } }">
+              <router-link
+                :to="{ name: 'show-detail', params: { id: activeShow.id } }"
+                class="inline-flex items-center justify-center gap-4 rounded-full border-4 border-transparent gradient-border! px-5.5 py-3 text-base! font-bold text-violet-100 shadow-lg shadow-purple-500/20 transition-shadow hover:shadow-xl hover:shadow-purple-500/40">
                 Explore show
                 <ArrowRight class="size-5" />
               </router-link>

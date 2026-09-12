@@ -8,8 +8,7 @@
         {{ story || 'No synopsis is available for this show yet.' }}
       </p>
     </div>
-    <aside
-      class="self-start rounded-2xl border border-slate-700/60 bg-linear-to-br from-slate-800/40 to-slate-950/60 p-6">
+    <aside class="self-start rounded-2xl border border-white/10 bg-slate-900 p-6">
       <h2 class="mb-4! text-lg! font-semibold text-white!">Show details</h2>
       <dl class="divide-y divide-slate-700/50">
         <div

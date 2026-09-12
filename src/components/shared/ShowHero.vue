@@ -44,9 +44,7 @@ const runtime = computed(() => props.show.runtime ?? props.show.averageRuntime)
         'Your next great story starts here. Discover this pick and find something new to love.'
       }}
     </p>
-    <div
-      v-if="$slots.actions"
-      class="mt-5 flex flex-wrap items-center gap-3 [&>a]:inline-flex [&>a]:items-center [&>a]:justify-center [&>a]:gap-4 [&>a]:rounded-full [&>a]:border-4 [&>a]:border-transparent [&>a]:gradient-border! [&>a]:px-5.5 [&>a]:py-3 [&>a]:text-base! [&>a]:font-bold [&>a]:text-violet-100 [&>a]:shadow-lg [&>a]:shadow-purple-500/20 [&>a]:transition-shadow [&>a:hover]:shadow-xl [&>a:hover]:shadow-purple-500/40">
+    <div v-if="$slots.actions" class="mt-5 flex flex-wrap items-center gap-3">
       <slot name="actions" />
     </div>
   </div>

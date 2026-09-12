@@ -41,7 +41,7 @@
         <article
           v-for="episode in episodes"
           :key="episode.id"
-          class="flex flex-col overflow-hidden rounded-xl border border-slate-700/60 bg-linear-to-r from-slate-800/40 to-slate-950 sm:flex-row">
+          class="flex flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-900 sm:flex-row">
           <DetailImage
             :src="episode.image?.medium || episode.image?.original"
             :alt="episode.name"

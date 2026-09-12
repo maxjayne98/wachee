@@ -5,8 +5,7 @@
       :loading="isLoading"
       :error="error"
       @retry="fetchShows(INITIAL_PAGES)" />
-    <div
-      class="mx-auto min-w-0 max-w-328 scroll-mt-25 px-8 pt-7 pb-16 text-left max-md:px-6 max-md:py-8">
+    <div class="page-container scroll-mt-25 pt-7 pb-16 text-left max-md:py-8">
       <div class="mb-7">
         <span class="text-base tracking-widest text-violet-300">FIND YOUR NEXT FAVORITE</span>
         <h2 class="mt-3! text-4xl! md:text-5xl! text-slate-100!">Explore the collection</h2>
