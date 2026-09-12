@@ -1,3 +1,24 @@
+<script setup lang="ts">
+export type TabSection = { label: string; href: string }
+
+interface Props {
+  sections: TabSection[]
+}
+
+defineProps<Props>()
+const activeSection = defineModel<string>()
+
+function goToSection(section: TabSection) {
+  activeSection.value = section.label
+  const target = document.getElementById(section.href)
+  target?.focus({ preventScroll: true })
+  target?.scrollIntoView({
+    block: 'start',
+    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+  })
+}
+</script>
+
 <template>
   <a
     v-for="section in sections"
@@ -14,23 +35,3 @@
     {{ section.label }}
   </a>
 </template>
-<script lang="ts" setup>
-type Section = { label: string; href: string }
-
-interface Props {
-  sections: Array<Section>
-}
-
-defineProps<Props>()
-const activeSection = defineModel<string>()
-
-function goToSection(section: Section) {
-  activeSection.value = section.label
-  const target = document.getElementById(section.href)
-  target?.focus({ preventScroll: true })
-  target?.scrollIntoView({
-    block: 'start',
-    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-  })
-}
-</script>

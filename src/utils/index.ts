@@ -26,21 +26,21 @@ function get<T = unknown>(object: unknown, path: string, defaultValue?: T): T | 
   return result === undefined ? defaultValue : (result as T)
 }
 
-function pickTwoRandom<T>(arr: T[], count: number): T[] {
-  const limit = Math.min(arr.length, count || 6)
+function pickRandomPair<T>(items: T[], poolLimit = 6): T[] {
+  const limit = Math.min(items.length, poolLimit || 6)
 
   if (limit < 2) {
-    return arr.slice(0, limit)
+    return items.slice(0, limit)
   }
 
-  const first = Math.floor(Math.random() * limit)
+  const firstIndex = Math.floor(Math.random() * limit)
 
-  let second: number
+  let secondIndex: number
   do {
-    second = Math.floor(Math.random() * limit)
-  } while (second === first)
+    secondIndex = Math.floor(Math.random() * limit)
+  } while (secondIndex === firstIndex)
 
-  return [arr[first], arr[second]]
+  return [items[firstIndex], items[secondIndex]]
 }
 
 function shuffle<T>(array: T[]): T[] {
@@ -88,7 +88,7 @@ export {
   sortShowsByRating,
   capitalizeFirstLetter,
   get,
-  pickTwoRandom,
+  pickRandomPair,
   shuffle,
   plainText,
   debounce,

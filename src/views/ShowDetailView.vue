@@ -4,8 +4,8 @@ import { useRoute } from 'vue-router'
 import { useShowDetail } from '@/composables/useShowDetail'
 import Tabs from '@/components/base/Tabs.vue'
 import ShowDetailOverview from '@/components/pages/detail/ShowDetailOverview.vue'
-import ShowDetailCastInfo from '@/components/pages/detail/ShowDetailCastInfo.vue'
-import ShowDetailEpisodeInfo from '@/components/pages/detail/ShowDetailEpisodeInfo.vue'
+import ShowDetailCast from '@/components/pages/detail/ShowDetailCast.vue'
+import ShowDetailEpisodes from '@/components/pages/detail/ShowDetailEpisodes.vue'
 import ShowHero from '@/components/shared/ShowHero.vue'
 import DetailImage from '@/components/base/DetailImage.vue'
 import ArrowRight from '@/components/base/icons/ArrowRight.vue'
@@ -44,7 +44,7 @@ watch(
 
 <template>
   <div
-    class="show-detail min-h-svh bg-slate-950 text-left text-slate-200 [#app:has(&)]:mt-0! [#app:has(&)]:w-full! [body:has(&)]:bg-slate-950! [&_a]:no-underline [&_button]:cursor-pointer [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-sky-300 [&_button:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-sky-300 [&_a:focus-visible]:outline-offset-4">
+    class="page-shell text-left text-slate-200 [&_a]:no-underline [&_button]:cursor-pointer [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-sky-300 [&_button:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-sky-300 [&_a:focus-visible]:outline-offset-4">
     <div v-if="loading" class="page-container pt-32 pb-16" role="status">
       <p class="mb-8! text-sm text-sky-200">Loading the story…</p>
       <div
@@ -121,8 +121,8 @@ watch(
           <Tabs v-model="activeSection" :sections="sections" />
         </nav>
         <ShowDetailOverview id="detail-overview" :show="show" />
-        <ShowDetailCastInfo id="detail-cast" :cast="cast" />
-        <ShowDetailEpisodeInfo
+        <ShowDetailCast id="detail-cast" :cast="cast" />
+        <ShowDetailEpisodes
           id="detail-episodes"
           v-model:selected-season="selectedSeason"
           :seasons="seasons"

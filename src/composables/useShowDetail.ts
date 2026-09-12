@@ -1,5 +1,5 @@
 import { computed, ref, watch, type Ref } from 'vue'
-import { fetchShowDetail, fetchSeasonEpisodes } from '@/api/request'
+import { fetchShowDetail, fetchSeasonEpisodes } from '@/api/shows'
 import type { Episode, ShowDetail } from '@/types'
 
 export function useShowDetail(id: Ref<number>) {

@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { plainText } from '@/utils'
+import type { Episode, Season } from '@/types'
+import CustomSelect from '@/components/base/CustomSelect.vue'
+import DetailImage from '@/components/base/DetailImage.vue'
+
+const props = defineProps<{
+  seasons: Season[]
+  episodes: Episode[]
+  episodesLoading?: boolean
+  episodesError?: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'retry-episodes'): void
+}>()
+
+const selectedSeason = defineModel<number | null>('selectedSeason', { default: null })
+
+const seasonsOptions = computed(() =>
+  props.seasons.map(season => ({ value: season.id, label: `Season ${season.number}` }))
+)
+</script>
+
 <template>
   <section tabindex="-1" class="mt-12 scroll-mt-28 focus:outline-none">
     <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
@@ -71,26 +96,3 @@
     </Transition>
   </section>
 </template>
-
-<script lang="ts" setup>
-import { computed } from 'vue'
-import { plainText } from '@/utils'
-import type { Episode, Season } from '@/types'
-import CustomSelect from '@/components/base/CustomSelect.vue'
-import DetailImage from '@/components/base/DetailImage.vue'
-
-const props = defineProps<{
-  seasons: Season[]
-  episodes: Episode[]
-  episodesLoading?: boolean
-  episodesError?: boolean
-}>()
-const emit = defineEmits<{
-  (e: 'retry-episodes'): void
-}>()
-const selectedSeason = defineModel<number | null>('selectedSeason', { default: null })
-
-const seasonsOptions = computed(() =>
-  props.seasons.map(season => ({ value: season.id, label: `Season ${season.number}` }))
-)
-</script>

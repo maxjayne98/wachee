@@ -41,10 +41,10 @@ import { computed, onUnmounted, ref, watch } from 'vue'
 import CustomSelect, { type SelectOption } from '@/components/base/CustomSelect.vue'
 import RangeSlider from '@/components/base/RangeSlider.vue'
 import Trash from '@/components/base/icons/Trash.vue'
-import { useShowList } from '@/store/showList'
+import { useShows } from '@/store/shows'
 import { debounce } from '@/utils'
 
-const { allShows, filters, resetFilters } = useShowList()
+const { allShows, filters, resetFilters } = useShows()
 
 const rating = ref({ ...filters.value.rating })
 

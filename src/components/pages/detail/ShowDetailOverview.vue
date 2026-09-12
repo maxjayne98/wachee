@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { Show } from '@/types'
+import { plainText } from '@/utils'
+
+interface Props {
+  show: Show
+}
+
+const props = defineProps<Props>()
+
+const story = computed(() => plainText(props.show.summary))
+const details = computed(() => [
+  ['Status', props.show.status || 'Unknown'],
+  ['Language', props.show.language || 'Unknown'],
+  [
+    'Runtime',
+    props.show.runtime || props.show.averageRuntime
+      ? `${props.show.runtime || props.show.averageRuntime} min`
+      : 'Unknown',
+  ],
+  ['Network', props.show.network?.name || props.show.webChannel?.name || 'Unknown'],
+])
+</script>
+
 <template>
   <section
     tabindex="-1"
@@ -22,26 +47,3 @@
     </aside>
   </section>
 </template>
-<script lang="ts" setup>
-import { computed } from 'vue'
-import type { Show } from '@/types'
-import { plainText } from '@/utils'
-
-const story = computed(() => plainText(props.show.summary))
-const details = computed(() => [
-  ['Status', props.show.status || 'Unknown'],
-  ['Language', props.show.language || 'Unknown'],
-  [
-    'Runtime',
-    props.show.runtime || props.show.averageRuntime
-      ? `${props.show.runtime || props.show.averageRuntime} min`
-      : 'Unknown',
-  ],
-  ['Network', props.show.network?.name || props.show.webChannel?.name || 'Unknown'],
-])
-
-interface Props {
-  show: Show
-}
-const props = defineProps<Props>()
-</script>

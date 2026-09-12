@@ -1,5 +1,5 @@
 import { ref, watch, type Ref } from 'vue'
-import { searchShowsByName } from '@/api/request'
+import { searchShowsByName } from '@/api/shows'
 import type { Show } from '@/types'
 
 export function useShowSearch(query: Ref<string>) {

@@ -1,22 +1,31 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Show } from '@/types'
+import { plainText } from '@/utils'
 import Badge from '@/components/base/Badge.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
 
-const props = defineProps<{ show: Show; showSummary?: boolean }>()
+interface Props {
+  show: Show
+  showSummary?: boolean
+}
 
-const summary = computed(() => {
-  const html = props.show.summary
-  return html ? new DOMParser().parseFromString(html, 'text/html').body.textContent || '' : ''
+const props = withDefaults(defineProps<Props>(), {
+  showSummary: true,
 })
+
+const summary = computed(() => plainText(props.show.summary))
+
 const years = computed(() => {
   const start = props.show.premiered?.slice(0, 4)
   const end = props.show.ended?.slice(0, 4)
+
+  if (!start) return ''
+  if (end && end !== start) return `${start}–${end}`
+  if (!end && props.show.status === 'Running') return `${start}–present`
   return start
-    ? `${start}${end && end !== start ? `–${end}` : !end && props.show.status === 'Running' ? '–present' : ''}`
-    : ''
 })
+
 const runtime = computed(() => props.show.runtime ?? props.show.averageRuntime)
 </script>
 
@@ -41,7 +50,7 @@ const runtime = computed(() => props.show.runtime ?? props.show.averageRuntime)
     <p
       :class="[
         'mt-5! line-clamp-2 max-w-140 text-base leading-8! min-h-16 text-slate-300',
-        { 'opacity-0': showSummary === false },
+        { 'opacity-0': !showSummary },
       ]">
       {{
         summary ||

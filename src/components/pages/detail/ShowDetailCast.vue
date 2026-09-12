@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import type { CastMember } from '@/types'
+import DetailImage from '@/components/base/DetailImage.vue'
+
+const props = defineProps<{ cast: CastMember[] }>()
+
+const expandedCast = ref(false)
+const visibleCast = computed(() => (expandedCast.value ? props.cast : props.cast.slice(0, 8)))
+</script>
+
 <template>
   <section tabindex="-1" class="mt-12 scroll-mt-28 focus:outline-none">
     <div class="mb-5 flex items-center justify-between gap-4">
@@ -42,14 +53,3 @@
     </div>
   </section>
 </template>
-
-<script setup lang="ts">
-import { computed, ref } from 'vue'
-import type { CastMember } from '@/types'
-import DetailImage from '@/components/base/DetailImage.vue'
-
-const props = defineProps<{ cast: CastMember[] }>()
-
-const expandedCast = ref(false)
-const visibleCast = computed(() => (expandedCast.value ? props.cast : props.cast.slice(0, 8)))
-</script>

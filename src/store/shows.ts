@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
-import { fetchShowsPage } from '@/api/request'
+import { fetchShowsPage } from '@/api/shows'
 import type { Show } from '@/types'
-import { sortShowsByRating, pickTwoRandom, shuffle } from '@/utils'
+import { sortShowsByRating, pickRandomPair, shuffle } from '@/utils'
 
 export interface ShowFiltersState {
   language: string
@@ -16,14 +16,14 @@ const DEFAULT_FILTERS: ShowFiltersState = {
   rating: { min: 1, max: 10 },
 }
 
-export const useShowListStore = defineStore('showList', () => {
+export const useShowsStore = defineStore('shows', () => {
   const allShows = ref<Show[]>([])
   const error = ref<string>('')
   const isLoading = ref<boolean>(false)
-  const filters = ref<ShowFiltersState>({ ...DEFAULT_FILTERS, rating: { min: 1, max: 10 } })
-  const topPickedShows = ref<Show[]>([])
+  const filters = ref<ShowFiltersState>({ ...DEFAULT_FILTERS })
+  const featuredShows = ref<Show[]>([])
 
-  const visibleShows = computed(() => {
+  const filteredShows = computed(() => {
     const { language, runtime, rating } = filters.value
     const hasRatingFilter = rating.min > 1 || rating.max < 10
 
@@ -58,15 +58,16 @@ export const useShowListStore = defineStore('showList', () => {
     return new Map(allShows.value.map(show => [show.id, show]))
   })
 
-  function calculateTopPicksShows(shows: Show[]) {
-    const genres = Object.keys(getShowsByGeneres(shows))
+  function selectFeaturedShows(shows: Show[]) {
+    const showsByGenre = groupShowsByGenre(shows)
+    const genres = Object.keys(showsByGenre)
     const selected: Show[] = []
     const selectedIds = new Set<number>()
 
     for (const genre of genres) {
-      const showsOfGenre = getShowsByGeneres(shows)[genre]
-      const availableShows = showsOfGenre.filter(show => !selectedIds.has(show.id))
-      const randomShows = pickTwoRandom(availableShows, 4)
+      const genreShows = showsByGenre[genre] ?? []
+      const availableShows = genreShows.filter(show => !selectedIds.has(show.id))
+      const randomShows = pickRandomPair(availableShows, 4)
 
       for (const show of randomShows) {
         selected.push(show)
@@ -77,7 +78,7 @@ export const useShowListStore = defineStore('showList', () => {
     return shuffle(selected).slice(0, 6)
   }
 
-  function getShowsByGeneres(shows: Show[]) {
+  function groupShowsByGenre(shows: Show[]) {
     return sortShowsByRating(shows).reduce(
       (acc, show) => {
         new Set(show.genres).forEach(genre => {
@@ -92,8 +93,8 @@ export const useShowListStore = defineStore('showList', () => {
     )
   }
 
-  const showsByGenres = computed(() => {
-    return getShowsByGeneres(visibleShows.value)
+  const showsByGenre = computed(() => {
+    return groupShowsByGenre(filteredShows.value)
   })
 
   async function fetchShows(pages: number[]) {
@@ -110,7 +111,7 @@ export const useShowListStore = defineStore('showList', () => {
 
       if (newShows.length > 0) {
         allShows.value.push(...newShows)
-        topPickedShows.value = calculateTopPicksShows(allShows.value)
+        featuredShows.value = selectFeaturedShows(allShows.value)
       }
     } catch (err) {
       console.error('Error fetching shows:', err)
@@ -121,53 +122,65 @@ export const useShowListStore = defineStore('showList', () => {
   }
 
   function resetFilters() {
-    filters.value = { ...DEFAULT_FILTERS, rating: { min: 1, max: 10 } }
+    filters.value = { ...DEFAULT_FILTERS }
   }
 
   return {
     allShows,
-    visibleShows,
+    filteredShows,
+    visibleShows: filteredShows,
     isLoading,
     error,
     filters,
     resetFilters,
     fetchShows,
-    showsByGenres,
+    showsByGenre,
+    showsByGenres: showsByGenre,
     showsById,
-    topPickedShows,
+    featuredShows,
+    topPickedShows: featuredShows,
   }
 })
 
-// Keep backward compatibility if showListStore is imported directly
-export const showListStore = useShowListStore
+// Export aliases for flexibility and backward compatibility
+export const useShowListStore = useShowsStore
+export const showListStore = useShowsStore
 
-export function useShowList() {
-  const store = useShowListStore()
+export function useShows() {
+  const store = useShowsStore()
 
   const {
     allShows,
+    filteredShows,
     visibleShows,
     isLoading,
     error,
     filters,
+    showsByGenre,
     showsByGenres,
     showsById,
+    featuredShows,
     topPickedShows,
   } = storeToRefs(store)
   const { fetchShows, resetFilters } = store
 
   return {
     allShows,
+    filteredShows,
     visibleShows,
     isLoading,
     error,
     filters,
     resetFilters,
     fetchShows,
+    showsByGenre,
     showsByGenres,
     showsById,
+    featuredShows,
     topPickedShows,
   }
 }
 
-export type UseShowListReturn = ReturnType<typeof useShowList>
+export const useShowList = useShows
+export type UseShowsReturn = ReturnType<typeof useShows>
+export type UseShowListReturn = UseShowsReturn

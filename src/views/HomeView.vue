@@ -1,7 +1,45 @@
+<script setup lang="ts">
+import { computed, onMounted } from 'vue'
+import { useShows } from '@/store/shows'
+import ShowCard from '@/components/shared/ShowCard.vue'
+import ShowCardSkeleton from '@/components/shared/ShowCardSkeleton.vue'
+import ShowFilters from '@/components/pages/home/ShowFilters.vue'
+import VirtualCarousel from '@/components/pages/home/VirtualCarousel.vue'
+import FeaturedShows from '@/components/pages/home/FeaturedShows.vue'
+import Badge from '@/components/base/Badge.vue'
+
+const INITIAL_PAGES = [1, 2, 3, 4, 5]
+const { fetchShows, showsByGenre, featuredShows, isLoading, error } = useShows()
+
+const genreSections = computed(() =>
+  Object.entries(showsByGenre.value).map(([genre, shows], index) => ({
+    genre,
+    colorIndex: index,
+    shows,
+    id: `genre-${encodeURIComponent(genre)}`,
+    href: `#genre-${encodeURIComponent(genre)}`,
+  }))
+)
+
+function scrollToSection(id: string) {
+  const section = document.getElementById(id)
+  if (!section) return
+  section.focus({ preventScroll: true })
+  section.scrollIntoView({
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    block: 'start',
+  })
+}
+
+onMounted(async () => {
+  await fetchShows(INITIAL_PAGES)
+})
+</script>
+
 <template>
   <section class="page-shell text-slate-300">
     <FeaturedShows
-      :shows="topPickedShows"
+      :shows="featuredShows"
       :loading="isLoading"
       :error="error"
       @retry="fetchShows(INITIAL_PAGES)" />
@@ -57,40 +95,3 @@
     </div>
   </section>
 </template>
-<script lang="ts" setup>
-import { onMounted, computed } from 'vue'
-import { useShowList } from '@/store/showList'
-import ShowCard from '@/components/shared/ShowCard.vue'
-import ShowCardSkeleton from '@/components/shared/ShowCardSkeleton.vue'
-import ShowFilters from '@/components/pages/home/ShowFilters.vue'
-import VirtualCarousel from '@/components/pages/home/VirtualCarousel.vue'
-import FeaturedShows from '@/components/pages/home/FeaturedShows.vue'
-import Badge from '@/components/base/Badge.vue'
-
-const INITIAL_PAGES = [1, 2, 3, 4, 5]
-const { fetchShows, showsByGenres, topPickedShows, isLoading, error } = useShowList()
-
-const genreSections = computed(() =>
-  Object.entries(showsByGenres.value).map(([genre, shows], index) => ({
-    genre,
-    colorIndex: index,
-    shows,
-    id: `genre-${encodeURIComponent(genre)}`,
-    href: `#genre-${encodeURIComponent(genre)}`,
-  }))
-)
-
-function scrollToSection(id: string) {
-  const section = document.getElementById(id)
-  if (!section) return
-  section.focus({ preventScroll: true })
-  section.scrollIntoView({
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-    block: 'start',
-  })
-}
-
-onMounted(async () => {
-  await fetchShows(INITIAL_PAGES)
-})
-</script>
