@@ -68,7 +68,7 @@ function onSubmit() {
 
       <form
         role="search"
-        class="group flex min-w-0 w-full max-w-md items-center rounded-full bg-linear-to-r bg-violet-300 p-px shadow-lg transition-shadow focus-within:shadow-purple-500/20"
+        class="group flex min-w-0 w-full max-w-md items-center rounded-full bg-linear-to-r bg-sky-500 p-px shadow-lg transition-shadow focus-within:shadow-purple-500/20"
         @submit.prevent="onSubmit">
         <div class="flex w-full min-w-0 items-center gap-2 rounded-full bg-black/95 pl-5 sm:pl-6">
           <TextInput
@@ -84,7 +84,7 @@ function onSubmit() {
             id="search-submit"
             aria-label="Search"
             type="submit"
-            class="flex sm:w-18 sm:h-10 w-10 h-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-purple-300/25 bg-linear-to-br bg-violet-300 text-white shadow-md shadow-purple-500/20 transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-purple-200 focus-visible:outline-offset-2 motion-reduce:transition-none">
+            class="flex sm:w-18 sm:h-10 w-10 h-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-sky-500 bg-sky-500 text-white shadow-md shadow-purple-500/20 transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-purple-200 focus-visible:outline-offset-2 motion-reduce:transition-none">
             <Magnifier aria-hidden="true" class="size-5 stroke-white" />
           </button>
         </div>

@@ -31,10 +31,10 @@
       <button
         v-for="(show, index) in shows"
         :key="show.id"
-        class="relative h-24 basis-41 shrink-0 cursor-pointer overflow-hidden rounded-2xl border text-left text-white hover:border-violet-200 max-md:basis-35 after:absolute after:inset-0 after:bg-linear-to-t after:from-slate-950/95 after:to-slate-950/20 after:content-['']"
+        class="relative h-24 basis-41 shrink-0 cursor-pointer overflow-hidden rounded-2xl border text-left text-white hover:border-blue-200 max-md:basis-35 after:absolute after:inset-0 after:bg-linear-to-t after:from-slate-950/95 after:to-slate-950/20 after:content-['']"
         :class="
           index === activeIndex
-            ? 'border-transparent gradient-border shadow-md shadow-purple-500/30'
+            ? 'border-blue-500! shadow-md shadow-blue-500/30'
             : 'border-white/15 bg-slate-900'
         "
         :aria-pressed="index === activeIndex"

@@ -40,7 +40,7 @@ onUnmounted(() => {
 
 <template>
   <section
-    class="relative isolate min-h-0 overflow-hidden bg-slate-950 text-left text-white [&_a]:no-underline after:absolute after:inset-x-0 after:bottom-0 after:h-px after:gradient-spectrum after:shadow-lg after:shadow-purple-500/40 after:content-['']"
+    class="relative isolate min-h-0 overflow-hidden bg-slate-950 text-left text-white [&_a]:no-underline after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-blue-500 after:shadow-lg after:shadow-blue-500/40 after:content-['']"
     aria-label="Top picks for you"
     aria-roledescription="carousel">
     <Transition
@@ -64,7 +64,7 @@ onUnmounted(() => {
       <template v-if="activeShow">
         <div
           class="flex items-center gap-2.5 text-xs font-bold tracking-widest text-slate-400 md:text-base">
-          <span class="size-1.75 rounded-full bg-violet-300 shadow-lg shadow-violet-400/60" />
+          <span class="size-1.75 rounded-full bg-blue-300 shadow-lg shadow-blue-400/60" />
           THE WACHEE SPOTLIGHT
         </div>
         <Transition
@@ -82,7 +82,7 @@ onUnmounted(() => {
             <template #actions>
               <router-link
                 :to="{ name: 'show-detail', params: { id: activeShow.id } }"
-                class="inline-flex items-center justify-center gap-4 rounded-full border-4 border-transparent gradient-border! px-5.5 py-3 text-base! font-bold text-violet-100 shadow-lg shadow-purple-500/20 transition-shadow hover:shadow-xl hover:shadow-purple-500/40">
+                class="inline-flex items-center justify-center gap-4 rounded-full border-4 border-blue-500 px-5.5 py-3 text-base! font-bold text-blue-100 shadow-lg shadow-sky-500/20 transition-shadow hover:shadow-xl hover:shadow-blue-500/40">
                 Explore show
                 <ArrowRight class="size-5" />
               </router-link>
@@ -119,7 +119,7 @@ onUnmounted(() => {
         </p>
         <button
           v-if="error && !loading"
-          class="inline-flex cursor-pointer text-lg mt-8 items-center justify-center gap-8 rounded-full border-2 border-transparent gradient-border! px-5.5 py-3 font-extrabold text-violet-100 shadow-lg shadow-purple-500/20 transition-[background] duration-200 hover:shadow-xl hover:shadow-purple-500/40"
+          class="inline-flex cursor-pointer text-lg mt-8 items-center justify-center gap-8 rounded-full border-2 border-blue-500 px-5.5 py-3 font-extrabold text-blue-100 shadow-lg shadow-sky-500/20 transition-all duration-200 hover:shadow-xl hover:shadow-blue-500/40"
           @click="emit('retry')">
           Try again
         </button>

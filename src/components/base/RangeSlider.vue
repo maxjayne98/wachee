@@ -31,7 +31,7 @@ const position = computed(
     <div class="absolute inset-x-0 h-1.5 rounded-full bg-slate-800" />
 
     <div
-      class="gradient-spectrum absolute left-0 h-1.5 rounded-full"
+      class="bg-blue-500 absolute left-0 h-1.5 rounded-full"
       :style="{ width: position }" />
 
     <input

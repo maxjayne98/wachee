@@ -142,7 +142,6 @@ export const useShowsStore = defineStore('shows', () => {
   }
 })
 
-// Export aliases for flexibility and backward compatibility
 export const useShowListStore = useShowsStore
 export const showListStore = useShowsStore
 
