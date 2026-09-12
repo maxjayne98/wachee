@@ -13,31 +13,31 @@
       </div>
       <ShowFilters />
       <nav
-        v-if="Object.keys(showsByGenres).length"
+        v-if="genreSections.length"
         class="mt-2 flex! flex-wrap gap-2 border-b border-white/10 pt-5.5 pb-7"
         aria-label="Browse by genre">
         <Badge
-          v-for="(genre, index) in Object.keys(showsByGenres)"
-          :key="genre"
-          :color-index="index"
+          v-for="section in genreSections"
+          :key="section.genre"
+          :color-index="section.colorIndex"
           size="regular"
-          :href="`#${genreId(genre)}`"
-          @click.prevent="scrollToGenre(genre)">
-          {{ genre }}
+          :href="section.href"
+          @click.prevent="scrollToSection(section.id)">
+          {{ section.genre }}
         </Badge>
       </nav>
       <section
-        v-for="(shows, genre) in showsByGenres"
-        :id="genreId(genre)"
-        :key="genre"
+        v-for="section in genreSections"
+        :id="section.id"
+        :key="section.genre"
         class="scroll-mt-25 focus:outline-none focus-visible:[&>h3]:underline focus-visible:[&>h3]:decoration-purple-500 focus-visible:[&>h3]:underline-offset-8 [content-visibility:auto] [contain-intrinsic-size:auto_560px]"
         tabindex="-1"
-        :aria-label="genre">
+        :aria-label="section.genre">
         <h3 class="mt-8! mb-4! text-left text-3xl! font-bold text-slate-100!">
-          {{ genre }}
+          {{ section.genre }}
         </h3>
-        <div class="flex h-140 flex-row justify-start gap-4 overflow-x-auto p-2">
-          <VirtualCarousel :items="shows">
+        <div class="flex h-125 flex-row justify-start gap-4 overflow-x-auto p-2">
+          <VirtualCarousel :items="section.shows">
             <template #default="{ item }">
               <ShowCard :show="item" :tagline="item.summary ?? ''" />
             </template>
@@ -48,7 +48,7 @@
   </section>
 </template>
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useShowList } from '@/store/showList'
 import ShowCard from '@/components/shared/ShowCard.vue'
 import ShowFilters from '@/components/pages/home/ShowFilters.vue'
@@ -59,9 +59,18 @@ import Badge from '@/components/base/Badge.vue'
 const INITIAL_PAGES = [1, 2, 3, 4, 5]
 const { fetchShows, showsByGenres, topPickedShows, isLoading, error } = useShowList()
 
-const genreId = (genre: string) => `genre-${encodeURIComponent(genre)}`
-function scrollToGenre(genre: string) {
-  const section = document.getElementById(genreId(genre))
+const genreSections = computed(() =>
+  Object.entries(showsByGenres.value).map(([genre, shows], index) => ({
+    genre,
+    colorIndex: index,
+    shows,
+    id: `genre-${encodeURIComponent(genre)}`,
+    href: `#genre-${encodeURIComponent(genre)}`,
+  }))
+)
+
+function scrollToSection(id: string) {
+  const section = document.getElementById(id)
   if (!section) return
   section.focus({ preventScroll: true })
   section.scrollIntoView({

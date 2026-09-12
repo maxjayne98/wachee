@@ -41,7 +41,7 @@ function onSubmit() {
 
 <template>
   <header
-    class="app-header fixed inset-x-0 top-0 z-50 isolate border-b transition-colors duration-300 motion-reduce:transition-none"
+    class="fixed inset-x-0 top-0 z-50 isolate border-b transition-colors duration-300 motion-reduce:transition-none"
     :class="isScrolled ? 'border-sky-200/30' : 'border-transparent'">
     <div
       aria-hidden="true"
@@ -58,7 +58,7 @@ function onSubmit() {
     </div>
 
     <div
-      class="mx-auto flex h-20 max-w-360 items-center justify-between gap-6 px-6 sm:gap-12 sm:px-12 lg:px-16">
+      class="mx-auto flex h-20 max-w-360 items-center justify-between gap-6 px-2 sm:px-6 sm:gap-12 sm:px-12 lg:px-16">
       <router-link
         :to="{ path: '/' }"
         aria-label="Wachee home"
@@ -68,13 +68,10 @@ function onSubmit() {
 
       <form
         role="search"
-        class="group flex min-w-0 w-full max-w-md items-center rounded-full bg-linear-to-r from-cyan-500/40 via-purple-500/50 to-orange-500/40 p-px shadow-lg transition-shadow focus-within:shadow-purple-500/20"
+        class="group flex min-w-0 w-full max-w-md items-center rounded-full bg-linear-to-r bg-violet-300 p-px shadow-lg transition-shadow focus-within:shadow-purple-500/20"
         @submit.prevent="onSubmit">
         <div
           class="flex w-full min-w-0 items-center gap-2 rounded-full bg-black/95 p-2 pl-5 sm:pl-6">
-          <Magnifier
-            aria-hidden="true"
-            class="hidden size-6 shrink-0 stroke-purple-300/70 sm:block" />
           <TextInput
             id="searchQuery"
             v-model="searchQuery"
@@ -87,7 +84,7 @@ function onSubmit() {
             id="search-submit"
             aria-label="Search"
             type="submit"
-            class="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-purple-300/25 bg-linear-to-br from-indigo-500 via-purple-600 to-fuchsia-600 text-white shadow-md shadow-purple-500/20 transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-purple-200 focus-visible:outline-offset-2 motion-reduce:transition-none">
+            class="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-purple-300/25 bg-linear-to-br bg-violet-300 text-white shadow-md shadow-purple-500/20 transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-purple-200 focus-visible:outline-offset-2 motion-reduce:transition-none">
             <Magnifier aria-hidden="true" class="size-5 stroke-white" />
           </button>
         </div>

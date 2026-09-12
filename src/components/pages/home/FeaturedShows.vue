@@ -110,7 +110,7 @@ onUnmounted(() => {
           v-if="error && !loading"
           class="inline-flex cursor-pointer text-lg mt-8 items-center justify-center gap-8 rounded-full border-2 border-transparent gradient-border! px-5.5 py-3 font-extrabold text-violet-100 shadow-lg shadow-purple-500/20 transition-[background] duration-200 hover:shadow-xl hover:shadow-purple-500/40"
           @click="emit('retry')">
-          Try again ↗
+          Try again
         </button>
       </div>
     </div>

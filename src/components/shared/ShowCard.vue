@@ -1,30 +1,19 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import type { Show } from '@/types'
 import Badge from '@/components/base/Badge.vue'
-import ShareIcon from '@/components/base/icons/Share.vue'
 import DetailImage from '@/components/base/DetailImage.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
-import Heart from '@/components/base/icons/Heart.vue'
 
 interface Props {
   show: Show
-  isFavorite?: boolean
   tagline?: string
 }
-const props = withDefaults(defineProps<Props>(), { isFavorite: false, tagline: '' })
+const props = withDefaults(defineProps<Props>(), { tagline: '' })
 const emit = defineEmits<{
   (e: 'click', show: Show): void
-  (e: 'favorite', show: Show, isFavorite: boolean): void
-  (e: 'share', show: Show): void
 }>()
-const isFav = ref(props.isFavorite)
-watch(
-  () => props.isFavorite,
-  value => {
-    isFav.value = value
-  }
-)
+
 const posterUrl = computed(() => props.show.image?.original || props.show.image?.medium || '')
 const premiereYear = computed(() => props.show.premiered?.slice(0, 4))
 const networkName = computed(
@@ -37,10 +26,6 @@ const description = computed(() =>
     .replace(/\s+/g, ' ')
     .trim()
 )
-function toggleFavorite() {
-  isFav.value = !isFav.value
-  emit('favorite', props.show, isFav.value)
-}
 </script>
 
 <template>
@@ -54,11 +39,17 @@ function toggleFavorite() {
       <div
         aria-hidden="true"
         class="absolute inset-0 bg-linear-to-t from-slate-950 via-transparent to-black/20" />
-      <IMDbBadge :score="show.rating?.average" class="absolute top-4 left-4" />
       <div
         v-if="description"
-        class="absolute inset-x-5 bottom-12 translate-y-2 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 motion-reduce:transition-none">
-        <p class="m-0! line-clamp-3 text-sm leading-relaxed text-slate-200">{{ description }}</p>
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 bg-slate-950/10 backdrop-blur-xs opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none" />
+      <IMDbBadge :score="show.rating?.average" class="absolute top-4 left-4 z-10" />
+      <div
+        v-if="description"
+        class="pointer-events-none absolute inset-x-5 bottom-12 z-10 translate-y-2 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 motion-reduce:transition-none">
+        <p class="m-0! line-clamp-3 text-sm leading-relaxed text-slate-100">
+          {{ description }}
+        </p>
       </div>
     </div>
     <div
@@ -90,29 +81,6 @@ function toggleFavorite() {
           {{ genre }}
         </Badge>
       </div>
-      <div class="mt-auto flex items-center justify-between border-t border-white/10 pt-3">
-        <span
-          aria-hidden="true"
-          class="inline-flex items-center gap-2 text-xs font-medium text-slate-400 transition-colors group-hover:text-sky-200">
-          Discover show
-          <span class="transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-            ↗
-          </span>
-        </span>
-        <button
-          type="button"
-          :aria-label="`${isFav ? 'Remove' : 'Add'} ${show.name} ${isFav ? 'from' : 'to'} favorites`"
-          :aria-pressed="isFav"
-          class="relative z-20 flex size-10 cursor-pointer items-center justify-center rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
-          :class="
-            isFav
-              ? 'border-sky-300/60 bg-sky-400/20 text-sky-200'
-              : 'border-white/10 bg-white/5 text-slate-400 hover:border-sky-300/50 hover:text-sky-200'
-          "
-          @click="toggleFavorite">
-          <Heart :fill="isFav ? 'currentColor' : 'none'" />
-        </button>
-      </div>
     </div>
     <router-link
       :to="{ name: 'show-detail', params: { id: show.id } }"
@@ -120,12 +88,5 @@ function toggleFavorite() {
       aria-hidden="true"
       class="absolute inset-x-0 top-0 z-10 aspect-4/5"
       @click="emit('click', show)" />
-    <button
-      type="button"
-      :aria-label="`Share ${show.name}`"
-      class="absolute top-3 right-3 z-20 flex size-10 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-slate-950/50 text-white backdrop-blur-xl transition-colors hover:bg-sky-900/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
-      @click="emit('share', show)">
-      <ShareIcon />
-    </button>
   </article>
 </template>
