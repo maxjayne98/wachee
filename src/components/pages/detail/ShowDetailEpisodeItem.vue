@@ -24,7 +24,7 @@ const posterUrl = computed(() => props.episode.image?.medium || props.episode.im
       :src="posterUrl"
       :alt="episode.name"
       class="aspect-video w-full shrink-0 sm:aspect-auto sm:min-h-28 sm:w-44" />
-    <div class="flex min-w-0 flex-1 items-start gap-4 p-4 sm:items-center sm:p-5">
+    <div class="flex min-w-0 flex-1 items-start gap-4 p-4 sm:items-center sm:p-5 text-left">
       <span
         class="flex size-9 shrink-0 items-center justify-center rounded-full border border-slate-600/50 text-sm text-slate-300">
         {{ episodeNumber }}

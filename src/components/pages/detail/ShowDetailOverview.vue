@@ -28,8 +28,8 @@ const details = computed(() => [
     tabindex="-1"
     class="grid scroll-mt-28 gap-8 focus:outline-none lg:grid-cols-3 lg:gap-12">
     <div class="lg:col-span-2">
-      <h2 class="mb-4! text-2xl! font-bold text-white!">The story</h2>
-      <p class="max-w-3xl text-base leading-8 whitespace-pre-line text-slate-300">
+      <h2 class="mb-4! text-2xl! font-bold text-white! text-left">The story</h2>
+      <p class="max-w-3xl text-base leading-8 whitespace-pre-line text-slate-300 text-left">
         {{ story || 'No description is available for this show yet.' }}
       </p>
     </div>

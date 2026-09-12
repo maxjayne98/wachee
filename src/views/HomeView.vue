@@ -46,7 +46,6 @@ onMounted(async () => {
       @retry="fetchShows(INITIAL_PAGES)" />
     <div class="page-container scroll-mt-25 pt-7 pb-16 text-left max-md:py-8">
       <div class="mb-7">
-        <span class="text-base tracking-widest text-violet-300">FIND YOUR NEXT FAVORITE</span>
         <h2 class="mt-3! text-4xl! md:text-5xl! text-slate-100!">Explore the collection</h2>
       </div>
       <ShowFilters />
@@ -67,10 +66,7 @@ onMounted(async () => {
         title="Unable to load shows"
         @retry="fetchShows(INITIAL_PAGES)" />
 
-      <StateMessage
-        v-else-if="!genreSections.length"
-        class="mt-8"
-        title="No shows found" />
+      <StateMessage v-else-if="!genreSections.length" class="mt-8" title="No shows found" />
 
       <template v-else>
         <TransitionGroup
