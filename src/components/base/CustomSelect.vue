@@ -97,7 +97,7 @@ onBeforeUnmount(() => {
       leave-to-class="opacity-0 -translate-y-1 scale-[0.98]">
       <ul
         v-if="isOpen"
-        class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-30 m-0 grid max-h-60 list-none gap-1 overflow-y-auto rounded-xl border border-white/10 bg-slate-900/95 p-1.5 shadow-2xl shadow-black/50 backdrop-blur-xl">
+        class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-1000 m-0 grid max-h-60 list-none gap-1 overflow-y-auto rounded-xl border border-white/10 bg-slate-900/95 p-1.5 shadow-2xl shadow-black/50 backdrop-blur-xl">
         <li
           v-for="option in options"
           :key="String(option.value)"
