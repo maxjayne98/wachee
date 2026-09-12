@@ -16,7 +16,7 @@ const { searchResult, isLoading, error, retry } = useShowSearch(query)
 </script>
 
 <template>
-  <section class="page-shell text-left text-slate-200">
+  <main class="page-shell text-left text-slate-200">
     <div class="mx-auto max-w-360 px-6 pt-28 pb-16 sm:px-12 lg:px-16">
       <div class="mt-6 mb-8 border-b border-white/10 pb-8">
         <h1
@@ -54,5 +54,5 @@ const { searchResult, isLoading, error, retry } = useShowSearch(query)
         v-else
         :title="query ? 'No shows found' : 'Search the collection'" />
     </div>
-  </section>
+  </main>
 </template>

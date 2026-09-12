@@ -38,7 +38,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="page-shell text-slate-300">
+  <main class="page-shell text-slate-300">
     <FeaturedShows
       :shows="featuredShows"
       :loading="isLoading"
@@ -112,5 +112,5 @@ onMounted(async () => {
         </section>
       </template>
     </div>
-  </section>
+  </main>
 </template>

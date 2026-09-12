@@ -43,7 +43,7 @@ watch(
 </script>
 
 <template>
-  <section class="page-shell">
+  <main class="page-shell">
     <div v-if="loading" class="page-container pt-32 pb-20">
       <div
         aria-hidden="true"
@@ -115,5 +115,5 @@ watch(
           @retry-episodes="retryEpisodes" />
       </div>
     </template>
-  </section>
+  </main>
 </template>
