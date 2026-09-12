@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { plainText } from '@/utils'
 import type { Episode, Season } from '@/types'
 import CustomSelect from '@/components/base/CustomSelect.vue'
-import DetailImage from '@/components/base/DetailImage.vue'
+import ShowDetailEpisodeItem from './ShowDetailEpisodeItem.vue'
 
 const props = defineProps<{
   seasons: Season[]
@@ -63,35 +62,10 @@ const seasonsOptions = computed(() =>
         No episodes are available for this season yet.
       </p>
       <div v-else :key="selectedSeason ?? 'episodes'" class="space-y-3">
-        <article
+        <ShowDetailEpisodeItem
           v-for="episode in episodes"
           :key="episode.id"
-          class="flex flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-900 sm:flex-row">
-          <DetailImage
-            :src="episode.image?.medium || episode.image?.original"
-            :alt="episode.name"
-            class="aspect-video w-full shrink-0 sm:aspect-auto sm:min-h-28 sm:w-44" />
-          <div class="flex min-w-0 flex-1 items-start gap-4 p-4 sm:items-center sm:p-5">
-            <span
-              class="flex size-9 shrink-0 items-center justify-center rounded-full border border-slate-600/50 text-sm text-slate-300">
-              {{ episode.number ?? 'SP' }}
-            </span>
-            <div class="min-w-0 flex-1">
-              <h3 class="m-0! text-base! font-semibold text-white">{{ episode.name }}</h3>
-              <p class="mt-1! line-clamp-2 text-sm leading-relaxed text-slate-400">
-                {{ plainText(episode.summary) || 'No episode synopsis available.' }}
-              </p>
-              <p v-if="episode.airdate" class="mt-2! text-xs text-slate-500">
-                {{ episode.airdate }}
-              </p>
-            </div>
-            <div class="flex shrink-0 flex-col items-center gap-2 sm:flex-row sm:gap-4">
-              <span v-if="episode.runtime" class="text-xs text-slate-400">
-                {{ episode.runtime }} min
-              </span>
-            </div>
-          </div>
-        </article>
+          :episode="episode" />
       </div>
     </Transition>
   </section>

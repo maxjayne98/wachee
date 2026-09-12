@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Show } from '@/types'
+import { plainText } from '@/utils'
 import Badge from '@/components/base/Badge.vue'
 import DetailImage from '@/components/base/DetailImage.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
@@ -20,12 +21,7 @@ const networkName = computed(
   () => props.show.network?.name || props.show.webChannel?.name || props.show.type || 'TV'
 )
 const displayedGenres = computed(() => props.show.genres?.slice(0, 3) || [])
-const description = computed(() =>
-  (props.tagline || props.show.summary || '')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-)
+const description = computed(() => plainText(props.tagline || props.show.summary))
 </script>
 
 <template>
@@ -42,7 +38,7 @@ const description = computed(() =>
       <div
         v-if="description"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-0 bg-slate-950/10 backdrop-blur-xs opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none" />
+        class="pointer-events-none absolute inset-0 bg-slate-950/85 backdrop-blur-xs opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none" />
       <IMDbBadge :score="show.rating?.average" class="absolute top-4 left-4 z-10" />
       <div
         v-if="description"
@@ -53,7 +49,7 @@ const description = computed(() =>
       </div>
     </div>
     <div
-      class="relative -mt-8 flex flex-1 flex-col rounded-t-3xl border-t border-white/10 bg-slate-900 px-5 pt-5 pb-4 backdrop-blur-xl">
+      class="relative -mt-8 flex flex-1 flex-col rounded-t-3xl border-t border-sky-200/15 bg-linear-to-br from-slate-800/85 via-slate-900/95 to-slate-950 px-5 pt-5 pb-4 backdrop-blur-xl">
       <div class="mb-2 flex min-w-0 items-center gap-2 text-xs font-medium text-slate-400">
         <span class="truncate text-sky-200/80">{{ networkName }}</span>
         <template v-if="premiereYear">

@@ -30,7 +30,7 @@ const details = computed(() => [
     <div class="lg:col-span-2">
       <h2 class="mb-4! text-2xl! font-bold text-white!">The story</h2>
       <p class="max-w-3xl text-base leading-8 whitespace-pre-line text-slate-300">
-        {{ story || 'No synopsis is available for this show yet.' }}
+        {{ story || 'No description is available for this show yet.' }}
       </p>
     </div>
     <aside class="self-start rounded-2xl border border-white/10 bg-slate-900 p-6">
