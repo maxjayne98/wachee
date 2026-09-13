@@ -30,7 +30,7 @@ const runtime = computed(() => props.show.runtime ?? props.show.averageRuntime)
 </script>
 
 <template>
-  <div class="min-w-0 max-w-170 flex-1 pt-5 pb-6 max-md:pt-6">
+  <div class="min-w-0 max-w-170 flex-1 pt-5 pb-6 text-left max-md:pt-6">
     <div class="mb-3.5 flex flex-wrap gap-2">
       <Badge v-for="(genre, index) in show.genres" :key="genre" :color-index="index" size="regular">
         {{ genre }}
