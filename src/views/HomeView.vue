@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useShows } from '@/store/shows'
+import { getBadgeColor } from '@/utils'
 import ShowCard from '@/components/shared/ShowCard.vue'
 import ShowCardSkeleton from '@/components/shared/ShowCardSkeleton.vue'
 import ShowFilters from '@/components/pages/home/ShowFilters.vue'
@@ -15,9 +16,9 @@ const { fetchShows, showsByGenre, featuredShows, isLoading, error } = useShows()
 const genreSections = computed(() =>
   Object.entries(showsByGenre.value)
     .sort(([genreA], [genreB]) => genreA.localeCompare(genreB))
-    .map(([genre, shows], index) => ({
+    .map(([genre, shows]) => ({
       genre,
-      colorIndex: index,
+      color: getBadgeColor(genre),
       shows,
       id: `genre-${encodeURIComponent(genre)}`,
       href: `#genre-${encodeURIComponent(genre)}`,
@@ -84,7 +85,7 @@ onMounted(async () => {
           <Badge
             v-for="section in genreSections"
             :key="section.genre"
-            :color-index="section.colorIndex"
+            :color="section.color"
             size="regular"
             :href="section.href"
             @click.prevent="scrollToSection(section.id)">

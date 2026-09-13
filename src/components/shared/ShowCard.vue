@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Show } from '@/types'
-import { plainText } from '@/utils'
+import { plainText, getBadgeColor } from '@/utils'
 import Badge from '@/components/base/Badge.vue'
 import BaseImage from '@/components/base/BaseImage.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
@@ -20,7 +20,12 @@ const premiereYear = computed(() => props.show.premiered?.slice(0, 4))
 const networkName = computed(
   () => props.show.network?.name || props.show.webChannel?.name || props.show.type || 'TV'
 )
-const displayedGenres = computed(() => props.show.genres?.slice(0, 3) || [])
+const displayedGenres = computed(() => {
+  return (props.show.genres?.slice(0, 3) || []).map(genre => ({
+    name: genre,
+    color: getBadgeColor(genre),
+  }))
+})
 const description = computed(() => plainText(props.tagline || props.show.summary))
 </script>
 
@@ -70,11 +75,11 @@ const description = computed(() => plainText(props.tagline || props.show.summary
       </h3>
       <div class="flex flex-wrap gap-1.5 pb-4">
         <Badge
-          v-for="(genre, index) in displayedGenres"
-          :key="genre"
-          :color-index="index"
+          v-for="genre in displayedGenres"
+          :key="genre.name"
+          :color="genre.color"
           class="min-w-0! border! shadow-none! text-xs!">
-          {{ genre }}
+          {{ genre.name }}
         </Badge>
       </div>
     </div>

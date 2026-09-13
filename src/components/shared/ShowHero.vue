@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Show } from '@/types'
-import { plainText } from '@/utils'
+import { plainText, getBadgeColor } from '@/utils'
 import Badge from '@/components/base/Badge.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
 
@@ -27,15 +27,22 @@ const years = computed(() => {
 })
 
 const runtime = computed(() => props.show.runtime ?? props.show.averageRuntime)
+
+const genres = computed(() => {
+  return (props.show.genres || []).map(genre => ({
+    name: genre,
+    color: getBadgeColor(genre),
+  }))
+})
 </script>
 
 <template>
   <div class="min-w-0 max-w-170 flex-1 pt-5 pb-6 text-left max-md:pt-6">
     <div class="mb-3.5 flex flex-wrap gap-2">
-      <Badge v-for="(genre, index) in show.genres" :key="genre" :color-index="index" size="regular">
-        {{ genre }}
+      <Badge v-for="genre in genres" :key="genre.name" :color="genre.color" size="regular">
+        {{ genre.name }}
       </Badge>
-      <Badge v-if="!show.genres.length" size="regular">{{ show.type }}</Badge>
+      <Badge v-if="!genres.length" size="regular">{{ show.type }}</Badge>
     </div>
     <h1
       class="m-0! mb-4 text-5xl! sm:text-6xl! lg:text-7xl! leading-tight! min-h-48 font-extrabold! tracking-tighter! text-balance text-white! wrap-anywhere">

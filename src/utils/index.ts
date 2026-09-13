@@ -70,4 +70,24 @@ function debounce<Args extends unknown[]>(fn: (...args: Args) => void, delay = 3
   return debounced
 }
 
-export { sortShowsByRating, capitalizeFirstLetter, pickRandomPair, shuffle, plainText, debounce }
+export type BadgeColor = 'sky' | 'purple' | 'orange' | 'pink' | 'amber'
+
+function getBadgeColor(name: string): BadgeColor {
+  const indexColors: BadgeColor[] = ['sky', 'purple', 'orange', 'pink']
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  const idx = Math.abs(hash) % indexColors.length
+  return indexColors[idx]
+}
+
+export {
+  sortShowsByRating,
+  capitalizeFirstLetter,
+  pickRandomPair,
+  shuffle,
+  plainText,
+  debounce,
+  getBadgeColor,
+}

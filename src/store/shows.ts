@@ -128,17 +128,14 @@ export const useShowsStore = defineStore('shows', () => {
   return {
     allShows,
     filteredShows,
-    visibleShows: filteredShows,
     isLoading,
     error,
     filters,
     resetFilters,
     fetchShows,
     showsByGenre,
-    showsByGenres: showsByGenre,
     showsById,
     featuredShows,
-    topPickedShows: featuredShows,
   }
 })
 
@@ -151,32 +148,26 @@ export function useShows() {
   const {
     allShows,
     filteredShows,
-    visibleShows,
     isLoading,
     error,
     filters,
     showsByGenre,
-    showsByGenres,
     showsById,
     featuredShows,
-    topPickedShows,
   } = storeToRefs(store)
   const { fetchShows, resetFilters } = store
 
   return {
     allShows,
     filteredShows,
-    visibleShows,
     isLoading,
     error,
     filters,
     resetFilters,
     fetchShows,
     showsByGenre,
-    showsByGenres,
     showsById,
     featuredShows,
-    topPickedShows,
   }
 }
 
