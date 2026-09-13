@@ -13,13 +13,15 @@ const INITIAL_PAGES = [1, 2, 3, 4, 5]
 const { fetchShows, showsByGenre, featuredShows, isLoading, error } = useShows()
 
 const genreSections = computed(() =>
-  Object.entries(showsByGenre.value).map(([genre, shows], index) => ({
-    genre,
-    colorIndex: index,
-    shows,
-    id: `genre-${encodeURIComponent(genre)}`,
-    href: `#genre-${encodeURIComponent(genre)}`,
-  }))
+  Object.entries(showsByGenre.value)
+    .sort(([genreA], [genreB]) => genreA.localeCompare(genreB))
+    .map(([genre, shows], index) => ({
+      genre,
+      colorIndex: index,
+      shows,
+      id: `genre-${encodeURIComponent(genre)}`,
+      href: `#genre-${encodeURIComponent(genre)}`,
+    }))
 )
 
 function scrollToSection(id: string) {

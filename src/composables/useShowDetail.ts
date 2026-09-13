@@ -1,4 +1,4 @@
-import { ref, computed, watch, onMounted, type Ref } from 'vue'
+import { ref, computed, watch, type Ref } from 'vue'
 import { fetchShowDetail, fetchSeasonEpisodes } from '@/api/shows'
 import type { Episode, ShowDetail } from '@/types'
 
