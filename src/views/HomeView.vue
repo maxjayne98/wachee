@@ -64,6 +64,7 @@ onMounted(async () => {
         v-else-if="error && !genreSections.length"
         class="mt-8"
         title="Unable to load shows"
+        :message="error"
         @retry="fetchShows(INITIAL_PAGES)" />
 
       <StateMessage v-else-if="!genreSections.length" class="mt-8" title="No shows found" />

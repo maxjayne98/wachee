@@ -44,6 +44,7 @@ const { searchResult, isLoading, error, retry } = useShowSearch(query)
       <StateMessage
         v-else-if="error"
         title="Unable to load results"
+        :message="error"
         @retry="retry" />
       <div
         v-else-if="searchResult.length"

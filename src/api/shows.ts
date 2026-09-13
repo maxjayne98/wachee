@@ -11,6 +11,15 @@ import type {
 async function get<T>(url: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(import.meta.env.VITE_API_BASE_URL + url, { signal })
   if (!response.ok) {
+    let errorData
+    try {
+      errorData = await response.json()
+    } catch {
+      // Ignore if response is not JSON
+    }
+    if (errorData) {
+      throw new Error(errorData.message || JSON.stringify(errorData))
+    }
     throw new Error(
       response.status === 404 ? 'Show not found' : response.statusText || 'Request failed'
     )

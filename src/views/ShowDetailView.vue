@@ -27,6 +27,9 @@ const {
   retry,
   retryEpisodes,
 } = useShowDetail(id)
+
+const isNotFound = computed(() => error.value === 'Show not found')
+
 const activeSection = ref('overview')
 const sections = computed(() => [
   { label: 'overview', href: 'detail-overview' },
@@ -58,9 +61,10 @@ watch(
     </div>
     <div v-else-if="error || !show" class="mx-auto max-w-2xl px-6 pt-40 pb-20">
       <StateMessage
-        :title="error === 'Show not found' ? 'Show not found' : 'Unable to load show'"
-        :retry-label="error !== 'Show not found' ? 'Try again' : undefined"
-        @retry="error !== 'Show not found' ? retry() : undefined">
+        :title="isNotFound ? 'Show not found' : 'Unable to load show'"
+        :message="isNotFound ? undefined : (error || undefined)"
+        :retry-label="isNotFound ? undefined : 'Try again'"
+        @retry="!isNotFound && retry()">
         <template #actions>
           <router-link
             to="/"

@@ -9,7 +9,7 @@ const props = defineProps<{
   seasons: Season[]
   episodes: Episode[]
   episodesLoading?: boolean
-  episodesError?: boolean
+  episodesError?: string | null
 }>()
 
 const emit = defineEmits<{
@@ -43,6 +43,7 @@ const seasonsOptions = computed(() =>
         v-if="episodesError"
         key="error"
         title="Episodes couldn’t load"
+        :message="episodesError"
         @retry="emit('retry-episodes')" />
       <p
         v-else-if="episodesLoading"

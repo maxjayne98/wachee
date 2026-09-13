@@ -12,7 +12,7 @@ export function useShowDetail(id: Ref<number>) {
 
   const episodes = ref<Episode[]>([])
   const episodesLoading = ref(false)
-  const episodesError = ref(false)
+  const episodesError = ref<string | null>(null)
   const reload = ref(0)
 
   const reloadEpisodes = ref(0)
@@ -64,7 +64,7 @@ export function useShowDetail(id: Ref<number>) {
       onCleanup(() => controller.abort())
 
       episodes.value = []
-      episodesError.value = false
+      episodesError.value = null
       episodesLoading.value = seasonId !== null
 
       if (seasonId === null) return
@@ -74,9 +74,9 @@ export function useShowDetail(id: Ref<number>) {
         if (!controller.signal.aborted) {
           episodes.value = data
         }
-      } catch {
+      } catch (err) {
         if (!controller.signal.aborted) {
-          episodesError.value = true
+          episodesError.value = err instanceof Error ? err.message : 'Failed to load episodes'
         }
       } finally {
         if (!controller.signal.aborted) {
