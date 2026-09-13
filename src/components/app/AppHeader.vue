@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
 import TextInput from '@/components/base/TextInput.vue'
+
 import Magnifier from '@/components/base/icons/Magnifier.vue'
 
 const route = useRoute()
@@ -74,10 +74,10 @@ function onSubmit() {
           <TextInput
             id="searchQuery"
             v-model="searchQuery"
-            type="input"
+            type="search"
             placeholder="Find your favorite…"
             test-id="search-bar"
-            class="min-w-0 w-full border-0 bg-transparent py-2 text-sm! text-slate-100 outline-none sm:text-base!"
+            class="min-w-0 w-full border-0! bg-transparent! px-0! py-2 text-sm! text-slate-100 outline-none! ring-0! focus:border-transparent! focus:ring-0! sm:text-base!"
             required
             aria-label="Search shows" />
           <button

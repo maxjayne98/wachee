@@ -28,8 +28,6 @@ const {
   retryEpisodes,
 } = useShowDetail(id)
 
-const isNotFound = computed(() => error.value === 'Show not found')
-
 const activeSection = ref('overview')
 const sections = computed(() => [
   { label: 'overview', href: 'detail-overview' },
@@ -61,18 +59,10 @@ watch(
     </div>
     <div v-else-if="error || !show" class="mx-auto max-w-2xl px-6 pt-40 pb-20">
       <StateMessage
-        :title="isNotFound ? 'Show not found' : 'Unable to load show'"
-        :message="isNotFound ? undefined : (error || undefined)"
-        :retry-label="isNotFound ? undefined : 'Try again'"
-        @retry="!isNotFound && retry()">
-        <template #actions>
-          <router-link
-            to="/"
-            class="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900 px-5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition hover:border-violet-400/50 hover:bg-violet-500/10 hover:text-violet-300 focus-visible:outline-2 focus-visible:outline-violet-400">
-            Back to discover
-          </router-link>
-        </template>
-      </StateMessage>
+        title="Unable to load show"
+        :message="error"
+        retry-label="Try again"
+        @retry="retry()" />
     </div>
     <template v-else>
       <section class="relative isolate overflow-hidden">
@@ -86,7 +76,6 @@ watch(
         <div class="page-container relative pt-26 pb-5 max-md:pt-25">
           <div
             class="flex items-center gap-2.5 text-xs font-bold tracking-widest text-slate-400 md:text-base">
-            <span class="size-1.75 rounded-full bg-violet-300 shadow-lg shadow-violet-400/60" />
             Discover {{ show.name }}
           </div>
           <ShowHero :show="show" :show-summary="false">

@@ -25,7 +25,7 @@ watch(
 )
 </script>
 <template>
-  <div class="relative overflow-hidden bg-linear-to-br from-slate-800 to-slate-950">
+  <div class="relative overflow-hidden">
     <img
       v-if="src && !failed"
       :src="src"

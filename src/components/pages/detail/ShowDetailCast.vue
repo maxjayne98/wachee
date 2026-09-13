@@ -20,7 +20,7 @@ const visibleCast = computed(() => (expandedCast.value ? props.cast : props.cast
         aria-controls="cast-list"
         class="min-h-10 rounded-lg px-2 text-sm! text-slate-300 hover:text-sky-200"
         @click="expandedCast = !expandedCast">
-        {{ expandedCast ? 'Show less ↑' : `View all (${cast.length}) →` }}
+        {{ expandedCast ? 'Show less' : `View all (${cast.length})` }}
       </button>
     </div>
     <StateMessage v-if="!cast.length" title="No cast available" />
@@ -31,7 +31,7 @@ const visibleCast = computed(() => (expandedCast.value ? props.cast : props.cast
       <article
         v-for="member in visibleCast"
         :key="`${member.person.id}-${member.character?.id}`"
-        class="group relative flex flex-col overflow-hidden rounded-lg border border-white/10 bg-slate-900 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-300/40 sm:rounded-xl motion-reduce:transition-none">
+        class="group relative flex flex-col overflow-hidden rounded-lg border border-white/10 bg-slate-900 shadow-sm transition duration-200 hover:-translate-y-0.5 sm:rounded-xl motion-reduce:transition-none">
         <BaseImage
           :src="member.person.image?.medium || member.person.image?.original"
           :alt="member.person.name"

@@ -64,7 +64,6 @@ onUnmounted(() => {
       <template v-if="activeShow">
         <div
           class="flex items-center gap-2.5 text-xs font-bold tracking-widest text-slate-400 md:text-base">
-          <span class="size-1.75 rounded-full bg-blue-300 shadow-lg shadow-blue-400/60" />
           THE WACHEE SPOTLIGHT
         </div>
         <Transition

@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import type { Show } from '@/types'
+
+import BaseImage from '@/components/base/BaseImage.vue'
+import ArrowLeft from '@/components/base/icons/ArrowLeft.vue'
+import ArrowRight from '@/components/base/icons/ArrowRight.vue'
+
+const props = defineProps<{ shows: Show[] }>()
+
+const activeIndex = defineModel<number>({ required: true })
+const picks = ref<HTMLElement | null>(null)
+const failedImages = ref(new Set<string>())
+
+const imageFor = (show: Show) => show.image?.original || show.image?.medium || ''
+const hasImage = (show: Show) => imageFor(show) && !failedImages.value.has(imageFor(show))
+
+function select(index: number) {
+  if (!props.shows.length) return
+  activeIndex.value = (index + props.shows.length) % props.shows.length
+}
+
+watch(
+  activeIndex,
+  () => {
+    const container = picks.value
+    const selected = container?.children[activeIndex.value] as HTMLElement | undefined
+    if (!container || !selected) return
+    const left = selected.offsetLeft - container.offsetLeft
+    if (
+      left < container.scrollLeft ||
+      left + selected.offsetWidth > container.scrollLeft + container.clientWidth
+    ) {
+      container.scrollTo({
+        left: Math.max(0, left - container.clientWidth / 2 + selected.offsetWidth / 2),
+        behavior: 'instant',
+      })
+    }
+  },
+  { flush: 'post' }
+)
+</script>
 <template>
   <div class="mt-auto min-w-0">
     <div class="mb-3 flex items-center justify-between gap-4">
@@ -58,46 +100,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, watch } from 'vue'
-import type { Show } from '@/types'
-
-import BaseImage from '@/components/base/BaseImage.vue'
-import ArrowLeft from '@/components/base/icons/ArrowLeft.vue'
-import ArrowRight from '@/components/base/icons/ArrowRight.vue'
-
-const props = defineProps<{ shows: Show[] }>()
-
-const activeIndex = defineModel<number>({ required: true })
-const picks = ref<HTMLElement | null>(null)
-const failedImages = ref(new Set<string>())
-
-const imageFor = (show: Show) => show.image?.original || show.image?.medium || ''
-const hasImage = (show: Show) => imageFor(show) && !failedImages.value.has(imageFor(show))
-
-function select(index: number) {
-  if (!props.shows.length) return
-  activeIndex.value = (index + props.shows.length) % props.shows.length
-}
-
-watch(
-  activeIndex,
-  () => {
-    const container = picks.value
-    const selected = container?.children[activeIndex.value] as HTMLElement | undefined
-    if (!container || !selected) return
-    const left = selected.offsetLeft - container.offsetLeft
-    if (
-      left < container.scrollLeft ||
-      left + selected.offsetWidth > container.scrollLeft + container.clientWidth
-    ) {
-      container.scrollTo({
-        left: Math.max(0, left - container.clientWidth / 2 + selected.offsetWidth / 2),
-        behavior: 'instant',
-      })
-    }
-  },
-  { flush: 'post' }
-)
-</script>

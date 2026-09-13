@@ -31,7 +31,7 @@ const seasonsOptions = computed(() =>
         v-if="seasons.length"
         v-model="selectedSeason"
         :options="seasonsOptions"
-        class="w-48! cursor-pointer rounded-lg px-4 py-2 text-sm! text-slate-200 outline-sky-300" />
+        class="w-48!" />
     </div>
     <Transition
       mode="out-in"
@@ -52,19 +52,10 @@ const seasonsOptions = computed(() =>
         class="py-8 text-sm text-slate-400">
         Loading episodes…
       </p>
-      <StateMessage
-        v-else-if="!seasons.length"
-        key="no-seasons"
-        title="No seasons available" />
-      <StateMessage
-        v-else-if="!episodes.length"
-        key="no-episodes"
-        title="No episodes available" />
+      <StateMessage v-else-if="!seasons.length" key="no-seasons" title="No seasons available" />
+      <StateMessage v-else-if="!episodes.length" key="no-episodes" title="No episodes available" />
       <div v-else :key="selectedSeason ?? 'episodes'" class="space-y-3">
-        <ShowDetailEpisodeItem
-          v-for="episode in episodes"
-          :key="episode.id"
-          :episode="episode" />
+        <ShowDetailEpisodeItem v-for="episode in episodes" :key="episode.id" :episode="episode" />
       </div>
     </Transition>
   </section>

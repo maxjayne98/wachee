@@ -1,41 +1,3 @@
-<template>
-  <div
-    class="mb-4 grid min-w-0 grid-cols-1 items-start gap-x-4 gap-y-4 text-left sm:grid-cols-2 lg:grid-cols-4">
-    <div class="min-w-0">
-      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Language</p>
-      <div class="flex h-20 items-center">
-        <CustomSelect v-model="filters.language" :options="languageOptions" aria-label="Language" />
-      </div>
-    </div>
-    <div class="min-w-0">
-      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Runtime</p>
-      <div class="flex h-20 items-center">
-        <CustomSelect v-model="filters.runtime" :options="runtimeOptions" aria-label="Runtime" />
-      </div>
-    </div>
-    <div class="min-w-0 sm:col-span-2">
-      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Rating</p>
-      <div class="flex h-20 items-center gap-3 px-2 sm:gap-4 sm:px-4">
-        <RangeSlider
-          v-model="rating"
-          class="flex-1 min-w-0 lg:max-w-64"
-          :min="1"
-          :max="10"
-          :step="0.1" />
-        <button
-          type="button"
-          aria-label="Reset filters"
-          title="Reset filters"
-          :disabled="!hasActiveFilters"
-          class="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-slate-900 text-slate-100 shadow-sm transition hover:border-rose-400/50 hover:bg-rose-500/10 hover:text-rose-400 focus-visible:outline-2 focus-visible:outline-rose-400 disabled:cursor-not-allowed disabled:opacity-30 motion-reduce:transition-none"
-          @click="handleReset">
-          <Trash class="size-5" />
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
 import CustomSelect, { type SelectOption } from '@/components/base/CustomSelect.vue'
@@ -50,9 +12,7 @@ const rating = ref(filters.value.rating)
 
 const hasActiveFilters = computed(() => {
   return (
-    Boolean(filters.value.language) ||
-    Boolean(filters.value.runtime) ||
-    filters.value.rating > 1
+    Boolean(filters.value.language) || Boolean(filters.value.runtime) || filters.value.rating > 1
   )
 })
 
@@ -103,3 +63,41 @@ const runtimeOptions: SelectOption[] = [
   { label: 'Over 60 min', value: 'long' },
 ]
 </script>
+
+<template>
+  <div
+    class="mb-4 grid min-w-0 grid-cols-1 items-start gap-x-4 gap-y-4 text-left sm:grid-cols-2 lg:grid-cols-4">
+    <div class="min-w-0">
+      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Language</p>
+      <div class="flex h-20 items-center">
+        <CustomSelect v-model="filters.language" :options="languageOptions" aria-label="Language" />
+      </div>
+    </div>
+    <div class="min-w-0">
+      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Runtime</p>
+      <div class="flex h-20 items-center">
+        <CustomSelect v-model="filters.runtime" :options="runtimeOptions" aria-label="Runtime" />
+      </div>
+    </div>
+    <div class="min-w-0 sm:col-span-2">
+      <p class="m-0! text-sm font-medium leading-5 text-slate-300">Rating</p>
+      <div class="flex h-20 items-center gap-3 px-2 sm:gap-4 sm:px-4">
+        <RangeSlider
+          v-model="rating"
+          class="flex-1 min-w-0 lg:max-w-64"
+          :min="1"
+          :max="10"
+          :step="0.1" />
+        <button
+          type="button"
+          aria-label="Reset filters"
+          title="Reset filters"
+          :disabled="!hasActiveFilters"
+          class="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-slate-900 text-slate-100 shadow-sm transition hover:border-rose-400/50 hover:bg-rose-500/10 hover:text-rose-400 focus-visible:outline-2 focus-visible:outline-rose-400 disabled:cursor-not-allowed disabled:opacity-30 motion-reduce:transition-none"
+          @click="handleReset">
+          <Trash class="size-5" />
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
