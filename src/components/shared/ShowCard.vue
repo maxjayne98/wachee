@@ -26,7 +26,7 @@ const description = computed(() => plainText(props.tagline || props.show.summary
 
 <template>
   <article
-    class="group relative isolate box-border flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-900 text-left shadow-lg shadow-black/20 transition-colors duration-300 hover:border-sky-300/40 hover:ring-1 hover:ring-inset hover:ring-sky-300/20 focus-within:border-sky-300/60 motion-reduce:transform-none motion-reduce:transition-none">
+    class="group relative isolate box-border flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-900 text-left shadow-lg shadow-black/20 transition-colors duration-300 hover:border-blue-500 hover:ring-1 hover:ring-inset hover:ring-blue-300/20 focus-within:border-blue-300/60 motion-reduce:transform-none motion-reduce:transition-none">
     <div class="relative aspect-4/5 overflow-hidden">
       <BaseImage
         :src="posterUrl"

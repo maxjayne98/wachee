@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import ArrowDown from '@/components/base/icons/ArrowDown.vue'
+import Tick from '@/components/base/icons/Tick.vue'
 
 export type SelectValue = string | number | Record<string, unknown> | null
 
@@ -107,7 +108,7 @@ onBeforeUnmount(() => {
           class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm transition-all duration-150"
           :class="
             option.value === modelValue
-              ? 'bg-purple-500/15 text-slate-100'
+              ? 'bg-blue-500/15 text-slate-100'
               : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
           "
           @click="selectOption(option)">
@@ -115,16 +116,7 @@ onBeforeUnmount(() => {
             {{ option.label }}
           </span>
 
-          <svg
-            v-if="option.value === modelValue"
-            viewBox="0 0 20 20"
-            class="ml-auto size-4 shrink-0 text-purple-400"
-            fill="currentColor">
-            <path
-              fill-rule="evenodd"
-              d="M16.704 5.292a1 1 0 0 1 .004 1.414l-7.25 7.292a1 1 0 0 1-1.42.004l-3.75-3.708a1 1 0 1 1 1.406-1.422l3.04 3.005 6.547-6.581a1 1 0 0 1 1.423-.004Z"
-              clip-rule="evenodd" />
-          </svg>
+          <Tick v-if="option.value === modelValue" class="ml-auto size-4 shrink-0 text-blue-400" />
         </li>
       </ul>
     </transition>

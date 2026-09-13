@@ -62,13 +62,13 @@ function onSubmit() {
         :to="{ path: '/' }"
         aria-label="Wachee home"
         test-id="wachee-logo"
-        class="shrink-0 rounded-xl bg-transparent! transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-purple-300 focus-visible:outline-offset-2">
+        class="shrink-0 rounded-xl bg-transparent! transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-sky-300 focus-visible:outline-offset-2">
         <img src="@/assets/wachee.png" alt="Wachee" class="app-header-logo h-12 w-auto sm:h-16" />
       </router-link>
 
       <form
         role="search"
-        class="group flex min-w-0 w-full max-w-md items-center rounded-full bg-linear-to-r bg-sky-500 p-px shadow-lg transition-shadow focus-within:shadow-purple-500/20"
+        class="group flex min-w-0 w-full max-w-md items-center rounded-full bg-linear-to-r bg-blue-500 p-px shadow-lg transition-shadow focus-within:shadow-sky-500/20"
         @submit.prevent="onSubmit">
         <div class="flex w-full min-w-0 items-center gap-2 rounded-full bg-black/95 pl-5 sm:pl-6">
           <TextInput
@@ -84,7 +84,7 @@ function onSubmit() {
             id="search-submit"
             aria-label="Search"
             type="submit"
-            class="flex sm:w-18 sm:h-10 w-10 h-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-sky-500 bg-sky-500 text-white shadow-md shadow-purple-500/20 transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-purple-200 focus-visible:outline-offset-2 motion-reduce:transition-none">
+            class="flex sm:w-18 sm:h-10 w-10 h-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-blue-500 bg-blue-500 text-white shadow-md shadow-purple-500/20 transition hover:brightness-125 focus-visible:outline-2 focus-visible:outline-purple-200 focus-visible:outline-offset-2 motion-reduce:transition-none">
             <Magnifier aria-hidden="true" class="size-5 stroke-white" />
           </button>
         </div>

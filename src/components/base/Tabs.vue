@@ -28,7 +28,7 @@ function goToSection(section: TabSection) {
     class="border-b-2 px-2 py-4 text-sm font-medium capitalize transition-colors"
     :class="
       activeSection === section.label
-        ? 'border-sky-400 text-sky-100'
+        ? 'border-blue-500 text-sky-100'
         : 'border-transparent text-slate-400 hover:text-white'
     "
     @click.prevent="goToSection(section)">
