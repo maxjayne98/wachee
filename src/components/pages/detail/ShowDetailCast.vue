@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { CastMember } from '@/types'
-import DetailImage from '@/components/base/DetailImage.vue'
+import BaseImage from '@/components/base/BaseImage.vue'
 import StateMessage from '@/components/shared/StateMessage.vue'
 
 const props = defineProps<{ cast: CastMember[] }>()
@@ -32,7 +32,7 @@ const visibleCast = computed(() => (expandedCast.value ? props.cast : props.cast
         v-for="member in visibleCast"
         :key="`${member.person.id}-${member.character?.id}`"
         class="group relative flex flex-col overflow-hidden rounded-lg border border-white/10 bg-slate-900 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-300/40 sm:rounded-xl motion-reduce:transition-none">
-        <DetailImage
+        <BaseImage
           :src="member.person.image?.medium || member.person.image?.original"
           :alt="member.person.name"
           class="aspect-3/4 w-full bg-slate-800"

@@ -7,7 +7,7 @@ import ShowDetailOverview from '@/components/pages/detail/ShowDetailOverview.vue
 import ShowDetailCast from '@/components/pages/detail/ShowDetailCast.vue'
 import ShowDetailEpisodes from '@/components/pages/detail/ShowDetailEpisodes.vue'
 import ShowHero from '@/components/shared/ShowHero.vue'
-import DetailImage from '@/components/base/DetailImage.vue'
+import BaseImage from '@/components/base/BaseImage.vue'
 import ArrowRight from '@/components/base/icons/ArrowRight.vue'
 import StateMessage from '@/components/shared/StateMessage.vue'
 
@@ -76,7 +76,7 @@ watch(
     </div>
     <template v-else>
       <section class="relative isolate overflow-hidden">
-        <DetailImage
+        <BaseImage
           :src="backdrop"
           alt=""
           eager

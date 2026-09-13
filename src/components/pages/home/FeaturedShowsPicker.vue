@@ -40,7 +40,7 @@
         :aria-pressed="index === activeIndex"
         :aria-label="`Show ${show.name}`"
         @click="select(index)">
-        <DetailImage
+        <BaseImage
           v-if="hasImage(show)"
           class="h-full from-slate-800 to-slate-950"
           :image-class="`size-full object-cover object-[center_25%] ${index === activeIndex ? 'opacity-100' : 'opacity-60'}`"
@@ -63,7 +63,7 @@
 import { ref, watch } from 'vue'
 import type { Show } from '@/types'
 
-import DetailImage from '@/components/base/DetailImage.vue'
+import BaseImage from '@/components/base/BaseImage.vue'
 import ArrowLeft from '@/components/base/icons/ArrowLeft.vue'
 import ArrowRight from '@/components/base/icons/ArrowRight.vue'
 

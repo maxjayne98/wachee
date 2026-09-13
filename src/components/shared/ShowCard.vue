@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import type { Show } from '@/types'
 import { plainText } from '@/utils'
 import Badge from '@/components/base/Badge.vue'
-import DetailImage from '@/components/base/DetailImage.vue'
+import BaseImage from '@/components/base/BaseImage.vue'
 import IMDbBadge from '@/components/base/IMDbBadge.vue'
 
 interface Props {
@@ -28,7 +28,7 @@ const description = computed(() => plainText(props.tagline || props.show.summary
   <article
     class="group relative isolate box-border flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-900 text-left shadow-lg shadow-black/20 transition-colors duration-300 hover:border-sky-300/40 hover:ring-1 hover:ring-inset hover:ring-sky-300/20 focus-within:border-sky-300/60 motion-reduce:transform-none motion-reduce:transition-none">
     <div class="relative aspect-4/5 overflow-hidden">
-      <DetailImage
+      <BaseImage
         :src="posterUrl"
         :alt="show.name"
         class="size-full transition-transform duration-700 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none" />

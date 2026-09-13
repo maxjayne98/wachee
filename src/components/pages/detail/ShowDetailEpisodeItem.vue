@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import type { Episode } from '@/types'
 import { plainText } from '@/utils'
-import DetailImage from '@/components/base/DetailImage.vue'
+import BaseImage from '@/components/base/BaseImage.vue'
 
 interface Props {
   episode: Episode
@@ -20,7 +20,7 @@ const posterUrl = computed(() => props.episode.image?.medium || props.episode.im
 <template>
   <article
     class="flex flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-900 sm:flex-row">
-    <DetailImage
+    <BaseImage
       :src="posterUrl"
       :alt="episode.name"
       class="aspect-video w-full shrink-0 sm:aspect-auto sm:min-h-28 sm:w-44" />

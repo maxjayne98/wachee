@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { Show } from '@/types'
-import DetailImage from '@/components/base/DetailImage.vue'
+import BaseImage from '@/components/base/BaseImage.vue'
 import FeaturedShowsPicker from './FeaturedShowsPicker.vue'
 import ShowHero from '@/components/shared/ShowHero.vue'
 import ArrowRight from '@/components/base/icons/ArrowRight.vue'
@@ -48,7 +48,7 @@ onUnmounted(() => {
       leave-active-class="transition-opacity duration-1200 ease-in-out"
       enter-from-class="opacity-0!"
       leave-to-class="opacity-0!">
-      <DetailImage
+      <BaseImage
         v-if="activeShow && hasImage(activeShow)"
         :key="activeShow.id"
         class="absolute! inset-0 size-full from-slate-800 to-slate-950 opacity-70"
