@@ -17,4 +17,7 @@ import { RouterView } from 'vue-router'
       </Transition>
     </RouterView>
   </main>
+  <footer class="p-4 border-t border-white/10 text-xs text-slate-500">
+    <p>Powered by Trakt.TV and TMDB</p>
+  </footer>
 </template>
