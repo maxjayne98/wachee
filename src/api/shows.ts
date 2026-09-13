@@ -8,25 +8,7 @@ import type {
   ShowImage,
 } from '@/types'
 
-async function get<T>(url: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(import.meta.env.VITE_API_BASE_URL + url, { signal })
-  if (!response.ok) {
-    let errorData
-    try {
-      errorData = await response.json()
-    } catch {
-      // Ignore if response is not JSON
-    }
-    if (errorData) {
-      throw new Error(errorData.message || JSON.stringify(errorData))
-    }
-    throw new Error(
-      response.status === 404 ? 'Show not found' : response.statusText || 'Request failed'
-    )
-  }
-  const result = (await response.json()) as T
-  return result
-}
+import { get } from './client'
 
 export async function fetchShowsPage(page: number, signal?: AbortSignal): Promise<Show[]> {
   return get<Show[]>(`/shows?page=${page}`, signal)
@@ -63,4 +45,3 @@ export function fetchShowImages(id: number, signal?: AbortSignal) {
   return get<ShowImage[]>(`/shows/${id}/images`, signal)
 }
 
-export { get }

@@ -1,4 +1,4 @@
-import { computed, ref, watch, type Ref } from 'vue'
+import { ref, computed, watch, onMounted, type Ref } from 'vue'
 import { fetchShowDetail, fetchSeasonEpisodes } from '@/api/shows'
 import type { Episode, ShowDetail } from '@/types'
 
@@ -46,7 +46,11 @@ export function useShowDetail(id: Ref<number>) {
         }
       } catch (err) {
         if (!controller.signal.aborted) {
-          error.value = err instanceof Error ? err.message : 'Unable to load this show'
+          if ((err as any)?.status === 404) {
+            error.value = 'Show not found'
+          } else {
+            error.value = err instanceof Error ? err.message : 'Unable to load this show'
+          }
         }
       } finally {
         if (!controller.signal.aborted) {
