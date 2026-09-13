@@ -114,8 +114,7 @@ export const useShowsStore = defineStore('shows', () => {
         featuredShows.value = selectFeaturedShows(allShows.value)
       }
     } catch (err) {
-      console.error('Error fetching shows:', err)
-      error.value = err instanceof Error ? err.message : 'Failed to fetch shows'
+      error.value = (err as { message?: string })?.message || 'Failed to fetch shows'
     } finally {
       isLoading.value = false
     }

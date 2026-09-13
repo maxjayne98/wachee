@@ -1,12 +1,4 @@
-import type {
-  Show,
-  ShowDetail,
-  SearchResult,
-  CastMember,
-  Season,
-  Episode,
-  ShowImage,
-} from '@/types'
+import type { Show, ShowDetail, SearchResult, Episode } from '@/types'
 
 import { get } from './client'
 
@@ -29,19 +21,6 @@ export async function searchShowsByName(
   return get<Record<number, SearchResult>>(`/search/shows?q=${encodeURIComponent(query)}`, signal)
 }
 
-export function fetchShowCast(id: number, signal?: AbortSignal) {
-  return get<CastMember[]>(`/shows/${id}/cast`, signal)
-}
-
-export function fetchShowSeasons(id: number, signal?: AbortSignal) {
-  return get<Season[]>(`/shows/${id}/seasons`, signal)
-}
-
 export function fetchSeasonEpisodes(id: number, signal?: AbortSignal) {
   return get<Episode[]>(`/seasons/${id}/episodes`, signal)
 }
-
-export function fetchShowImages(id: number, signal?: AbortSignal) {
-  return get<ShowImage[]>(`/shows/${id}/images`, signal)
-}
-
