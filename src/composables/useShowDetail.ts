@@ -13,83 +13,77 @@ export function useShowDetail(id: Ref<number>) {
   const episodes = ref<Episode[]>([])
   const episodesLoading = ref(false)
   const episodesError = ref<string | null>(null)
-  const reload = ref(0)
 
-  const reloadEpisodes = ref(0)
   const selectedSeason = ref<number | null>(null)
 
-  watch(
-    [id, reload],
-    async ([showId], _, onCleanup) => {
-      const controller = new AbortController()
-      onCleanup(() => controller.abort())
+  let detailController: AbortController | null = null
+  let episodesController: AbortController | null = null
 
-      show.value = null
-      selectedSeason.value = null
-      error.value = ''
-      loading.value = true
+  async function fetchDetail() {
+    detailController?.abort()
+    detailController = new AbortController()
+    const signal = detailController.signal
+    const showId = id.value
 
-      if (!Number.isSafeInteger(showId) || showId < 1) {
-        error.value = 'Show not found'
+    show.value = null
+    selectedSeason.value = null
+    error.value = ''
+    loading.value = true
+
+    try {
+      const data = await fetchShowDetail(showId, signal)
+      if (signal.aborted) return
+
+      show.value = data
+
+      if (seasons.value.length > 0) {
+        selectedSeason.value = seasons.value[0]?.id ?? null
+      }
+    } catch (err) {
+      if (!signal.aborted) {
+        if ((err as any)?.status === 404) {
+          error.value = 'Show not found'
+        } else {
+          error.value = err instanceof Error ? err.message : 'Unable to load this show'
+        }
+      }
+    } finally {
+      if (!signal.aborted) {
         loading.value = false
-        return
       }
+    }
+  }
 
-      try {
-        const data = await fetchShowDetail(showId, controller.signal)
-        if (controller.signal.aborted) return
+  async function fetchEpisodes() {
+    episodesController?.abort()
+    episodesController = new AbortController()
+    const signal = episodesController.signal
+    const seasonId = selectedSeason.value
 
-        show.value = data
+    episodes.value = []
+    episodesError.value = null
+    episodesLoading.value = seasonId !== null
 
-        if (seasons.value.length > 0) {
-          selectedSeason.value = seasons.value[0]?.id ?? null
-        }
-      } catch (err) {
-        if (!controller.signal.aborted) {
-          if ((err as any)?.status === 404) {
-            error.value = 'Show not found'
-          } else {
-            error.value = err instanceof Error ? err.message : 'Unable to load this show'
-          }
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          loading.value = false
-        }
+    if (seasonId === null) return
+
+    try {
+      const data = await fetchSeasonEpisodes(seasonId, signal)
+      if (!signal.aborted) {
+        episodes.value = data
       }
-    },
-    { immediate: true }
-  )
-
-  watch(
-    [selectedSeason, reloadEpisodes],
-    async ([seasonId], _, onCleanup) => {
-      const controller = new AbortController()
-      onCleanup(() => controller.abort())
-
-      episodes.value = []
-      episodesError.value = null
-      episodesLoading.value = seasonId !== null
-
-      if (seasonId === null) return
-
-      try {
-        const data = await fetchSeasonEpisodes(seasonId, controller.signal)
-        if (!controller.signal.aborted) {
-          episodes.value = data
-        }
-      } catch (err) {
-        if (!controller.signal.aborted) {
-          episodesError.value = err instanceof Error ? err.message : 'Failed to load episodes'
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          episodesLoading.value = false
-        }
+    } catch (err) {
+      if (!signal.aborted) {
+        episodesError.value = err instanceof Error ? err.message : 'Failed to load episodes'
       }
-    },
-    { immediate: true }
-  )
+    } finally {
+      if (!signal.aborted) {
+        episodesLoading.value = false
+      }
+    }
+  }
+
+  watch(id, fetchDetail, { immediate: true })
+  watch(selectedSeason, fetchEpisodes, { immediate: true })
 
   const backdrop = computed(() => {
     const backgrounds = images.value.filter(image => image.type === 'background')
@@ -112,7 +106,7 @@ export function useShowDetail(id: Ref<number>) {
     error,
     episodesLoading,
     episodesError,
-    retry: () => reload.value++,
-    retryEpisodes: () => reloadEpisodes.value++,
+    retry: fetchDetail,
+    retryEpisodes: fetchEpisodes,
   }
 }
