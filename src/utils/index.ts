@@ -16,19 +16,6 @@ function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-function pickRandomPair<T>(items: T[], poolLimit = 6): T[] {
-  const limit = Math.min(items.length, poolLimit ?? 6)
-
-  if (limit < 2) {
-    return items.slice(0, limit)
-  }
-
-  const pool = items.slice(0, limit)
-  pool.sort(() => Math.random() - 0.5)
-
-  return [pool[0]!, pool[1]!]
-}
-
 function shuffle<T>(array: T[]): T[] {
   const result = [...array]
 
@@ -82,12 +69,4 @@ function getBadgeColor(name: string): BadgeColor {
   return indexColors[idx]
 }
 
-export {
-  sortShowsByRating,
-  capitalizeFirstLetter,
-  pickRandomPair,
-  shuffle,
-  plainText,
-  debounce,
-  getBadgeColor,
-}
+export { sortShowsByRating, capitalizeFirstLetter, shuffle, plainText, debounce, getBadgeColor }

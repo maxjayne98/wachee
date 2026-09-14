@@ -1,12 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import {
-  sortShowsByRating,
-  capitalizeFirstLetter,
-  pickRandomPair,
-  shuffle,
-  plainText,
-  debounce,
-} from '@/utils'
+import { sortShowsByRating, capitalizeFirstLetter, shuffle, plainText, debounce } from '@/utils'
 import { mockShowsList } from '@/mocks/shows'
 import type { Show } from '@/types'
 
@@ -61,23 +54,6 @@ describe('utils/index', () => {
 
     it('Handles empty string', () => {
       expect(capitalizeFirstLetter('')).toEqual('')
-    })
-  })
-
-  describe('pickRandomPair', () => {
-    it('Returns a pair of items', () => {
-      const pair = pickRandomPair([1, 2, 3, 4, 5], 2)
-      expect(pair.length).toEqual(2)
-    })
-
-    it('Returns unique items', () => {
-      const pair = pickRandomPair([1, 2, 3, 4, 5])
-      expect(pair[0]).not.toEqual(pair[1])
-    })
-
-    it('Returns items from the pool', () => {
-      const pair = pickRandomPair([1, 2, 3, 4, 5], 4)
-      expect(pair).not.include(5)
     })
   })
 

@@ -73,12 +73,12 @@ const description = computed(() => plainText(props.tagline || props.show.summary
           {{ show.name }}
         </router-link>
       </h3>
-      <div class="flex flex-wrap gap-1.5 pb-4">
+      <div class="flex min-h-18.5 flex-wrap content-start gap-1.5 pb-4">
         <Badge
           v-for="genre in displayedGenres"
           :key="genre.name"
           :color="genre.color"
-          class="min-w-0! border! shadow-none! text-xs!">
+          class="min-w-0! border! shadow-none! text-xs! px-1!">
           {{ genre.name }}
         </Badge>
       </div>

@@ -28,7 +28,7 @@ watch(
 
 onMounted(() => {
   timer = setInterval(() => {
-    if (!document.hidden && props.shows.length > 1) {
+    if (props.shows.length > 1) {
       select(activeIndex.value + 1)
     }
   }, DURATION)

@@ -11,7 +11,7 @@ import Badge from '@/components/base/Badge.vue'
 import StateMessage from '@/components/shared/StateMessage.vue'
 
 const INITIAL_PAGES = [1, 2, 3, 4, 5]
-const { fetchShows, showsByGenre, featuredShows, isLoading, error } = useShows()
+const { fetchShows, allShows, showsByGenre, featuredShows, isLoading, error } = useShows()
 
 const genreSections = computed(() =>
   Object.entries(showsByGenre.value)
@@ -64,7 +64,7 @@ onMounted(async () => {
       </div>
 
       <StateMessage
-        v-else-if="error && !genreSections.length"
+        v-else-if="error && !allShows.length"
         class="mt-8"
         title="Unable to load shows"
         :message="error"
@@ -105,7 +105,7 @@ onMounted(async () => {
           <div class="flex h-125 flex-row justify-start gap-4 overflow-x-auto p-2">
             <VirtualCarousel :items="section.shows">
               <template #default="{ item }">
-                <ShowCard :show="item" :tagline="item.summary ?? ''" />
+                <ShowCard :show="item" :tagline="item.summary ?? ''" class="w-60 h-120" />
               </template>
             </VirtualCarousel>
           </div>

@@ -95,7 +95,9 @@ defineExpose({
     <div
       ref="itemProbe"
       aria-hidden="true"
-      class="invisible pointer-events-none absolute h-0 w-60" />
+      class="invisible pointer-events-none absolute h-0 flex items-start">
+      <slot v-if="items.length" :item="items[0]" :index="0" />
+    </div>
     <div
       class="relative h-full"
       :style="{

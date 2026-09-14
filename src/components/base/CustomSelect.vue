@@ -12,7 +12,7 @@ export type SelectOption = {
 
 const props = withDefaults(
   defineProps<{
-    options: SelectOption[]
+    options?: SelectOption[]
     placeholder?: string
     disabled?: boolean
     ariaLabel?: string
@@ -25,7 +25,7 @@ const props = withDefaults(
   }
 )
 
-const modelValue = defineModel<SelectValue>()
+const modelValue = defineModel<SelectValue>({ default: null })
 
 const rootRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)

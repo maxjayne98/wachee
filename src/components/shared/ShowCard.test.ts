@@ -18,7 +18,7 @@ const mockShow: Show = createMockShow({
 })
 
 describe('ShowCard', () => {
-  let wrapper: any
+  let wrapper: ReturnType<typeof mount>
 
   beforeEach(() => {
     wrapper = mount(ShowCard, {

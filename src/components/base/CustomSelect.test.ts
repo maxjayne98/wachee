@@ -7,7 +7,7 @@ describe('CustomSelect', () => {
     { label: 'Option 1', value: 1 },
     { label: 'Option 2', value: 2 },
   ]
-  let wrapper: any
+  let wrapper: ReturnType<typeof mount>
 
   beforeEach(() => {
     wrapper = mount(CustomSelect, {

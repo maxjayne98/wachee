@@ -55,7 +55,6 @@ const languageOptions = computed<SelectOption[]>(() => [
     .map(language => ({ value: language, label: language })),
 ])
 
-// Primitive values keep selection identity stable through Vue's reactive proxies.
 const runtimeOptions: SelectOption[] = [
   { label: 'Any runtime', value: '' },
   { label: 'Under 30 min', value: 'short' },

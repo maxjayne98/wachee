@@ -5,7 +5,8 @@
     version="1.1"
     xml:space="preserve"
     xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    aria-hidden="true">
     <circle
       id="XMLID_42_"
       cx="14"

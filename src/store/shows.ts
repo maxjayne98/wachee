@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { fetchShowsPage } from '@/api/shows'
 import type { Show } from '@/types'
-import { sortShowsByRating, pickRandomPair, shuffle } from '@/utils'
+import { sortShowsByRating, shuffle } from '@/utils'
 
 export interface ShowFiltersState {
   language: string
@@ -21,7 +21,8 @@ export const useShowsStore = defineStore('shows', () => {
   const error = ref<string>('')
   const isLoading = ref<boolean>(false)
   const filters = ref<ShowFiltersState>({ ...DEFAULT_FILTERS })
-  const featuredShows = ref<Show[]>([])
+  const featuredShows = computed(() => selectFeaturedShows(allShows.value))
+  const loadedPages = new Set<number>()
 
   const filteredShows = computed(() => {
     const { language, runtime, rating } = filters.value
@@ -58,24 +59,27 @@ export const useShowsStore = defineStore('shows', () => {
     return new Map(allShows.value.map(show => [show.id, show]))
   })
 
-  function selectFeaturedShows(shows: Show[]) {
+  function selectFeaturedShows(shows: Show[]): Show[] {
+    const candidateLimitPerGenre = 4
+    const picksPerGenre = 2
+    const featuredLimit = 6
+
     const showsByGenre = groupShowsByGenre(shows)
-    const genres = Object.keys(showsByGenre)
     const selected: Show[] = []
     const selectedIds = new Set<number>()
 
-    for (const genre of genres) {
-      const genreShows = showsByGenre[genre] ?? []
+    for (const genreShows of Object.values(showsByGenre)) {
       const availableShows = genreShows.filter(show => !selectedIds.has(show.id))
-      const randomShows = pickRandomPair(availableShows, 4)
+      const topCandidates = availableShows.slice(0, candidateLimitPerGenre)
+      const genrePicks = shuffle(topCandidates).slice(0, picksPerGenre)
 
-      for (const show of randomShows) {
+      for (const show of genrePicks) {
         selected.push(show)
         selectedIds.add(show.id)
       }
     }
 
-    return shuffle(selected).slice(0, 6)
+    return shuffle(selected).slice(0, featuredLimit)
   }
 
   function groupShowsByGenre(shows: Show[]) {
@@ -98,20 +102,34 @@ export const useShowsStore = defineStore('shows', () => {
   })
 
   async function fetchShows(pages: number[]) {
-    isLoading.value = true
-    try {
-      const data = await Promise.all(pages.map((page: number) => fetchShowsPage(page)))
-      const existingIds = new Set(allShows.value.map(s => s.id))
+    const pagesToFetch = [...new Set(pages)].filter(page => !loadedPages.has(page))
+    if (pagesToFetch.length === 0) return
 
-      const newShows = data.flat().filter(show => {
-        if (existingIds.has(show.id)) return false
-        existingIds.add(show.id)
-        return true
-      })
+    isLoading.value = true
+    error.value = ''
+
+    try {
+      const results = await Promise.allSettled(pagesToFetch.map(page => fetchShowsPage(page)))
+      const existingIds = new Set(allShows.value.map(show => show.id))
+      const newShows: Show[] = []
+
+      for (const [index, result] of results.entries()) {
+        if (result.status === 'rejected') {
+          error.value = result.reason?.message || 'Failed to fetch shows'
+          continue
+        }
+
+        loadedPages.add(pagesToFetch[index]!)
+
+        for (const show of result.value) {
+          if (existingIds.has(show.id)) continue
+          existingIds.add(show.id)
+          newShows.push(show)
+        }
+      }
 
       if (newShows.length > 0) {
         allShows.value.push(...newShows)
-        featuredShows.value = selectFeaturedShows(allShows.value)
       }
     } catch (err) {
       error.value = (err as { message?: string })?.message || 'Failed to fetch shows'

@@ -9,6 +9,10 @@ withDefaults(defineProps<Props>(), {
   message: '',
   retryLabel: 'Try again',
 })
+
+defineEmits<{
+  (e: 'retry'): void
+}>()
 </script>
 
 <template>

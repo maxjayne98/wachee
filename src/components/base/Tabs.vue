@@ -6,7 +6,7 @@ interface Props {
 }
 
 defineProps<Props>()
-const activeSection = defineModel<string>()
+const activeSection = defineModel<string>({ default: '' })
 
 function goToSection(section: TabSection) {
   activeSection.value = section.label
@@ -23,7 +23,7 @@ function goToSection(section: TabSection) {
   <a
     v-for="section in sections"
     :key="section.label"
-    :href="section.href"
+    :href="`#${section.href}`"
     :aria-current="activeSection === section.label ? 'location' : undefined"
     class="border-b-2 px-2 py-4 text-sm font-medium capitalize transition-colors"
     :class="

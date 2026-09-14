@@ -1,10 +1,14 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useShowsStore } from './shows'
 import { createMockShow } from '@/mocks/shows'
+import { fetchShowsPage } from '@/api/shows'
+
+vi.mock('@/api/shows', () => ({ fetchShowsPage: vi.fn() }))
 
 describe('store/shows', () => {
   beforeEach(() => {
+    vi.mocked(fetchShowsPage).mockReset()
     setActivePinia(createPinia())
   })
 
